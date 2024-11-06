@@ -1,0 +1,758 @@
+{% extends 'layout2.html' %}
+
+{% block body %}
+
+<div class="wrapper">
+	<script>
+		import "script-loader!smartwizard/dist/js/jquery.smartWizard.min.js";
+		import "jquery-validation";
+		import "jquery-validation/dist/additional-methods.js";
+		import "fullcalendar";
+	</script>	
+			<main class="content">
+				<div class="container-fluid p-0">
+
+					<h1 class="h3 mb-3">Cotizador</h1>
+
+					<div class="row">
+
+						<div class="col-12">
+							<form id="smartwizard-validation" class="wizard wizard-primary" action="javascript:void(0)">
+								<ul>
+									<li><a href="#validation-step-1">Primer paso<br /><small>Datos Inciales</small></a></li>
+									<li><a href="#validation-step-2">Segundo paso<br /><small>Descripción de Servicios</small></a></li>
+									<li><a href="#validation-step-3">Tercer paso<br /><small>Autorización tratamiento de datos</small></a></li>
+									<li><a href="#validation-step-4">Cuarto paso<br /><small>Cuenta y Pago</small></a></li>
+								</ul>
+
+								<div>
+
+									<div id="validation-step-1">
+										<h3 style="margin: 0px; width: 100px; border: 1px solid black; text-align: center; padding: 5px; background-color: #00CC00;">TITULAR</h3><br>
+										<div style="padding: 0;" class="form-group col-md-6">
+											<label class="form-label">Nombre del Titular
+				              	<span class="text-danger">*</span>
+				            	</label>
+											<input name="wizard-userName" id="Titu" type="text" class="form-control required">
+										</div>
+										<div class="form-group">
+											<label for="fecnactit">Fecha de nacimiento<br>
+	                      <input type="date" id="fecnactit" name="fecnactit"/>
+	                      <input type="button" id="edadtit" name="edadtit" value="Calcular edad" onclick="return calcularEdad('fecnactit','result');"/>
+												<!-- div donde mostraremos el resultado -->
+                            <input id="result" disabled size="28px" style="background-color: #00CC00;"></input><br/>
+                  		</label><br><br>
+											<div style="margin-left: 50px;">Género&mdash;(sólo por el proceso de digitación)<br>
+												<label class="form-check form-check-inline" style="margin-left: 20px;">
+													<input class="form-check-inline" type="radio" value="option1g" name="radios-genero" checked>
+													<span class="form-check-label">
+														Masculino
+													</span>
+												</label>
+												<label class="form-check form-check-inline">
+												<input class="form-check-inline" type="radio" value="option2g" name="radios-genero">
+													<span class="form-check-label">
+														Femenino
+													</span>
+												</label>
+											</label>
+											</div>
+											<div style="margin-left: 50px;">Estado Civil<br>
+												<label class="form-check form-check-inline" style="margin-left: 20px;">
+													<input class="form-check-inline" type="radio" value="opcion1ec" name="radios-estciv" checked>
+													<span class="form-check-label">
+														Soltero
+													</span>
+												</label>
+												<label class="form-check form-check-inline">
+												<input class="form-check-inline" type="radio" value="opcion2ec" name="radios-estciv">
+													<span class="form-check-label">
+														Casado
+													</span>
+												</label>
+												<label class="form-check form-check-inline">
+												<input class="form-check-inline" type="radio" value="opcion3ec" name="radios-estciv">
+													<span class="form-check-label">
+														Unión Libre
+													</span>
+												</label>
+											</label>
+											</div>
+										</div>
+										<div style="padding: 0px; margin-left: 50px;" class="form-group mb-0 col-md-3">
+											<label for="inputCel">Teléfono</label>
+												<span class="text-danger">*</span>
+											<input type="text" style="width=50%;" name="CelTit" class="form-control required" data-mask="(00) 000-000 00 00" id="inputCel" placeholder="Teléfono">
+											<span class="font-13 text-muted col-md-5"> e.j "(57) xxx-xxx xx xx "</span><br>
+											<span class="font-13 text-muted col-md-5"> (cod país)+Teléfono</span>
+										</div><br>
+										<div style="padding-left: 0px; margin-left: 50px;" class="form-group col-md-3">
+											<label class="form-label" for="emailTit">Email</label>
+												<span class="text-danger">*</span>
+											<input type="email" class="form-control required" name="emailTit" id="emailTit" placeholder="eMail" onchange="validarEmail(emailTit);">
+												<small class="font-13 text-muted col-md-5">Dirección de correo electrónico</small>
+											<span id="emailOKTit"></span>
+											<script>
+												ValidaElMail("emailTit","emailOKTit");
+											</script><br><br>
+										</div>
+										<hr width=100% align="left" size=200 color="#00CC00">
+
+										<div class="row">
+											<div class="col-12 col-lg-6">
+													<div class="card" id="benefic">
+														<h3 style="margin: auto; width: 180px; border: 1px solid black; text-align: center; padding: 5px; background-color: #FF6600;">BENEFICIARIOS</h3><br><br>
+														<label style="font-weight: bold;" class="form-label">Relación de Beneficiarios</label>
+														<br>
+													<div class="form-group col-lg-12">
+														<label class="form-label">Parentesco
+															<span class="text-danger">*</span>
+														</label>
+														<select name="parent1" id="parent1" class="form-control col-md-7">
+															<option label="Seleccione..." selected disabled>
+															<option value=13>ABUELO(A)</option>
+															<option value=21>BISABUELO(A)</option>
+															<option value=20>BISNIETO(A)</option>
+															<option value=22>COMPAÑERO(A)</option>
+															<option value=0>CONYUGE</option>
+															<option value=9>CUÑADA(O)</option>
+															<option value=19>DOMESTICO(A)</option>
+															<option value=18>EX_EXPOSO(A)</option>
+															<option value=3>HERMANA(O)</option>
+															<option value=23>HERMANASTRO(A)</option>
+															<option value=5>HIJA(O)</option>
+															<option value=14>HIJASTRA(O)</option>
+															<option value=16>MADRASTRA</option>
+															<option value=2>MADRE</option>
+															<option value=12>NIETA(O)</option>
+															<option value=6>NO FAMILIA</option>
+															<option value=8>NUERA</option>
+															<option value=99>OTRO</option>
+															<option value=15>PADRASTRO</option>
+															<option value=1>PADRE</option>
+															<option value=17>PRIMA(O)</option>
+															<option value=11>SOBRINA(O)</option>
+															<option value=4>SUEGRA(O)</option>
+															<option value=10>TIA(O)</option>
+															<option value=7>TITULAR</option>
+															<option value=81>YERNO</option>
+														</select>
+													</div>
+													<div class="form-group col-lg-12" id="divi278">
+														<label for="fecnacben">Fecha de nacimiento<br>
+				                      <input type="date" id="fecnacben" name="fecnacben"/>
+				                      <input type="button" id="edadben" name="edadben" value="Edad" onclick="return calcularEdad1('fecnacben','result1');"/>
+															<!-- div donde mostraremos el resultado -->
+			                            <input id="result1" disabled size="5px" style="background-color: #FF6600; text-align: center; font-weight: bold;"></input><br/>
+															<hr width=100% align="left" size=50 color="#FF6600">
+			                  		</label><br>
+													</div>
+
+												<div class="form-group col-lg-12">
+													<label class="form-label">Parentesco
+													</label>
+													<select name="parent2" id="parent2" class="form-control col-md-7" data-toggle="select2">
+														<option label="Seleccione..." selected disabled>
+														<option value=13>ABUELO(A)</option>
+														<option value=21>BISABUELO(A)</option>
+														<option value=20>BISNIETO(A)</option>
+														<option value=22>COMPAÑERO(A)</option>
+														<option value=0>CONYUGE</option>
+														<option value=9>CUÑADA(O)</option>
+														<option value=19>DOMESTICO(A)</option>
+														<option value=18>EX_EXPOSO(A)</option>
+														<option value=3>HERMANA(O)</option>
+														<option value=23>HERMANASTRO(A)</option>
+														<option value=5>HIJA(O)</option>
+														<option value=14>HIJASTRA(O)</option>
+														<option value=16>MADRASTRA</option>
+														<option value=2>MADRE</option>
+														<option value=12>NIETA(O)</option>
+														<option value=6>NO FAMILIA</option>
+														<option value=8>NUERA</option>
+														<option value=99>OTRO</option>
+														<option value=15>PADRASTRO</option>
+														<option value=1>PADRE</option>
+														<option value=17>PRIMA(O)</option>
+														<option value=11>SOBRINA(O)</option>
+														<option value=4>SUEGRA(O)</option>
+														<option value=10>TIA(O)</option>
+														<option value=7>TITULAR</option>
+														<option value=81>YERNO</option>
+													</select>
+												</div>
+												<div class="form-group col-lg-12">
+													<label for="fecnacben2">Fecha de nacimiento<br>
+														<input type="date" id="fecnacben2" name="fecnacben2"/>
+														<input type="button" id="edadben2" name="edadben2" value="Edad" onclick="return calcularEdad1('fecnacben2','result2');"/>
+														<!-- div donde mostraremos el resultado -->
+																<input id="result2" disabled size="5px" style="background-color: #FF6600; text-align: center; font-weight: bold;"></input><br/>
+														<hr width=100% align="left" size=50 color="#FF6600">
+													</label>
+												</div>
+											</div>
+											<button type="submit" id="otrbn" class="btn btn-outline-warning" style="width: 180px; text-align: center;" onclick="return otroBenef('#benefic');"><i class="fas fa-plus"></i> otro Beneficiario</button>
+									</div>
+
+									<div class="col-12 col-lg-6">
+										<div class="card" id="adiciona">
+											<h3 style="margin: auto; width: 180px; border: 1px solid black; text-align: center; padding: 5px; background-color: #FF6600;">ADICIONALES</h3><br><br>
+												<label style="font-weight: bold;" class="form-label">Lista de Adicionales</label>
+											<br>
+
+											<div style="padding: 0;" class="form-group col-lg-12">
+												<label class="form-label">Parentesco
+													<span class="text-danger">*</span>
+												</label>
+												<select name="parentA1" id="parentA1" class="form-control col-md-7" data-toggle="select2">
+														<option label="Seleccione..." selected disabled>
+														<option value=13>ABUELO(A)</option>
+														<option value=21>BISABUELO(A)</option>
+														<option value=20>BISNIETO(A)</option>
+														<option value=22>COMPAÑERO(A)</option>
+														<option value=0>CONYUGE</option>
+														<option value=9>CUÑADA(O)</option>
+														<option value=19>DOMESTICO(A)</option>
+														<option value=18>EX_EXPOSO(A)</option>
+														<option value=3>HERMANA(O)</option>
+														<option value=23>HERMANASTRO(A)</option>
+														<option value=5>HIJA(O)</option>
+														<option value=14>HIJASTRA(O)</option>
+														<option value=16>MADRASTRA</option>
+														<option value=2>MADRE</option>
+														<option value=12>NIETA(O)</option>
+														<option value=6>NO FAMILIA</option>
+														<option value=8>NUERA</option>
+														<option value=99>OTRO</option>
+														<option value=15>PADRASTRO</option>
+														<option value=1>PADRE</option>
+														<option value=17>PRIMA(O)</option>
+														<option value=11>SOBRINA(O)</option>
+														<option value=4>SUEGRA(O)</option>
+														<option value=10>TIA(O)</option>
+														<option value=7>TITULAR</option>
+														<option value=81>YERNO</option>
+												</select>
+											</div>
+											<div class="form-group">
+												<label for="fecnacAd1">Fecha de nacimiento<br>
+													<input type="date" id="fecnacAd1" name="fecnacAd1"/>
+													<input type="button" id="edadAd1" name="edadAd1" value="Edad" onclick="return calcularEdad1('fecnacAd1','result3');"/>
+													<!-- div donde mostraremos el resultado -->
+															<input id="result3" disabled size="5px" style="background-color: #FF6600; text-align: center; font-weight: bold;"></input><br/>
+													<hr width=100% align="left" size=50 color="#FF6600">
+												</label><br>
+											</div>
+
+											<div style="padding: 0;" class="form-group col-lg-12">
+												<label class="form-label">Parentesco
+													<span class="text-danger">*</span>
+												</label>
+												<select name="parentA2" id="parentA2" class="form-control col-md-7" data-toggle="select2">
+														<option label="Seleccione..." selected disabled>
+														<option value=13>ABUELO(A)</option>
+														<option value=21>BISABUELO(A)</option>
+														<option value=20>BISNIETO(A)</option>
+														<option value=22>COMPAÑERO(A)</option>
+														<option value=0>CONYUGE</option>
+														<option value=9>CUÑADA(O)</option>
+														<option value=19>DOMESTICO(A)</option>
+														<option value=18>EX_EXPOSO(A)</option>
+														<option value=3>HERMANA(O)</option>
+														<option value=23>HERMANASTRO(A)</option>
+														<option value=5>HIJA(O)</option>
+														<option value=14>HIJASTRA(O)</option>
+														<option value=16>MADRASTRA</option>
+														<option value=2>MADRE</option>
+														<option value=12>NIETA(O)</option>
+														<option value=6>NO FAMILIA</option>
+														<option value=8>NUERA</option>
+														<option value=99>OTRO</option>
+														<option value=15>PADRASTRO</option>
+														<option value=1>PADRE</option>
+														<option value=17>PRIMA(O)</option>
+														<option value=11>SOBRINA(O)</option>
+														<option value=4>SUEGRA(O)</option>
+														<option value=10>TIA(O)</option>
+														<option value=7>TITULAR</option>
+														<option value=81>YERNO</option>
+												</select>
+											</div>
+											<div class="form-group">
+												<label for="fecnacAd2">Fecha de nacimiento<br>
+													<input type="date" id="fecnacAd2" name="fecnacAd2"/>
+													<input type="button" id="edadAd2" name="edadAd2" value="Edad" onclick="return calcularEdad1('fecnacAd2','result4');"/>
+													<!-- div donde mostraremos el resultado -->
+															<input id="result4" disabled size="5px" style="background-color: #FF6600; text-align: center; font-weight: bold;"></input><br/>
+													<hr width=100% align="left" size=50 color="#FF6600">
+												</label><br>
+											</div>
+
+										</div>
+										</div>
+
+									</div>
+
+									</div>
+
+									<div id="validation-step-2">
+										<div class="form-group">
+											<label class="form-label">First name
+					              	<span class="text-danger">*</span>
+					            </label>
+											<input name="wizard-name" type="text" class="form-control required">
+										</div>
+										<div class="form-group">
+											<label class="form-label">Last name
+					              	<span class="text-danger">*</span>
+					            </label>
+											<input name="wizard-surname" type="text" class="form-control required">
+										</div>
+										<div class="form-group">
+											<label class="form-label">Email
+					              	<span class="text-danger">*</span>
+					            </label>
+											<input name="wizard-email" type="text" class="form-control required email">
+										</div>
+										<div class="form-group mb-0">
+											<label class="form-label">Address</label>
+											<input name="wizard-address" type="text" class="form-control">
+										</div>
+									</div>
+
+									<div id="validation-step-3">
+										<div class="form-group">
+											<label class="custom-control custom-checkbox">
+					              <input type="checkbox" class="custom-control-input">
+					              <span class="custom-control-label">I agree with the Terms and Conditions</span>
+				            	</label>
+										</div>
+									</div>
+
+									<div id="validation-step-4">
+										<div class="form-group">
+											<label class="custom-control custom-checkbox">
+												<button type="button" class="btn btn-lg btn-success" role="button" aria-pressed="true"/>
+												<span >Link para la plataforma de pago</span>
+											</label>
+										</div>
+									</div>
+
+								</div>
+
+							</form>
+						</div>
+					</div>
+				</div>
+			</main>		
+		</div>
+	{% endblock %}
+	<script src="js/app.js"></script>
+
+	<script>
+					function isValidDate(day,month,year)
+					 {
+							 var dteDate;
+
+							 // En javascript, el mes empieza en la posicion 0 y termina en la 11
+							 //   siendo 0 el mes de enero
+							 // Por esta razon, tenemos que restar 1 al mes
+							 month=month-1;
+							 // Establecemos un objeto Data con los valore recibidos
+							 // Los parametros son: año, mes, dia, hora, minuto y segundos
+							 // getDate(); devuelve el dia como un entero entre 1 y 31
+							 // getDay(); devuelve un num del 0 al 6 indicando siel dia es lunes,
+							 //   martes, miercoles ...
+							 // getHours(); Devuelve la hora
+							 // getMinutes(); Devuelve los minutos
+							 // getMonth(); devuelve el mes como un numero de 0 a 11
+							 // getTime(); Devuelve el tiempo transcurrido en milisegundos desde el 1
+							 //   de enero de 1970 hasta el momento definido en el objeto date
+							 // setTime(); Establece una fecha pasandole en milisegundos el valor de esta.
+							 // getYear(); devuelve el año
+							 // getFullYear(); devuelve el año
+							 dteDate=new Date(year,month,day);
+
+							 //Devuelva true o false...
+							 return ((day==dteDate.getDate()) && (month==dteDate.getMonth()) && (year==dteDate.getFullYear()));
+					 }
+	 </script>
+
+	 <script>
+					 /**
+					 * Funcion para validar una fecha
+					 * Tiene que recibir:
+					 *  La fecha en formato ingles yyyy-mm-dd
+					 * Devuelve:
+					 *  true-Fecha correcta
+					 *  false-Fecha Incorrecta
+					 */
+					 function validate_fecha(fecha)
+					 {
+							 var patron=new RegExp("^(19|20)+([0-9]{2})([-])([0-9]{1,2})([-])([0-9]{1,2})$");
+
+							 if(fecha.search(patron)==0)
+							 {
+									 var values=fecha.split("-");
+									 if(isValidDate(values[2],values[1],values[0]))
+									 {
+											 return true;
+									 }
+							 }
+							 return false;
+					 }
+	</script>
+
+	<script>
+		 /**
+		 * Esta función calcula la edad de una persona y los meses
+		 * La fecha la tiene que tener el formato yyyy-mm-dd que es
+		 * metodo que por defecto lo devuelve el <input type="date">
+		 */
+
+		 function calcularEdad(tagedad, elresu)
+		 {
+				 tagedad = "#" + tagedad
+				 var fecha = (document.querySelector(tagedad)).value
+
+				 if(validate_fecha(fecha)==true)
+					 {
+					 // Si la fecha es correcta, calculamos la edad
+					 var values=fecha.split("-");
+					 var dia = values[2];
+					 var mes = values[1];
+					 var ano = values[0];
+
+					 // cogemos los valores actuales
+					 var fecha_hoy = new Date();
+					 var ahora_ano = fecha_hoy.getYear();
+					 var ahora_mes = fecha_hoy.getMonth()+1;
+					 var ahora_dia = fecha_hoy.getDate();
+
+					 // realizamos el calculo
+					 var edad = (ahora_ano + 1900) - ano;
+					 if ( ahora_mes < mes )
+					 {
+							 edad--;
+					 }
+					 if ((mes == ahora_mes) && (ahora_dia < dia))
+					 {
+							 edad--;
+					 }
+					 if (edad > 1900)
+					 {
+							 edad -= 1900;
+					 }
+
+					 // calculamos los meses
+					 var meses=0;
+					 if(ahora_mes>mes)
+							 meses=ahora_mes-mes;
+					 if(ahora_mes<mes)
+							 meses=12-(mes-ahora_mes);
+					 if(ahora_mes==mes && dia>ahora_dia)
+							 meses=11;
+
+					 // calculamos los dias
+					 var dias=0;
+					 if(ahora_dia>dia)
+							 dias=ahora_dia-dia;
+					 if(ahora_dia<dia)
+					 {
+							 ultimoDiaMes=new Date(ahora_ano, ahora_mes, 0);
+							 dias=ultimoDiaMes.getDate()-(dia-ahora_dia);
+					 }
+					 	document.getElementById(elresu).value="Tienes "+edad+" años, "+meses+" meses y "+dias+" días";
+						alert(edad);
+					}
+				else{
+						document.getElementById(elresu).innerHTML="La fecha "+fecha+" es incorrecta";
+				}
+		 }
+ 	</script>
+
+	<script>
+		 /**
+		 * VARIACIÓN DEL ANTERIOR SÓLO PARA CALCULAR LOS AÑOS !!!!
+		 * Esta función calcula la edad de una persona y los meses
+		 * La fecha la tiene que tener el formato yyyy-mm-dd que es
+		 * metodo que por defecto lo devuelve el <input type="date">
+		 */
+
+		 function calcularEdad1(tagedad, elresu)
+		 {
+				 tagedad = "#" + tagedad
+				 var fecha = (document.querySelector(tagedad)).value
+
+				 if(validate_fecha(fecha)==true)
+					 {
+					 // Si la fecha es correcta, calculamos la edad
+					 var values=fecha.split("-");
+					 var dia = values[2];
+					 var mes = values[1];
+					 var ano = values[0];
+
+					 // cogemos los valores actuales
+					 var fecha_hoy = new Date();
+					 var ahora_ano = fecha_hoy.getYear();
+					 var ahora_mes = fecha_hoy.getMonth()+1;
+					 var ahora_dia = fecha_hoy.getDate();
+
+					 // realizamos el calculo
+					 var edad = (ahora_ano + 1900) - ano;
+					 if ( ahora_mes < mes )
+					 {
+							 edad--;
+					 }
+					 if ((mes == ahora_mes) && (ahora_dia < dia))
+					 {
+							 edad--;
+					 }
+					 if (edad > 1900)
+					 {
+							 edad -= 1900;
+					 }
+
+					 // calculamos los meses
+					 var meses=0;
+					 if(ahora_mes>mes)
+							 meses=ahora_mes-mes;
+					 if(ahora_mes<mes)
+							 meses=12-(mes-ahora_mes);
+					 if(ahora_mes==mes && dia>ahora_dia)
+							 meses=11;
+
+					 // calculamos los dias
+					 var dias=0;
+					 if(ahora_dia>dia)
+							 dias=ahora_dia-dia;
+					 if(ahora_dia<dia)
+					 {
+							 ultimoDiaMes=new Date(ahora_ano, ahora_mes, 0);
+							 dias=ultimoDiaMes.getDate()-(dia-ahora_dia);
+					 }
+					 	document.getElementById(elresu).value=edad;
+					}
+				else{
+						document.getElementById(elresu).innerHTML="La fecha "+fecha+" es incorrecta";
+				}
+		 }
+ 	</script>
+
+	<!-- Validar un eMail con JavaScript -->
+	<script>
+		function ValidaElMail(correito, elmist)	{
+			document.addEventListener('DOMContentLoaded', function() {
+
+				document.getElementById(correito).addEventListener('input', function() {
+				campo = event.target;
+				valido = document.getElementById(elmist);
+
+				emailRegex = /^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-Z]{2,63}$/i;
+				//Se muestra un texto a modo de ejemplo, luego va a ser un icono
+				if (emailRegex.test(campo.value)) {
+					valido.innerText = "válido";
+					document.querySelector("#"+elmist).style.color = 'blue';
+					} else {
+							valido.innerText = "incorrecto";
+							document.querySelector("#"+elmist).style.color = 'red';
+						}
+					});
+			});
+		}
+	</script>
+
+	<!-- Agregar Beneficiarios y Adicionales -->
+			<script>
+				function otroBenef(eltags) {
+
+					const div = document.createElement('div');
+					div.className = 'form-group col-lg-12';
+					var aleatj = Math.floor(Math.random() * (100 - 1)) + 1
+					var nomdiv = 'divi'+aleatj;
+					div.id = nomdiv;
+					document.querySelector(eltags).append(div);
+					alert(nomdiv);
+
+					//const lbl = document.createElement('label');
+					//lbl.className = 'form-label';
+					//lbl.value = 'Parentesco';
+					//newlbl.appendChild(lbl);
+					//document.getElementById(eltags).appendChild(newt);
+
+					const lbl = document.createElement('label');
+					lbl.className = 'form-label';
+					lbl.value = 'Parentesco';
+					eldivi = "#"+nomdiv;
+					//document.getElementById(eldivi).appendChild(lbl);
+					document.querySelector(eldivi).append(lbl);
+
+					//document.getElementById(eltags).innerHTML='<br>';
+
+					const sel = document.createElement('select');
+					var nomsel = 'parent'+aleatj;
+					sel.name = nomsel;
+					sel.id = nomsel;
+					sel.className = 'form-control col-md-7';
+					document.querySelector(eldivi).append(sel);
+
+					nomseln = "#"+nomsel;
+					$(nomseln).append('<option label="Seleccione..." selected disabled></option>');
+					$(nomseln).append('<option value=13>ABUELO(A)</option>');
+					$(nomseln).append('<option value=21>BISABUELO(A)</option>');
+					$(nomseln).append('<option value=20>BISNIETO(A)</option>');
+					$(nomseln).append('<option value=22>COMPAÑERO(A)</option>');
+					$(nomseln).append('<option value=0>CONYUGE</option>');
+					$(nomseln).append('<option value=9>CUÑADA(O)</option>');
+					$(nomseln).append('<option value=19>DOMESTICO(A)</option>');
+
+					const div2 = document.createElement('div');
+					div2.className = 'form-group col-lg-12';
+					var nomdiv2 = 'divi2'+aleatj;
+					div2.id = nomdiv2;
+					document.querySelector(eltags).append(div2);
+
+					const lbl2 = document.createElement('label');
+					var nomlbl2 = 'fecnac'+aleatj;
+					lbl2.for = nomlbl2;
+					lbl2.value = 'Fecha de nacimiento';
+					elabel2 = "#"+ nomdiv2;
+					document.querySelector(elabel2).append(lbl2);
+
+					const inpt1 = document.createElement('input');
+					inpt1.type = 'date';
+					inpt1.id = nomlbl2;
+					inpt1.name = nomlbl2;
+					nomdlbl2 = "#"+nomlbl2;
+					document.querySelector(nomdlbl2).append(inpt1);
+
+					const inpt3 = document.createElement('input');
+					var results = 'resul'+aleatj;
+					inpt3.id = results;
+					inpt3.disabled = 'true';
+					inpt3.size = '5px';
+					document.querySelector(nomdlbl2).append(inpt3);
+					document.querySelector("#"+results).style.backgroundcolor = '#FF6600';
+					document.querySelector("#"+results).style.textalign ='center';
+					document.querySelector("#"+results).style.fontweight ='bold';
+
+					const inpt2 = document.createElement('input');
+					inpt2.type = 'button';
+					var nominpt2 = 'edadben'+aleatj;
+					inpt2.id = nominpt2;
+					inpt2.name = nominpt2;
+					inpt2.value = 'Edad';
+					document.querySelector(nomdlbl2).append(inpt2);
+
+					var inputc = document.getElementById(nominpt2);
+					inputc.onclick = function() {
+						return calcularEdad1('#'+nomlbl2 ,'#'+results);
+					}
+
+					const hr = document.createElement('hr');
+					hr.width = '100%';
+					hr.align = 'left';
+					hr.size = '50';
+					hr.color = '#FF6600';
+					nompalhr = "#"+nominpt2;
+					document.querySelector(nompalhr).append(hr);
+
+					const br = document.createElement('br');
+					document.querySelector(eldivi).append(br);
+
+					return false;
+				}
+			</script>
+
+			<script>
+				function vuelabenadc(eltextA, elbutT) {
+					var divRemove = document.querySelector(eltextA);
+ 					divRemove.remove();
+					var iRemove = document.querySelector(elbutT);
+					iRemove.remove();
+					return false;
+				}
+			</script>
+
+	<script>
+		$(function() {
+			$("#smartwizard-default-primary").smartWizard({
+				theme: "default",
+				showStepURLhash: false
+			});
+			$("#smartwizard-default-success").smartWizard({
+				theme: "default",
+				showStepURLhash: false
+			});
+			$("#smartwizard-default-danger").smartWizard({
+				theme: "default",
+				showStepURLhash: false
+			});
+			$("#smartwizard-default-warning").smartWizard({
+				theme: "default",
+				showStepURLhash: false
+			});
+			$("#smartwizard-arrows-primary").smartWizard({
+				theme: "arrows",
+				showStepURLhash: false
+			});
+			$("#smartwizard-arrows-success").smartWizard({
+				theme: "arrows",
+				showStepURLhash: false
+			});
+			$("#smartwizard-arrows-danger").smartWizard({
+				theme: "arrows",
+				showStepURLhash: false
+			});
+			$("#smartwizard-arrows-warning").smartWizard({
+				theme: "arrows",
+				showStepURLhash: false
+			});
+			// Validation
+			var $validationForm = $("#smartwizard-validation");
+			$validationForm.validate({
+				errorPlacement: function errorPlacement(error, element) {
+					$(element).parents(".form-group").append(
+						error.addClass("invalid-feedback small d-block")
+					)
+				},
+				highlight: function(element) {
+					$(element).addClass("is-invalid");
+				},
+				unhighlight: function(element) {
+					$(element).removeClass("is-invalid");
+				},
+				rules: {
+					"wizard-confirm": {
+						equalTo: "input[name=\"wizard-password\"]"
+					}
+				}
+			});
+			$validationForm
+				.smartWizard({
+					autoAdjustHeight: false,
+					backButtonSupport: false,
+					useURLhash: false,
+					showStepURLhash: false,
+					toolbarSettings: {
+						toolbarExtraButtons: [$("<button class=\"btn btn-submit btn-primary\" type=\"button\">Finish</button>")]
+					}
+				})
+				.on("leaveStep", function(e, anchorObject, stepNumber, stepDirection) {
+					if (stepDirection === "forward") {
+						return $validationForm.valid();
+					}
+					return true;
+				});
+			$validationForm.find(".btn-submit").on("click", function() {
+				if (!$validationForm.valid()) {
+					return;
+				}
+				alert("Great! The form is valid and ready to submit.");
+				return false;
+			});
+		});
+	</script>
+
+
+</html>

@@ -1,0 +1,519 @@
+{% extends 'layout1.html' %}
+
+{% block body %}
+
+<main class="content">
+    <div class="container-fluid p-0">
+
+        <h1 class="h3 mb-3">Cruce de las Asociadas</h1>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body m-sm-3 m-md-5">
+                        <h1 style="color: chartreuse; font-size: 30px;" class="h3 mb-3">COSERFUN LOS OLIVOS</h1>
+                        <div class="mb-4">                            
+                             <strong style="font-size: 20px;">Resumen Asociadas</strong>
+                        </div>
+                        <div class="row">{% for datosc in datcru %}
+                            <div class="col-md-6">
+                                <div class="text-muted">Fecha del Cruce</div>
+                                <strong>{{ datosc.1 }}</strong>
+                            </div>
+                            <div class="col-md-6 text-md-right">
+                                <div class="text-muted">Valor de la unidad</div>
+                                <strong>$ {{ "{:,.2f}".format(vunidad) }}</strong>
+                            </div>{% endfor %}
+                        </div>
+
+                        <hr class="my-4" />
+
+                        <h5 style="font-size: x-large; color:white; padding-left: 20px;" class="card-title mb-0 bg-dark">CAVIPETROL</h5>
+                        <br>
+                        <div class="row mb-4">                            
+                            <div class="col-md-6">
+                               <TABLE WIDTH="100%" BORDER="1">
+                                <colgroup style="background: orange;"></colgroup>
+                                <colgroup style="background: yellowgreen;"></colgroup>
+                                   <tr>
+                                       <th style="text-align: center; background-color: aliceblue;"><strong>Afiliados</strong></th>
+                                       <th  style="text-align: center; background-color: aliceblue;"><strong>COMPARTIDOS</strong></th>
+                                   </tr>
+                                    <tr>                                        
+                                        <td><h3 style="font-size: 14px; text-align: center;" class="card-title mb-0 bg-warning text-dark">1</h3></td>
+                                        <td style="text-align: center;"><strong>{{ rep1Cavip }}</strong></td>
+                                    </tr>
+                                    <tr>                                        
+                                        <td><h3 style="font-size: 12px; text-align: center;" class="card-title mb-0 bg-warning text-dark">2</h3></td>
+                                        <td style="text-align: center;"><strong>{{ rep2Cavip }}</strong></td>
+                                    </tr>
+                                    <tr>                                        
+                                        <td><h3 style="font-size: 12px; text-align: center;" class="card-title mb-0 bg-warning text-dark">3</h3></td>
+                                        <td style="text-align: center;"><strong>{{ rep3Cavip }}</strong></td>
+                                    </tr>
+                                    <tr>                                        
+                                        <td><h3 style="font-size: 12px; text-align: center;" class="card-title mb-0 bg-warning text-dark">4</h3></td>
+                                        <td style="text-align: center;"><strong>{{ rep4Cavip }}</strong></td>
+                                    </tr>
+                                    <tr>                                        
+                                        <td><h3 style="font-size: 12px; text-align: center;" class="card-title mb-0 bg-warning text-dark">5</h3></td>
+                                        <td style="text-align: center;"><strong>{{ rep5Cavip }}</strong></td>
+                                    </tr>
+                                    <tr>                                        
+                                        <td><h3 style="font-size: 12px; text-align: center;" class="card-title mb-0 bg-warning text-dark">6</h3></td>
+                                        <td style="text-align: center;"><strong>{{ rep6Cavip }}</strong></td>
+                                    </tr>
+                                    <tr>                                        
+                                        <td><h3 style="font-size: 12px; text-align: center;" class="card-title mb-0 bg-warning text-dark"><strong>Total</strong></h3></td>
+                                        <td style="text-align: center; font-size: 14px;"><strong>{{ totCavip1 }}</strong></td>
+                                    </tr>
+                               </TABLE>
+                            </div>
+                            <div class="col-md-6 text-md-right">
+                                <TABLE WIDTH="100%" BORDER="1">
+                                    <colgroup style="background: rgb(0, 255, 221);"></colgroup>                                   
+                                    <tr>
+                                        <th style="background-color: aliceblue; text-align: center;">SUB TOTAL</th>
+                                    </tr>
+                                    <tr>
+                                        <td>$ {{ "{:,.2f}".format(vunidad * rep1Cavip) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>$ {{ "{:,.2f}".format(vunidad / 2 * rep2Cavip) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>$ {{ "{:,.2f}".format(vunidad / 3 * rep3Cavip) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>$ {{ "{:,.2f}".format(vunidad / 4 * rep4Cavip) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>$ {{ "{:,.2f}".format(vunidad / 5 * rep5Cavip) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>$ {{ "{:,.2f}".format(vunidad / 6 * rep6Cavip) }}</td>
+                                        <td style="text-align: center; border: none; color: orangered;"><strong>Promedio</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>$ {{ "{:,.2f}".format(subtCavipet) }}</strong></td>
+                                        <td colspan="2" style="text-align: center;"><strong>$ {{ "{:,.2f}".format( subtCavipet / totCavip ) }}</strong></td>
+                                    </tr>
+                                </TABLE>
+                            </div>
+                        </div>
+
+                        <br>
+                        <h5 style="font-size: x-large; color:white; padding-left: 20px;" class="card-title mb-0 bg-dark">COOPETROL</h5>
+                        <br>
+                        <div class="row mb-4">                            
+                            <div class="col-md-6">
+                               <TABLE WIDTH="100%" BORDER="1">
+                                <colgroup style="background: orange;"></colgroup>
+                                <colgroup style="background: yellowgreen;"></colgroup>
+                                   <tr>
+                                       <th style="text-align: center; background-color: aliceblue;"><strong>Afiliados</strong></th>
+                                       <th  style="text-align: center; background-color: aliceblue;"><strong>COMPARTIDOS</strong></th>
+                                   </tr>
+                                    <tr>                                        
+                                        <td><h3 style="font-size: 14px; text-align: center;" class="card-title mb-0 bg-warning text-dark">1</h3></td>
+                                        <td style="text-align: center;"><strong>{{ rep1Coop }}</strong></td>
+                                    </tr>
+                                    <tr>                                        
+                                        <td><h3 style="font-size: 12px; text-align: center;" class="card-title mb-0 bg-warning text-dark">2</h3></td>
+                                        <td style="text-align: center;"><strong>{{ rep2Coop }}</strong></td>
+                                    </tr>
+                                    <tr>                                        
+                                        <td><h3 style="font-size: 12px; text-align: center;" class="card-title mb-0 bg-warning text-dark">3</h3></td>
+                                        <td style="text-align: center;"><strong>{{ rep3Coop }}</strong></td>
+                                    </tr>
+                                    <tr>                                        
+                                        <td><h3 style="font-size: 12px; text-align: center;" class="card-title mb-0 bg-warning text-dark">4</h3></td>
+                                        <td style="text-align: center;"><strong>{{ rep4Coop }}</strong></td>
+                                    </tr>
+                                    <tr>                                        
+                                        <td><h3 style="font-size: 12px; text-align: center;" class="card-title mb-0 bg-warning text-dark">5</h3></td>
+                                        <td style="text-align: center;"><strong>{{ rep5Coop }}</strong></td>
+                                    </tr>
+                                    <tr>                                        
+                                        <td><h3 style="font-size: 12px; text-align: center;" class="card-title mb-0 bg-warning text-dark">6</h3></td>
+                                        <td style="text-align: center;"><strong>{{ rep6Coop }}</strong></td>
+                                    </tr>
+                                    <tr>                                        
+                                        <td><h3 style="font-size: 12px; text-align: center;" class="card-title mb-0 bg-warning text-dark"><strong>Total</strong></h3></td>
+                                        <td style="text-align: center; font-size: 14px;"><strong>{{ totCoop1 }}</strong></td>
+                                    </tr>
+                               </TABLE>
+                            </div>
+                            <div class="col-md-6 text-md-right">                              
+                                <TABLE WIDTH="100%" BORDER="1">
+                                    <colgroup style="background: rgb(0, 255, 221);"></colgroup>                                   
+                                    <tr>
+                                        <th style="background-color: aliceblue; text-align: center;">SUB TOTAL</th>                                       
+                                    </tr>
+                                    <tr>
+                                        <td>$ {{ "{:,.2f}".format(vunidad * rep1Coop) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>$ {{ "{:,.2f}".format(vunidad / 2 * rep2Coop) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>$ {{ "{:,.2f}".format(vunidad / 3 * rep3Coop) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>$ {{ "{:,.2f}".format(vunidad / 4 * rep4Coop) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>$ {{ "{:,.2f}".format(vunidad / 5 * rep5Coop) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>$ {{ "{:,.2f}".format(vunidad / 6 * rep6Coop) }}</td>
+                                        <td style="text-align: center; border: none; color: orangered;"><strong>Promedio</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>$ {{ "{:,.2f}".format(subtCoopetr) }}</strong></td>
+                                        <td colspan="2" style="text-align: center;"><strong>$ {{ "{:,.2f}".format( subtCoopetr / totCoop ) }}</strong></td>
+                                    </tr>
+                                </TABLE>
+                            </div>
+                        </div>
+
+                        <br>
+                        <h5 style="font-size: x-large; color:white; padding-left: 20px;" class="card-title mb-0 bg-dark">COPACREDITO</h5>
+                        <br>
+                        <div class="row mb-4">                            
+                            <div class="col-md-6">
+                               <TABLE WIDTH="100%" BORDER="1">
+                                <colgroup style="background: orange;"></colgroup>
+                                <colgroup style="background: yellowgreen;"></colgroup>
+                                   <tr>
+                                       <th style="text-align: center; background-color: aliceblue;"><strong>Afiliados</strong></th>
+                                       <th  style="text-align: center; background-color: aliceblue;"><strong>COMPARTIDOS</strong></th>
+                                   </tr>
+                                    <tr>                                        
+                                        <td><h3 style="font-size: 14px; text-align: center;" class="card-title mb-0 bg-warning text-dark">1</h3></td>
+                                        <td style="text-align: center;"><strong>{{ rep1Copac }}</strong></td>
+                                    </tr>
+                                    <tr>                                        
+                                        <td><h3 style="font-size: 12px; text-align: center;" class="card-title mb-0 bg-warning text-dark">2</h3></td>
+                                        <td style="text-align: center;"><strong>{{ rep2Copac }}</strong></td>
+                                    </tr>
+                                    <tr>                                        
+                                        <td><h3 style="font-size: 12px; text-align: center;" class="card-title mb-0 bg-warning text-dark">3</h3></td>
+                                        <td style="text-align: center;"><strong>{{ rep3Copac }}</strong></td>
+                                    </tr>
+                                    <tr>                                        
+                                        <td><h3 style="font-size: 12px; text-align: center;" class="card-title mb-0 bg-warning text-dark">4</h3></td>
+                                        <td style="text-align: center;"><strong>{{ rep4Copac }}</strong></td>
+                                    </tr>
+                                    <tr>                                        
+                                        <td><h3 style="font-size: 12px; text-align: center;" class="card-title mb-0 bg-warning text-dark">5</h3></td>
+                                        <td style="text-align: center;"><strong>{{ rep5Copac }}</strong></td>
+                                    </tr>
+                                    <tr>                                        
+                                        <td><h3 style="font-size: 12px; text-align: center;" class="card-title mb-0 bg-warning text-dark">6</h3></td>
+                                        <td style="text-align: center;"><strong>{{ rep6Copac }}</strong></td>
+                                    </tr>
+                                    <tr>                                        
+                                        <td><h3 style="font-size: 12px; text-align: center;" class="card-title mb-0 bg-warning text-dark"><strong>Total</strong></h3></td>
+                                        <td style="text-align: center; font-size: 14px;"><strong>{{ totCopac1 }}</strong></td>
+                                    </tr>
+                               </TABLE>
+                            </div>
+                            <div class="col-md-6 text-md-right">                              
+                                <TABLE WIDTH="100%" BORDER="1">
+                                    <colgroup style="background: rgb(0, 255, 221);"></colgroup>                                   
+                                    <tr>
+                                        <th style="background-color: aliceblue; text-align: center;">SUB TOTAL</th>                                       
+                                    </tr>
+                                    <tr>
+                                        <td>$ {{ "{:,.2f}".format(vunidad * rep1Copac) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>$ {{ "{:,.2f}".format(vunidad / 2 * rep2Copac) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>$ {{ "{:,.2f}".format(vunidad / 3 * rep3Copac) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>$ {{ "{:,.2f}".format(vunidad / 4 * rep4Copac) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>$ {{ "{:,.2f}".format(vunidad / 5 * rep5Copac) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>$ {{ "{:,.2f}".format(vunidad / 6 * rep6Copac) }}</td>
+                                        <td style="text-align: center; border: none; color: orangered;"><strong>Promedio</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>$ {{ "{:,.2f}".format(subtCopacred) }}</strong></td>
+                                        <td colspan="2" style="text-align: center;"><strong>$ {{ "{:,.2f}".format( subtCopacred / totCopac ) }}</strong></td>
+                                    </tr>
+                                </TABLE>
+                            </div>
+                        </div>
+
+                        <br>
+                        <h5 style="font-size: x-large; color:white; padding-left: 20px;" class="card-title mb-0 bg-dark">COPACENTRO</h5>
+                        <br>
+                        <div class="row mb-4">                            
+                            <div class="col-md-6">
+                               <TABLE WIDTH="100%" BORDER="1">
+                                <colgroup style="background: orange;"></colgroup>
+                                <colgroup style="background: yellowgreen;"></colgroup>
+                                   <tr>
+                                       <th style="text-align: center; background-color: aliceblue;"><strong>Afiliados</strong></th>
+                                       <th style="text-align: center; background-color: aliceblue;"><strong>COMPARTIDOS</strong></th>
+                                   </tr>
+                                    <tr>                                        
+                                        <td><h3 style="font-size: 14px; text-align: center;" class="card-title mb-0 bg-warning text-dark">1</h3></td>
+                                        <td style="text-align: center;"><strong>{{ rep1Coptro }}</strong></td>
+                                    </tr>
+                                    <tr>                                        
+                                        <td><h3 style="font-size: 12px; text-align: center;" class="card-title mb-0 bg-warning text-dark">2</h3></td>
+                                        <td style="text-align: center;"><strong>{{ rep2Coptro }}</strong></td>
+                                    </tr>
+                                    <tr>                                        
+                                        <td><h3 style="font-size: 12px; text-align: center;" class="card-title mb-0 bg-warning text-dark">3</h3></td>
+                                        <td style="text-align: center;"><strong>{{ rep3Coptro }}</strong></td>
+                                    </tr>
+                                    <tr>                                        
+                                        <td><h3 style="font-size: 12px; text-align: center;" class="card-title mb-0 bg-warning text-dark">4</h3></td>
+                                        <td style="text-align: center;"><strong>{{ rep4Coptro }}</strong></td>
+                                    </tr>
+                                    <tr>                                        
+                                        <td><h3 style="font-size: 12px; text-align: center;" class="card-title mb-0 bg-warning text-dark">5</h3></td>
+                                        <td style="text-align: center;"><strong>{{ rep5Coptro }}</strong></td>
+                                    </tr>
+                                    <tr>                                        
+                                        <td><h3 style="font-size: 12px; text-align: center;" class="card-title mb-0 bg-warning text-dark">6</h3></td>
+                                        <td style="text-align: center;"><strong>{{ rep6Coptro }}</strong></td>
+                                    </tr>
+                                    <tr>                                        
+                                        <td><h3 style="font-size: 12px; text-align: center;" class="card-title mb-0 bg-warning text-dark"><strong>Total</strong></h3></td>
+                                        <td style="text-align: center; font-size: 14px;"><strong>{{ totCoptro1 }}</strong></td>
+                                    </tr>
+                               </TABLE>
+                            </div>
+                            <div class="col-md-6 text-md-right">                              
+                                <TABLE WIDTH="100%" BORDER="1">
+                                    <colgroup style="background: rgb(0, 255, 221);"></colgroup>                                   
+                                    <tr>
+                                        <th style="background-color: aliceblue; text-align: center;">SUB TOTAL</th>                                       
+                                    </tr>
+                                    <tr>
+                                        <td>$ {{ "{:,.2f}".format(vunidad * rep1Coptro) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>$ {{ "{:,.2f}".format(vunidad / 2 * rep2Coptro) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>$ {{ "{:,.2f}".format(vunidad / 3 * rep3Coptro) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>$ {{ "{:,.2f}".format(vunidad / 4 * rep4Coptro) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>$ {{ "{:,.2f}".format(vunidad / 5 * rep5Coptro) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>$ {{ "{:,.2f}".format(vunidad / 6 * rep6Coptro) }}</td>
+                                        <td style="text-align: center; border: none; color: orangered;"><strong>Promedio</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>$ {{ "{:,.2f}".format(subtCopactr) }}</strong></td>
+                                        <td colspan="2" style="text-align: center;"><strong>$ {{ "{:,.2f}".format( subtCopactr / totCoptro ) }}</strong></td>
+                                    </tr>
+                                </TABLE>
+                            </div>
+                        </div>
+
+                        <br>
+                        <h5 style="font-size: x-large; color:white; padding-left: 20px;" class="card-title mb-0 bg-dark">COOPADUCTOS</h5>
+                        <br>
+                        <div class="row mb-4">                            
+                            <div class="col-md-6">
+                               <TABLE WIDTH="100%" BORDER="1">
+                                <colgroup style="background: orange;"></colgroup>
+                                <colgroup style="background: yellowgreen;"></colgroup>
+                                   <tr>
+                                       <th style="text-align: center; background-color: aliceblue;"><strong>Afiliados</strong></th>
+                                       <th style="text-align: center; background-color: aliceblue;"><strong>COMPARTIDOS</strong></th>
+                                   </tr>
+                                    <tr>                                        
+                                        <td><h3 style="font-size: 14px; text-align: center;" class="card-title mb-0 bg-warning text-dark">1</h3></td>
+                                        <td style="text-align: center;"><strong>{{ rep1Coopdc }}</strong></td>
+                                    </tr>
+                                    <tr>                                        
+                                        <td><h3 style="font-size: 12px; text-align: center;" class="card-title mb-0 bg-warning text-dark">2</h3></td>
+                                        <td style="text-align: center;"><strong>{{ rep2Coopdc }}</strong></td>
+                                    </tr>
+                                    <tr>                                        
+                                        <td><h3 style="font-size: 12px; text-align: center;" class="card-title mb-0 bg-warning text-dark">3</h3></td>
+                                        <td style="text-align: center;"><strong>{{ rep3Coopdc }}</strong></td>
+                                    </tr>
+                                    <tr>                                        
+                                        <td><h3 style="font-size: 12px; text-align: center;" class="card-title mb-0 bg-warning text-dark">4</h3></td>
+                                        <td style="text-align: center;"><strong>{{ rep4Coopdc }}</strong></td>
+                                    </tr>
+                                    <tr>                                        
+                                        <td><h3 style="font-size: 12px; text-align: center;" class="card-title mb-0 bg-warning text-dark">5</h3></td>
+                                        <td style="text-align: center;"><strong>{{ rep5Coopdc }}</strong></td>
+                                    </tr>
+                                    <tr>                                        
+                                        <td><h3 style="font-size: 12px; text-align: center;" class="card-title mb-0 bg-warning text-dark">6</h3></td>
+                                        <td style="text-align: center;"><strong>{{ rep6Coopdc }}</strong></td>
+                                    </tr>
+                                    <tr>                                        
+                                        <td><h3 style="font-size: 12px; text-align: center;" class="card-title mb-0 bg-warning text-dark"><strong>Total</strong></h3></td>
+                                        <td style="text-align: center; font-size: 14px;"><strong>{{ totCoopdc1 }}</strong></td>
+                                    </tr>
+                               </TABLE>
+                            </div>
+                            <div class="col-md-6 text-md-right">                              
+                                <TABLE WIDTH="100%" BORDER="1">
+                                    <colgroup style="background: rgb(0, 255, 221);"></colgroup>                                   
+                                    <tr>
+                                        <th style="background-color: aliceblue; text-align: center;">SUB TOTAL</th>                                       
+                                    </tr>
+                                    <tr>
+                                        <td>$ {{ "{:,.2f}".format(vunidad * rep1Coopdc) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>$ {{ "{:,.2f}".format(vunidad / 2 * rep2Coopdc) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>$ {{ "{:,.2f}".format(vunidad / 3 * rep3Coopdc) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>$ {{ "{:,.2f}".format(vunidad / 4 * rep4Coopdc) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>$ {{ "{:,.2f}".format(vunidad / 5 * rep5Coopdc) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>$ {{ "{:,.2f}".format(vunidad / 6 * rep6Coopdc) }}</td>
+                                        <td style="text-align: center; border: none; color: orangered;"><strong>Promedio</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>$ {{ "{:,.2f}".format(subtCoopad) }}</strong></td>
+                                        <td colspan="2" style="text-align: center;"><strong>$ {{ "{:,.2f}".format( subtCoopad / totCoopdc ) }}</strong></td>
+                                    </tr>
+                                </TABLE>
+                            </div>
+                        </div>
+
+                        <br>
+                        <h5 style="font-size: x-large; color:white; padding-left: 20px;" class="card-title mb-0 bg-dark">CRECENTRO</h5>
+                        <br>
+                        <div class="row mb-4">                            
+                            <div class="col-md-6">
+                               <TABLE WIDTH="100%" BORDER="1">
+                                <colgroup style="background: orange;"></colgroup>
+                                <colgroup style="background: yellowgreen;"></colgroup>
+                                   <tr>
+                                       <th style="text-align: center; background-color: aliceblue;"><strong>Afiliados</strong></th>
+                                       <th style="text-align: center; background-color: aliceblue;"><strong>COMPARTIDOS</strong></th>
+                                   </tr>
+                                    <tr>                                        
+                                        <td><h3 style="font-size: 14px; text-align: center;" class="card-title mb-0 bg-warning text-dark">1</h3></td>
+                                        <td style="text-align: center;"><strong>{{ rep1Copcrec }}</strong></td>
+                                    </tr>
+                                    <tr>                                        
+                                        <td><h3 style="font-size: 12px; text-align: center;" class="card-title mb-0 bg-warning text-dark">2</h3></td>
+                                        <td style="text-align: center;"><strong>{{ rep2Copcrec }}</strong></td>
+                                    </tr>
+                                    <tr>                                        
+                                        <td><h3 style="font-size: 12px; text-align: center;" class="card-title mb-0 bg-warning text-dark">3</h3></td>
+                                        <td style="text-align: center;"><strong>{{ rep3Copcrec }}</strong></td>
+                                    </tr>
+                                    <tr>                                        
+                                        <td><h3 style="font-size: 12px; text-align: center;" class="card-title mb-0 bg-warning text-dark">4</h3></td>
+                                        <td style="text-align: center;"><strong>{{ rep4Copcrec }}</strong></td>
+                                    </tr>
+                                    <tr>                                        
+                                        <td><h3 style="font-size: 12px; text-align: center;" class="card-title mb-0 bg-warning text-dark">5</h3></td>
+                                        <td style="text-align: center;"><strong>{{ rep5Copcrec }}</strong></td>
+                                    </tr>
+                                    <tr>                                        
+                                        <td><h3 style="font-size: 12px; text-align: center;" class="card-title mb-0 bg-warning text-dark">6</h3></td>
+                                        <td style="text-align: center;"><strong>{{ rep6Copcrec }}</strong></td>
+                                    </tr>
+                                    <tr>                                        
+                                        <td><h3 style="font-size: 12px; text-align: center;" class="card-title mb-0 bg-warning text-dark"><strong>Total</strong></h3></td>
+                                        <td style="text-align: center; font-size: 14px;"><strong>{{ totCopcrec1 }}</strong></td>
+                                    </tr>
+                               </TABLE>
+                            </div>
+                            <div class="col-md-6 text-md-right">                              
+                                <TABLE WIDTH="100%" BORDER="1">
+                                    <colgroup style="background: rgb(0, 255, 221);"></colgroup>
+                                    <tr>
+                                        <th style="background-color: aliceblue; text-align: center;">SUB TOTAL</th>
+                                    </tr>
+                                    <tr>
+                                        <td>$ {{ "{:,.2f}".format(vunidad * rep1Copcrec) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>$ {{ "{:,.2f}".format(vunidad / 2 * rep2Copcrec) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>$ {{ "{:,.2f}".format(vunidad / 3 * rep3Copcrec) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>$ {{ "{:,.2f}".format(vunidad / 4 * rep4Copcrec) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>$ {{ "{:,.2f}".format(vunidad / 5 * rep5Copcrec) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>$ {{ "{:,.2f}".format(vunidad / 6 * rep6Copcrec) }}</td>
+                                        <td style="text-align: center; border: none; color: orangered;"><strong>Promedio</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>$ {{ "{:,.2f}".format(subtCopcrec) }}</strong></td>
+                                        <td colspan="2" style="text-align: center;"><strong>$ {{ "{:,.2f}".format( subtCopcrec / totCopcrec ) }}</strong></td>
+                                    </tr>
+                                </TABLE>
+                            </div>
+                        </div>
+                        
+                        <br>
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th style="font-size: 20px;"><strong>GRAN TOTAL</strong></th> 
+                                    <th style="text-align: center; font-size: 15px;">Total Afiliados</th>
+                                    <th style="font-size: 15px;" class="text-right">Cuentas de Cobro</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="padding-left: 35px;"><strong>Afiliados</strong></td>
+                                    <td style="text-align: center; font-size: 14px;"><strong>{{ "{:,}".format(  totCavip1 + totCoop1 + totCopac1 + totCoptro1 + totCoopdc1 + totCopcrec1 ) }}</strong></td>
+                                    <td style="font-size: 14px;" class="text-right"><strong>$ {{ "{:,.2f}".format( subtCavipet + subtCoopetr + subtCopacred + subtCopactr + subtCoopad + subtCopcrec ) }}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-left: 35px; color: orangered;"><strong>Promedio</strong></td>
+                                    <td style="text-align: center; color: white;">6 Cooperativas</td>
+                                    <td class="text-right">$ {{ "{:,.2f}".format( (subtCavipet + subtCoopetr + subtCopacred + subtCopactr + subtCoopad + subtCopcrec) / (totCavip + totCoop + totCopac + totCoptro + totCoopdc + totCopcrec) ) }}</td>
+                                </tr>                               
+                            </tbody>
+                        </table>
+                        <br><br>
+                        <div class="text-center">
+                            <p class="text-sm">
+                                <strong>Nota Extra: </strong> Generado por <strong style="color: blue;">JOTALEJO SW y Sistemas  </strong>
+                                <a href="http://www.jotalejo.com/">jotalejo.com</a>                                
+                            </p>
+                            <a href="print" class="btn btn-primary">
+                                Imprimir Informe
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>  
+        
+{% endblock %}

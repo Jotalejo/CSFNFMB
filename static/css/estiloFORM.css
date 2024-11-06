@@ -1,0 +1,107 @@
+/*Estilo para el fondo de la página web*/
+@media (max-width: 850px) {
+    .container{
+      flex-wrap: wrap;
+      background-color: orange;      
+    }
+}
+body {
+    font-family:"tahoma";
+    font-size:12px;
+}
+/*Estilo para el formulario*/
+#form_titular_particulares{
+    border:solid 2px rgb(90, 205, 119);
+    background:springgreen;
+    margin:7px;    
+    width:400px;
+    padding: 7px;
+}
+/*Estilo para el formulario*/
+#form_beneficiario_particulares{
+    border:solid 2px rgb(90, 205, 119);
+    background:springgreen;
+    margin:7px;
+    width:550px;
+    padding: 10px;
+}
+/*Estilo para el formulario Adicionales*/
+#form_adicionales{
+    border:solid 2px rgb(90, 205, 119);
+    background:springgreen;
+    margin:7px;
+    width:550px;
+    padding: 10px;
+}
+/*Contenedor en Flex*/
+.container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+/* flex-direction: row; */
+/*Estilo para el titulo*/
+h1{
+    font-size:16px;
+    font-weight:bold;
+    margin-bottom:2px;
+}
+h2{
+    font: size 50px;
+    max-width: 550px;
+    border:solid 2px rgb(58, 205, 0);
+    background-color: lawngreen;
+    font-weight:bold;    
+    margin-bottom:2px;
+    margin-left: 25px;
+    text-align: center;
+}
+h3{
+    margin-left: 28px;
+}
+
+/*Estilo para el texto y su línea*/
+#linea{
+    color:#666666;
+    margin-bottom:5px;
+    border-bottom:solid 1px #FFF;
+    padding-bottom:5px;
+}
+
+/*Estilo para los textos del formulario*/
+#label, #label1{
+    display: block;
+    font-weight: bold;
+    width: 240px;
+    font-size: 12px;
+}
+/*Estilo para la cajas de texto simple*/
+#caja{
+    padding:4px;
+    border:solid 1px #aacfe4;
+    margin:1px 0 1px 0;
+}
+
+/*Estilo para el boton Registrar*/
+#boton{
+    clear:both;
+    margin-left:150px;
+    width:125px;
+    height:31px;
+    background:#666666;
+    text-align:center;
+    line-height:31px;
+    color:#FFFFFF;
+    font-size:11px;
+    font-weight:bold;
+}
+
+/*Estilo para la cajas de texto simple*/
+/* input[type=text] {
+    background-color: red;
+} */
+input::selection
+    {
+        color: red;
+        background-color: yellow;
+    }

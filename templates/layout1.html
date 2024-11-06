@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie-edge">
+    <title>Coserfun Apps</title>
+    <link rel="stylesheet" href="https://bootswatch.com/4/materia/bootstrap.min.css">    
+    <link rel="stylesheet" href="{{url_for('static', filename='/css/main.css')}}">
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="sidebar">
+        <h2 class="bg-primary bg-success">CATEGORÍAS</h2>
+        <ul>
+          <li><a href="/inicial">INICIO</a></li>
+            <li><a href="/cruces">I-CRUCES ASOCIADAS</a></li>
+            <li><a href="/cotizador">II-COTIZADOR PLANES</a></li>
+            <li><a href="">III-HORNO INCINERADOR</a></li>
+            <li><a href="">IV-GESTION DEL RIESGO</a></li>            
+            <li><a href="">USUARIOS</a></li>
+            <li><a href="/exit">SALIR</a></li>
+        </ul>
+    </div>
+    <div class="contenido">        
+        <!-- <form class="form-inline d-none d-sm-inline-block"> -->
+            <!-- <input class="form-control form-control-no-border mr-sm-2" type="text" placeholder="Escoja la categoría..." aria-label="Search"> -->
+            <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+                <!-- <a class="navbar-brand" href="#">MENÚ</a> -->
+                <!-- <img src="{{url_for('static', filename='/img/BtnCat.png')}}" alt="" class="menu-bar"> -->                
+                <img style="padding: 10px"  src="{{url_for('static', filename='/img/Logopcsfn.png')}}" alt="" class="menu-bar">                
+                <svg width="3em" height="3em" viewBox="0 0 16 16" class="bi bi-bricks menu-bar" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M15 13H1v2h14v-2zM1 12a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1H1zm14-5H1v2h14V7zM1 6a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H1z"/>
+                    <path fill-rule="evenodd" d="M13 10H3v2h10v-2zM3 9a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1H3zm10-5H3v2h10V4zM3 3a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H3z"/>
+                    <path fill-rule="evenodd" d="M15 1H1v2h14V1zM1 0a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1H1z"/>
+                    <path fill-rule="evenodd" d="M5.5 1v2h-1V1h1zm6 0v2h-1V1h1zm-4 5V4h1v2h-1zm-2 1v2h-1V7h1zm6 0v2h-1V7h1zm-4 5v-2h1v2h-1zm-3 3v-2h1v2h-1zm6 0v-2h1v2h-1z"/>
+                </svg>
+
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+              
+                <div class="collapse navbar-collapse" id="navbarColor01">
+                  <ul style="font-size: x-large;" class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                      <a class="nav-link" href="/pcruce">Proceso de cruce<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="/detalle">Reportes</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#">Cooperativas</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#">Afiliados</a>
+                    </li>                    
+                  </ul>
+                  <form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="text" placeholder="Búsqueda">
+                    <button class="btn btn-secondary my-2 my-sm-0" type="submit">Buscar</button>
+                  </form>
+                </div>
+            </nav>
+        <!-- </form>    -->
+        <div class="card">
+            <div class="card-header">                
+                <div class="container pt-4">
+                    {% block body %}
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+    
+    <!-- SCRIPTS-->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+
+    <script src="{{url_for('static', filename='/js/main.js')}}"></script>
+    <script src="{{url_for('static', filename='/js/abrir.js')}}"></script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+{% extends 'layout1.html' %}
+
+{% block body %}
+<script type="text/javascript">
+    window.onload = function(){
+        var fecha = new Date(); //Fecha actual
+        var mes = fecha.getMonth()+1; //obteniendo mes
+        var dia = fecha.getDate(); //obteniendo dia
+        var ano = fecha.getFullYear(); //obteniendo año
+        
+        document.getElementById('fechaActual').value=ano+"-"+mes+"-"+dia;
+    }                    
+</script>
+<h1 class="card-title mb-0">Cruces</h1>
+<div class="card">
+    <div class="card-header">
+        <h5 class="card-title">Archivos</h5>
+    </div>
+    <div class="card-body"> 
+        <div class="form-row">
+        <div class="form-group col-md-5">            
+            <form action="/add_arc" method="POST">
+                <div class="form-group">
+                    <h3>Seleccionar Archivo</h3>
+                        <!-- BEGIN primary modal -->
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#defaultModalPrimary">
+                            <input style="width: 300px;" type="file" name="infile">
+                        </button>
+                        <div class="modal fade" id="defaultModalPrimary" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Información Importante !!!</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body m-3">
+                                        <p class="mb-0">No olvide tener en cuenta que el archivo .csv debe estar depurado (sin duplicados) y 
+                                            con todas las columnas completas.
+                                        </p>
+                                    </div> 
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END primary modal -->            
+
+                    <small class="form-text text-muted">El archivo debe estar depurado para éste proceso</small>
+                </div> {% for datocru in cruc %}
+                <div style="width: 350px; justify-content: space-around;" class="card"><br>
+                    <div class="form-group col-md-5">
+                        <label style="margin-left: 10px; font-weight: bold;" class="form-label" for="txtfechacsfn"><strong>Fecha del Cruce</strong></label>
+                        <input style="width: 150px; font-size: small; margin-left: 10px; text-align: center;" type="date" class="form-control" id="txtfechacsfn" name="txtfechacsfn" placeholder="DD/MM/YYYY" value="{{ datocru.1 }}">
+                    </div>                    
+                    <div class="form-group col-md-5">
+                        <label style="width: 150px; margin-left: 10px; font-weight: bold;" for="ValorU"><strong>Valor de la Unidad</strong></label>
+                        <input style="width: 150px; font-size: small; margin-left: 10px; padding-left: 15px;" type="text" name="ValorU" id="ValorU" class="form-control money" data-mask="$#.##" data-reverse="true" value="$ {{ '{:,.2f}'.format(launidad) }}">
+                    </div>
+                </div> {% endfor %}
+                <br><br>
+                <button type="submit" class="btn btn-outline-primary">ENVIAR</button><br><br>
+            </form>
+        </div>
+        <div style="justify-content: end; width: 630px;" class="card">
+            <table class="table table-hover">
+                <div style="background-color: #1e6075; padding-left: 30px; font-size: medium; font-weight: bold; " class="alert alert-danger" role="alert">
+                    Lista de Archivos para el Cruce
+                </div>
+                <thead>
+                  <tr>
+                    <th>Archivo</th>
+                    <th>Cooperativa</th>
+                    <th>Fecha Reportada</th>
+                    <th>Registros</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {% for archivin in cont %}
+                  <tr>
+                    <td>{{ archivin.2 }}</td>
+                    <td>{{ archivin.4 }}</td>
+                    <td>{{ archivin.1 }}</td>
+                    <td>{{ archivin.3 }}</td>
+                    <td><a style="background-color: #1e6075" href="/deletearc/{{archivin.0}}" class="btn btn-secondary btn-sm">Eliminar</a>
+                    </td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+            </table>            
+        </div>
+        </div>
+    </div>
+</div>
+<br>        
+{% endblock %}

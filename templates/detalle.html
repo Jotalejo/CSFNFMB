@@ -1,0 +1,422 @@
+{% extends 'layout1.html' %}
+
+{% block body %}
+
+<main class="content">
+    <div class="container-fluid p-0">
+
+        <h1 class="h3 mb-3">Cruce de las Asociadas</h1>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body m-sm-3 m-md-5">
+                        <h1 style="color: chartreuse; font-size: 30px;" class="h3 mb-3">COSERFUN LOS OLIVOS</h1>
+                        <div class="mb-4">                            
+                             <strong style="font-size: 20px;">Detalle Asociadas</strong>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="text-muted">Fecha del Cruce</div>
+                                <strong>{{ FecUni }}</strong>
+                            </div>
+                            <div class="col-md-6 text-md-right">
+                                <div class="text-muted">Valor de la unidad</div>
+                                <strong>$ {{ "{:,.2f}".format(ValUni) }}</strong>
+                            </div>
+                        </div><br>
+
+                        <hr class="my-4" />
+
+                        <h5 style="font-size: x-large; color:white; padding-left: 20px;" class="card-title mb-0 bg-dark">COOPERATIVAS</h5>
+
+                        <br>
+                        <div class="col-md-12">
+                            <TABLE WIDTH="100%" BORDER="2">
+                                <colgroup style="background: yellow;"></colgroup>                                
+                                <colgroup style="background: yellow;"></colgroup>
+                                <colgroup style="background: yellow;"></colgroup>
+                                <colgroup style="background: yellow;"></colgroup>                                
+                                <colgroup style="background: orange;"></colgroup>
+                                <colgroup style="background: orange;"></colgroup>
+                                    <tr>
+                                        <th style="text-align: center; background-color: yellowgreen; font-size: 16px;"><strong>COOPETROL</strong></th>                                        
+                                        <th style="text-align: center; background-color: yellowgreen; font-size: 16px;"><strong>Copacrédito</strong></th>
+                                        <th style="text-align: center; background-color: yellowgreen; font-size: 16px;"><strong>Copacentro</strong></th>
+                                        <th style="text-align: center; background-color: yellowgreen; font-size: 16px;"><strong>Coopaductos</strong></th>
+                                        <th style="text-align: center; background-color: yellowgreen; font-size: 16px;"><strong>Total</strong></th>
+                                        <th style="text-align: center; background-color: yellowgreen; font-size: 16px;"><strong>PRECIO</strong></th>
+                                    </tr>
+                                    <tr>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 10px;">Coopetrol</h3></td>
+                                        <td><h3 style="font-size: 16px"></h3></td>
+                                        <td><h3 style="font-size: 16px; text-align: center;" class="card-title mb-0 bg-warning text-dark"></h3></td>
+                                        <td><h3 style="font-size: 16px; text-align: center;" class="card-title mb-0 bg-warning text-dark"></h3></td>
+                                        <td style="text-align: center; font-size: 14px">{{ PhStot_Coop }}</td>
+                                        <td style="text-align: right; font-size: 14px">$ {{ "{:,.2f}".format(ValUni * PhStot_Coop) }}</td>
+                                    </tr>                                    
+                                    <tr>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Coopetrol</h3></td>                                        
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Copacrédito</h3></td>                                        
+                                        <td><h3 style="font-size: 16px; text-align: center;" class="card-title mb-0 bg-warning text-dark"></h3></td>
+                                        <td><h3 style="font-size: 16px; text-align: center;" class="card-title mb-0 bg-warning text-dark"></h3></td>
+                                        <td style="text-align: center; font-size: 14px">{{ Phrcoop_copacred }}</td>
+                                        <td style="text-align: right; font-size: 14px">$ {{ "{:,.2f}".format(PhsubTot18) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Coopetrol</h3></td>                                        
+                                        <td><h3 style="font-size: 16px; text-align: center;"></h3></td>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Copacentro</h3></td>
+                                        <td><h3 style="font-size: 16px; text-align: center;" class="card-title mb-0 bg-warning text-dark"></h3></td>
+                                        <td style="text-align: center; font-size: 14px">{{ Phrcoop_copacen }}</td>
+                                        <td style="text-align: right; font-size: 14px">$ {{ "{:,.2f}".format(PhsubTot19) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Coopetrol</h3></td>                                        
+                                        <td><h3 style="font-size: 16px; text-align: center;"></h3></td>
+                                        <td><h3 style="font-size: 16px; text-align: center;"></h3></td>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Coopaductos</h3></td>                                    
+                                        <td style="text-align: center; font-size: 14px">{{ Phrcoop_coopadct }}</td>
+                                        <td style="text-align: right; font-size: 14px">$ {{ "{:,.2f}".format(PhsubTot20) }}</td>
+                                    </tr>                                    
+                                    <tr>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Coopetrol</h3></td>                                        
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Copacrédito</h3></td>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Copacentro</h3></td>
+                                        <td><h3 style="font-size: 16px; text-align: center;" class="card-title mb-0 bg-warning text-dark"></h3></td>
+                                        <td style="text-align: center; font-size: 14px">{{ Phrcoop_copacred_copacen }}</td>
+                                        <td style="text-align: right; font-size: 14px">$ {{ "{:,.2f}".format(PhsubTot21) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Coopetrol</h3></td>                                        
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Copacrédito</h3></td>
+                                        <td><h3 style="font-size: 16px; text-align: center;"></h3></td>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Coopaductos</h3></td>
+                                        <td style="text-align: center; font-size: 14px">{{ Phrcoop_copacred_coopadct }}</td>
+                                        <td style="text-align: right; font-size: 14px">$ {{ "{:,.2f}".format(PhsubTot22) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Coopetrol</h3></td>                                        
+                                        <td><h3 style="font-size: 16px; text-align: center;"></h3></td>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Copacentro</h3></td>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Coopaductos</h3></td>
+                                        <td style="text-align: center; font-size: 14px">{{ Phrcoop_copacen_coopadct }}</td>
+                                        <td style="text-align: right; font-size: 14px">$ {{ "{:,.2f}".format(PhsubTot23) }}</td>
+                                    </tr>                                  
+                                    <tr>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Coopetrol</h3></td>                                        
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Copacrédito</h3></td>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Copacentro</h3></td>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Coopaductos</h3></td>
+                                        <td style="text-align: center; font-size: 14px">{{ Phrcoop_copacred_copacen_coopadct }}</td>
+                                        <td style="text-align: right; font-size: 14px">$ {{ "{:,.2f}".format(PhsubTot24) }}</td>
+                                    </tr>                                    
+                                    <tr>
+                                        <td style="background-color: white; border: none; font-size: 16px; padding: 5px; height: 5px; color: white;">A</td>
+                                        <td style="background-color: white; border: none; font-size: 16px; padding: 5px; height: 5px; color: white;">B</td>
+                                        <td style="background-color: white; border: none; font-size: 16px; padding: 5px; height: 5px; color: white;">C</td>
+                                        <td style="background-color: white; border: none; font-size: 16px; padding: 5px; height: 5px; color: white;">D</td>                                        
+                                        <td style="font-size: 20px; text-align: center;"><b>{{ Phtot_coop }}</b></td>
+                                        <td style="font-size: 20px; background-color: yellow; text-align: right;"><b>$ {{ "{:,.2f}".format(PhsubTotCoop) }}</b></td>
+                                    </tr>
+                                </TABLE>
+                        </div>
+                        <br>
+                              
+                        <br>                        
+                        <div class="col-md-12">
+                            <TABLE WIDTH="100%" BORDER="2">
+                                <colgroup style="background: yellow;"></colgroup>                                
+                                <colgroup style="background: yellow;"></colgroup>
+                                <colgroup style="background: yellow;"></colgroup>
+                                <colgroup style="background: yellow;"></colgroup>
+                                <colgroup style="background: orange;"></colgroup>
+                                <colgroup style="background: orange;"></colgroup>
+                                    <tr>
+                                        <th style="text-align: center; background-color: yellowgreen; font-size: 16px;"><strong>COPACREDITO</strong></th>                                        
+                                        <th style="text-align: center; background-color: yellowgreen; font-size: 16px;"><strong>Coopetrol</strong></th>
+                                        <th style="text-align: center; background-color: yellowgreen; font-size: 16px;"><strong>Copacentro</strong></th>
+                                        <th style="text-align: center; background-color: yellowgreen; font-size: 16px;"><strong>Coopaductos</strong></th>
+                                        <th style="text-align: center; background-color: yellowgreen; font-size: 16px;"><strong>Total</strong></th>
+                                        <th style="text-align: center; background-color: yellowgreen; font-size: 16px;"><strong>PRECIO</strong></th>
+                                    </tr>
+                                    <tr>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 10px;">Copacrédito</h3></td>
+                                        <td><h3 style="font-size: 16px"></h3></td>                                        
+                                        <td><h3 style="font-size: 16px; text-align: center;" class="card-title mb-0 bg-warning text-dark"></h3></td>
+                                        <td><h3 style="font-size: 16px; text-align: center;" class="card-title mb-0 bg-warning text-dark"></h3></td>
+                                        <td style="text-align: center; font-size: 14px">{{ PhStot_Copac }}</td>
+                                        <td style="text-align: right; font-size: 14px">$ {{ "{:,.2f}".format(ValUni * PhStot_Copac) }}</td>
+                                    </tr> 
+                                    <tr>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Copacrédito</h3></td>                                        
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Coopetrol</h3></td>                                        
+                                        <td><h3 style="font-size: 16px; text-align: center;" class="card-title mb-0 bg-warning text-dark"></h3></td>
+                                        <td><h3 style="font-size: 16px; text-align: center;" class="card-title mb-0 bg-warning text-dark"></h3></td>
+                                        <td style="text-align: center; font-size: 14px">{{ Phrcopac_cooptr }}</td>
+                                        <td style="text-align: right; font-size: 14px">$ {{ "{:,.2f}".format(PhsubTot27) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Copacrédito</h3></td>                                        
+                                        <td><h3 style="font-size: 16px; text-align: center;"></h3></td>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Copacentro</h3></td>
+                                        <td><h3 style="font-size: 16px; text-align: center;" class="card-title mb-0 bg-warning text-dark"></h3></td>
+                                        <td style="text-align: center; font-size: 14px">{{ Phrcopac_copacen }}</td>
+                                        <td style="text-align: right; font-size: 14px">$ {{ "{:,.2f}".format(PhsubTot28) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Copacrédito</h3></td>                                        
+                                        <td><h3 style="font-size: 16px; text-align: center;"></h3></td>
+                                        <td><h3 style="font-size: 16px; text-align: center;"></h3></td>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Coopaductos</h3></td>                                    
+                                        <td style="text-align: center; font-size: 14px">{{ Phrcopac_coopadct }}</td>
+                                        <td style="text-align: right; font-size: 14px">$ {{ "{:,.2f}".format(PhsubTot29) }}</td>
+                                    </tr>                                                                                                
+                                    <tr>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Copacrédito</h3></td>                                        
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Coopetrol</h3></td>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Copacentro</h3></td>
+                                        <td><h3 style="font-size: 16px; text-align: center;" class="card-title mb-0 bg-warning text-dark"></h3></td>
+                                        <td style="text-align: center; font-size: 14px">{{ Phrcopac_cooptr_copacen }}</td>
+                                        <td style="text-align: right; font-size: 14px">$ {{ "{:,.2f}".format(PhsubTot33) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Copacrédito</h3></td>                                        
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Coopetrol</h3></td>
+                                        <td><h3 style="font-size: 16px; text-align: center;"></h3></td>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Coopaductos</h3></td>
+                                        <td style="text-align: center; font-size: 14px">{{ Phrcopac_cooptr_coopadct }}</td>
+                                        <td style="text-align: right; font-size: 14px">$ {{ "{:,.2f}".format(PhsubTot34) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Copacrédito</h3></td>                                        
+                                        <td><h3 style="font-size: 16px; text-align: center;"></h3></td>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Copacentro</h3></td>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Coopaductos</h3></td>
+                                        <td style="text-align: center; font-size: 14px">{{ Phrcopac_copacen_coopadct }}</td>
+                                        <td style="text-align: right; font-size: 14px">$ {{ "{:,.2f}".format(PhsubTot35) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Copacrédito</h3></td>                                        
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Coopetrol</h3></td>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Copacentro</h3></td>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Coopaductos</h3></td>
+                                        <td style="text-align: center; font-size: 14px">{{ Phrcopac_cooptr_copacen_coopadct }}</td>
+                                        <td style="text-align: right; font-size: 14px">$ {{ "{:,.2f}".format(PhsubTot39) }}</td>
+                                    </tr>                                    
+                                    <tr>
+                                        <td style="background-color: white; border: none; font-size: 16px; padding: 5px; height: 5px; color: white;">A</td>                                        
+                                        <td style="background-color: white; border: none; font-size: 16px; padding: 5px; height: 5px; color: white;">B</td>
+                                        <td style="background-color: white; border: none; font-size: 16px; padding: 5px; height: 5px; color: white;">C</td>
+                                        <td style="background-color: white; border: none; font-size: 16px; padding: 5px; height: 5px; color: white;">D</td>
+                                        <td style="font-size: 20px; text-align: center;"><b>{{ Phtot_copac }}</b></td>
+                                        <td style="font-size: 20px; background-color: yellow; text-align: right;"><b>$ {{ "{:,.2f}".format(PhsubTotCopac) }}</b></td>
+                                    </tr>
+                                </TABLE>
+                        </div>
+                        <br>
+
+                        <br>                        
+                        <div class="col-md-12">
+                            <TABLE WIDTH="100%" BORDER="2">
+                                <colgroup style="background: yellow;"></colgroup>                                
+                                <colgroup style="background: yellow;"></colgroup>
+                                <colgroup style="background: yellow;"></colgroup>
+                                <colgroup style="background: yellow;"></colgroup>
+                                <colgroup style="background: orange;"></colgroup>
+                                <colgroup style="background: orange;"></colgroup>
+                                    <tr>
+                                        <th style="text-align: center; background-color: yellowgreen; font-size: 16px;"><strong>COPACENTRO</strong></th>                                        
+                                        <th style="text-align: center; background-color: yellowgreen; font-size: 16px;"><strong>Coopetrol</strong></th>                                
+                                        <th style="text-align: center; background-color: yellowgreen; font-size: 16px;"><strong>Copacrédito</strong></th>
+                                        <th style="text-align: center; background-color: yellowgreen; font-size: 16px;"><strong>Coopaductos</strong></th>
+                                        <th style="text-align: center; background-color: yellowgreen; font-size: 16px;"><strong>Total</strong></th>
+                                        <th style="text-align: center; background-color: yellowgreen; font-size: 16px;"><strong>PRECIO</strong></th>
+                                    </tr>
+                                    <tr>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 10px;">Copacentro</h3></td>
+                                        <td><h3 style="font-size: 16px"></h3></td>                                        
+                                        <td><h3 style="font-size: 16px; text-align: center;" class="card-title mb-0 bg-warning text-dark"></h3></td>
+                                        <td><h3 style="font-size: 16px; text-align: center;" class="card-title mb-0 bg-warning text-dark"></h3></td>
+                                        <td style="text-align: center; font-size: 14px">{{ PhStot_Coptro }}</td>
+                                        <td style="text-align: right; font-size: 14px">$ {{ "{:,.2f}".format(ValUni * PhStot_Coptro) }}</td>
+                                    </tr>                                    
+                                    <tr>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Copacentro</h3></td>                                        
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Coopetrol</h3></td>                                        
+                                        <td><h3 style="font-size: 16px; text-align: center;" class="card-title mb-0 bg-warning text-dark"></h3></td>
+                                        <td><h3 style="font-size: 16px; text-align: center;" class="card-title mb-0 bg-warning text-dark"></h3></td>
+                                        <td style="text-align: center; font-size: 14px">{{ Phrcpctro_cooptr }}</td>
+                                        <td style="text-align: right; font-size: 14px">$ {{ "{:,.2f}".format(PhsubTot59) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Copacentro</h3></td>                                        
+                                        <td><h3 style="font-size: 16px; text-align: center;"></h3></td>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Copacrédito</h3></td>
+                                        <td><h3 style="font-size: 16px; text-align: center;" class="card-title mb-0 bg-warning text-dark"></h3></td>
+                                        <td style="text-align: center; font-size: 14px">{{ Phrcpctro_copacred }}</td>
+                                        <td style="text-align: right; font-size: 14px">$ {{ "{:,.2f}".format(PhsubTot60) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Copacentro</h3></td>                                        
+                                        <td><h3 style="font-size: 16px; text-align: center;"></h3></td>
+                                        <td><h3 style="font-size: 16px; text-align: center;"></h3></td>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Coopaductos</h3></td>                                    
+                                        <td style="text-align: center; font-size: 14px">{{ Phrcpctro_coopadct }}</td>
+                                        <td style="text-align: right; font-size: 14px">$ {{ "{:,.2f}".format(PhsubTot61) }}</td>
+                                    </tr>                                                                                                           
+                                    <tr>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Copacentro</h3></td>                                        
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Coopetrol</h3></td>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Copacrédito</h3></td>
+                                        <td><h3 style="font-size: 16px; text-align: center;" class="card-title mb-0 bg-warning text-dark"></h3></td>
+                                        <td style="text-align: center; font-size: 14px">{{ Phrcpctro_cooptr_copacred }}</td>
+                                        <td style="text-align: right; font-size: 14px">$ {{ "{:,.2f}".format(PhsubTot65) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Copacentro</h3></td>                                        
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Coopetrol</h3></td>
+                                        <td><h3 style="font-size: 16px; text-align: center;"></h3></td>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Coopaductos</h3></td>
+                                        <td style="text-align: center; font-size: 14px">{{ Phrcpctro_cooptr_coopadct }}</td>
+                                        <td style="text-align: right; font-size: 14px">$ {{ "{:,.2f}".format(PhsubTot66) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Copacentro</h3></td>                                        
+                                        <td><h3 style="font-size: 16px; text-align: center;"></h3></td>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Copacrédito</h3></td>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Coopaductos</h3></td>
+                                        <td style="text-align: center; font-size: 14px">{{ Phrcpctro_copacred_coopadct }}</td>
+                                        <td style="text-align: right; font-size: 14px">$ {{ "{:,.2f}".format(PhsubTot67) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Copacentro</h3></td>                                        
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Coopetrol</h3></td>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Copacrédito</h3></td>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Coopaductos</h3></td>
+                                        <td style="text-align: center; font-size: 14px">{{ Phrcpctro_cooptr_copacred_coopadct }}</td>
+                                        <td style="text-align: right; font-size: 14px">$ {{ "{:,.2f}".format(PhsubTot71) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="background-color: white; border: none; font-size: 16px; padding: 5px; height: 5px; color: white;">A</td>                                        
+                                        <td style="background-color: white; border: none; font-size: 16px; padding: 5px; height: 5px; color: white;">B</td>
+                                        <td style="background-color: white; border: none; font-size: 16px; padding: 5px; height: 5px; color: white;">C</td>
+                                        <td style="background-color: white; border: none; font-size: 16px; padding: 5px; height: 5px; color: white;">D</td>
+                                        <td style="font-size: 20px; text-align: center;"><b>{{ Phtot_coptro }}</b></td>
+                                        <td style="font-size: 20px; background-color: yellow; text-align: right;"><b>$ {{ "{:,.2f}".format(PhsubTotCoptro) }}</b></td>
+                                    </tr>
+                                </TABLE>
+                        </div>
+                        <br>
+
+                        <br>                        
+                        <div class="col-md-12">
+                            <TABLE WIDTH="100%" BORDER="2">
+                                <colgroup style="background: yellow;"></colgroup>                                
+                                <colgroup style="background: yellow;"></colgroup>
+                                <colgroup style="background: yellow;"></colgroup>
+                                <colgroup style="background: yellow;"></colgroup>
+                                <colgroup style="background: orange;"></colgroup>
+                                <colgroup style="background: orange;"></colgroup>
+                                    <tr>
+                                        <th style="text-align: center; background-color: yellowgreen; font-size: 16px;"><strong>COOPADUCTOS</strong></th>
+                                        <th style="text-align: center; background-color: yellowgreen; font-size: 16px;"><strong>Coopetrol</strong></th>
+                                        <th style="text-align: center; background-color: yellowgreen; font-size: 16px;"><strong>Copacentro</strong></th>
+                                        <th style="text-align: center; background-color: yellowgreen; font-size: 16px;"><strong>Copacrédito</strong></th>
+                                        <th style="text-align: center; background-color: yellowgreen; font-size: 16px;"><strong>Total</strong></th>
+                                        <th style="text-align: center; background-color: yellowgreen; font-size: 16px;"><strong>PRECIO</strong></th>
+                                    </tr>
+                                    <tr>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 10px;">Coopaductos</h3></td>
+                                        <td><h3 style="font-size: 16px"></h3></td>                                        
+                                        <td><h3 style="font-size: 16px; text-align: center;" class="card-title mb-0 bg-warning text-dark"></h3></td>
+                                        <td><h3 style="font-size: 16px; text-align: center;" class="card-title mb-0 bg-warning text-dark"></h3></td>
+                                        <td style="text-align: center; font-size: 14px">{{ PhStot_Coopdc }}</td>
+                                        <td style="text-align: right; font-size: 14px">$ {{ "{:,.2f}".format(ValUni * PhStot_Coopdc) }}</td>
+                                    </tr>                                    
+                                    <tr>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Coopaductos</h3></td>                                        
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Coopetrol</h3></td>                                        
+                                        <td><h3 style="font-size: 16px; text-align: center;" class="card-title mb-0 bg-warning text-dark"></h3></td>
+                                        <td><h3 style="font-size: 16px; text-align: center;" class="card-title mb-0 bg-warning text-dark"></h3></td>
+                                        <td style="text-align: center; font-size: 14px">{{ Phrcoopdc_cooptr }}</td>
+                                        <td style="text-align: right; font-size: 14px">$ {{ "{:,.2f}".format(PhsubTot43) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Coopaductos</h3></td>                                        
+                                        <td><h3 style="font-size: 16px; text-align: center;"></h3></td>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Copacentro</h3></td>
+                                        <td><h3 style="font-size: 16px; text-align: center;" class="card-title mb-0 bg-warning text-dark"></h3></td>
+                                        <td style="text-align: center; font-size: 14px">{{ Phrcoopdc_copacen }}</td>
+                                        <td style="text-align: right; font-size: 14px">$ {{ "{:,.2f}".format(PhsubTot45) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Coopaductos</h3></td>                                        
+                                        <td><h3 style="font-size: 16px; text-align: center;"></h3></td>
+                                        <td><h3 style="font-size: 16px; text-align: center;"></h3></td>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Copacrédito</h3></td>                                    
+                                        <td style="text-align: center; font-size: 14px">{{ Phrcoopdc_copacred }}</td>
+                                        <td style="text-align: right; font-size: 14px">$ {{ "{:,.2f}".format(PhsubTot44) }}</td>
+                                    </tr>                                    
+                                    <tr>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Coopaductos</h3></td>                                        
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Coopetrol</h3></td>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Copacentro</h3></td>
+                                        <td><h3 style="font-size: 16px; text-align: center;" class="card-title mb-0 bg-warning text-dark"></h3></td>
+                                        <td style="text-align: center; font-size: 14px">{{ Phrcoopdc_cooptr_copacen }}</td>
+                                        <td style="text-align: right; font-size: 14px">$ {{ "{:,.2f}".format(PhsubTot49) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Coopaductos</h3></td>                                        
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Coopetrol</h3></td>
+                                        <td><h3 style="font-size: 16px; text-align: center;"></h3></td>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Copacrédito</h3></td>
+                                        <td style="text-align: center; font-size: 14px">{{ Phrcoopdc_cooptr_copacred }}</td>
+                                        <td style="text-align: right; font-size: 14px">$ {{ "{:,.2f}".format(PhsubTot50) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Coopaductos</h3></td>                                        
+                                        <td><h3 style="font-size: 16px; text-align: center;"></h3></td>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Copacentro</h3></td>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Copacrédito</h3></td>
+                                        <td style="text-align: center; font-size: 14px">{{ Phrcoopdc_copacen_copacred }}</td>
+                                        <td style="text-align: right; font-size: 14px">$ {{ "{:,.2f}".format(PhsubTot51) }}</td>
+                                    </tr>                                    
+                                    <tr>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Coopaductos</h3></td>                                        
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Coopetrol</h3></td>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Copacentro</h3></td>
+                                        <td><h3 style="text-align: center; font-size: 14px; padding: 5px; height: 5px;">Copacrédito</h3></td>
+                                        <td style="text-align: center; font-size: 14px">{{ Phrcoopdc_cooptr_copacen_copacred }}</td>
+                                        <td style="text-align: right; font-size: 14px">$ {{ "{:,.2f}".format(PhsubTot55) }}</td>
+                                    </tr>                                    
+                                    <tr>
+                                        <td style="background-color: white; border: none; font-size: 16px; padding: 5px; height: 5px; color: white;">A</td>                                        
+                                        <td style="background-color: white; border: none; font-size: 16px; padding: 5px; height: 5px; color: white;">B</td>
+                                        <td style="background-color: white; border: none; font-size: 16px; padding: 5px; height: 5px; color: white;">C</td>
+                                        <td style="background-color: white; border: none; font-size: 16px; padding: 5px; height: 5px; color: white;">D</td>
+                                        <td style="font-size: 20px; text-align: center;"><b>{{ Phtot_coopdc }}</b></td>
+                                        <td style="font-size: 20px; background-color: yellow; text-align: right;"><b>$ {{ "{:,.2f}".format(PhsubTotCoopad) }}</b></td>
+                                    </tr>
+                                </TABLE>
+                        </div>
+                        <br>
+
+                        <br>
+                        <div class="text-center">
+                            <p class="text-sm">
+                                <strong>Nota Extra: </strong> Generado por <strong style="color: blue;">JOTALEJO SW y Sistemas  </strong>
+                                <a href="http://www.jotalejo.com/">jotalejo.com</a>                                
+                            </p>
+                            <a href="print" class="btn btn-primary">
+                                Imprimir Informe
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>  
+        
+{% endblock %}

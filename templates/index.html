@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Form Login | CSFN</title>
+    <link href="{{url_for('static', filename='/css/master.css')}}" rel="stylesheet">
+  </head>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelector('form').onsubmit = function () {
+          var n1 = parseFloat(document.getElementById("username").value);
+          var n2 = parseFloat(document.getElementById("passwduser").value);
+          n1.value = "";
+          n2.value = "";
+          const name = document.querySelector('#username').value;
+          alert(`Hola, ${name}!`);
+        };
+    });
+  </script>
+
+  <body>
+    <div class="login-box">
+      <img src="{{url_for('static', filename='/img/avatarCsfn.jpg')}}" id="logoc" alt="Logo de CSFN" class="avatar"/>
+      <h1 id="ingr">Ingreso</h1>
+      <form action="/logearse" method="POST" autocomplete="off">
+        <!-- USER NAME -->
+        <label for="username">Usuario</label>
+        <input autofocus type="text" name="username" id="username" value=":)" placeholder="Ingrese Nombre del Usuario">
+
+        <!-- PASSWORD -->
+        <label for="passwduser">Password</label>
+        <input type="password" name="passwduser" id="passwduser" placeholder="Password del Usuario">
+
+        <input id="lalo" type="submit" value="Log In">
+
+        <a href="mailto:jotalejo@gmail.com">Perdió su password?</a><br>
+        <a href="mailto:jotalejo@hotmail.com">No tienes una cuenta?</a>
+      </form>
+    </div>
+  </body>
+</html>

@@ -3,10 +3,10 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile
+    environment:
+    - DB_URL=${DB_URL}
+    - DOMAIN=${DOMAIN}
     restart: always
-    working_dir: /app
-    volumes:
-      - .:/app
     labels:
       - traefik.enable=true
       - traefik.http.routers.project1-https.rule=Host(`${DOMAIN}`)

@@ -1,0 +1,7 @@
+#'cod_almac', 'int', 'NO', 'PRI', NULL, 'auto_increment'
+#'codinci_almac', 'int', 'NO', 'MUL', NULL, ''
+#'pesoalmacenado_almac', 'double', 'YES', '', NULL, ''
+#'fecha_almac', 'date', 'YES', '', NULL, ''
+#'tiempo_almac', 'double', 'YES', '', NULL, ''
+#'responsable_almac', 'varchar(50)', 'YES', '', NULL, ''
+#'observ_almac', 'varchar(200)', 'YES', '', NULL, ''

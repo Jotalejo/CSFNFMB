@@ -1,3 +1,7 @@
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
+from sqlalchemy.orm import relationship
+from . import Base
+
 #'cod_almac', 'int', 'NO', 'PRI', NULL, 'auto_increment'
 #'codinci_almac', 'int', 'NO', 'MUL', NULL, ''
 #'pesoalmacenado_almac', 'double', 'YES', '', NULL, ''

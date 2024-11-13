@@ -1,49 +1,39 @@
-# client
+# Material UI - Vite.js example
 
-<div align="center" style="margin: 30px;">
-    <a href="https://refine.dev">
-    <img alt="refine logo" src="https://refine.ams3.cdn.digitaloceanspaces.com/readme/refine-readme-banner.png">
-    </a>
-</div>
-<br/>
+## How to use
 
-This [Refine](https://github.com/refinedev/refine) project was generated with [create refine-app](https://github.com/refinedev/refine/tree/master/packages/create-refine-app).
+Download the example [or clone the repo](https://github.com/mui/material-ui):
 
-## Getting Started
-
-A React Framework for building internal tools, admin panels, dashboards & B2B apps with unmatched flexibility ✨
-
-Refine's hooks and components simplifies the development process and eliminates the repetitive tasks by providing industry-standard solutions for crucial aspects of a project, including authentication, access control, routing, networking, state management, and i18n.
-
-## Available Scripts
-
-### Running the development server.
+<!-- #default-branch-switch -->
 
 ```bash
-    npm run dev
+curl https://codeload.github.com/mui/material-ui/tar.gz/master | tar -xz --strip=2 material-ui-master/examples/material-ui-vite
+cd material-ui-vite
 ```
 
-### Building for production.
+Install it and run:
 
 ```bash
-    npm run build
+npm install
+npm run dev
 ```
 
-### Running the production server.
+or:
 
-```bash
-    npm run start
-```
+<!-- #default-branch-switch -->
 
-## Learn More
+[![Edit on StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/mui/material-ui/tree/master/examples/material-ui-vite)
 
-To learn more about **Refine**, please check out the [Documentation](https://refine.dev/docs)
+[![Edit on CodeSandbox](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/p/sandbox/github/mui/material-ui/tree/master/examples/material-ui-vite)
 
-- **REST Data Provider** [Docs](https://refine.dev/docs/core/providers/data-provider/#overview)
-- **Material UI** [Docs](https://refine.dev/docs/ui-frameworks/mui/tutorial/)
-- **React Router** [Docs](https://refine.dev/docs/core/providers/router-provider/)
-- **Custom Auth Provider** [Docs](https://refine.dev/docs/core/providers/auth-provider/)
+## The idea behind the example
 
-## License
+This example uses [Vite.js](https://github.com/vitejs/vite).
+It includes `@mui/material` and its peer dependencies, including [Emotion](https://emotion.sh/docs/introduction), the default style engine in Material UI v6.
 
-MIT
+## What's next?
+
+<!-- #default-branch-switch -->
+
+You now have a working example project.
+You can head back to the documentation and continue by browsing the [templates](https://mui.com/material-ui/getting-started/templates/) section.

@@ -10,9 +10,9 @@ def get_cliente(db: Session, cliente_id: int):
 def get_cliente_by_nit(db: Session, nit: str):
     return db.query(models.Cliente).filter(models.Cliente.nit == nit).first()
 
-def create_client(db: Session, cliente:schemas.ClienteCreate):
-    db_cliente = models.Cliente.User(razonSocial=cliente.razonSocial,
-                          nit=cliente.razonSocial)
+def create_cliente(db: Session, cliente:schemas.ClienteCreate):
+    db_cliente = models.Cliente(razonSocial=cliente.razonSocial,
+                          nit=cliente.nit)
     db.add(db_cliente)
     db.commit()
     db.refresh(db_cliente)

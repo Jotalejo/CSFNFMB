@@ -1,5 +1,5 @@
 import { Link as MuiLink } from "@mui/material";
-import { Link as ReactRouterLink } from "react-router-dom";
+import { Link as ReactRouterLink } from "react-router";
 
 const Link = (props) => {
   return (

@@ -14,7 +14,7 @@ import {
   datePickersCustomizations,
   treeViewCustomizations,
 } from '../theme/customizations';
-import { Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router';
 
 const xThemeComponents = {
   ...chartsCustomizations,

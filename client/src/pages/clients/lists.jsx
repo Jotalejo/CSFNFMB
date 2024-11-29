@@ -9,18 +9,34 @@ import { DataGrid } from "@mui/x-data-grid";
 } from "@refinedev/mui";
  */
 
-import React, { useEffect } from "react";
+import React, { Suspense, useEffect } from "react";
 import Page from '../../components/Page';
 import { EditButton, DeleteButton } from "@/components"
 import { useApp, useAppDispatch } from "../../contexts/AppContext";
+import { useNavigate } from "react-router";
+import { Loading } from "../../components/Loading";
+import { clientsService } from "../../services/clientsService";
+import { useClientsStore } from "../../contexts/clients";
+import { useLoaderData } from 'react-router';
+import { redirect } from "react-router";
+
+const Content = (clientes) => {
+
+  return <DataGrid rows={clientes}  columns={columns} />
+}
 
 
 export const ClientList = () => {
-  const {clientes} = useApp()
-  const {loadClientes, dispatch} = useAppDispatch()
+  const clients = useLoaderData();
+  const {actions, dispatch} = useAppDispatch()
+  const navigate = useNavigate()
+
+  console.log(clients);
+  
 
   const handleEdit = (id) => {
-    console.log(id)
+    console.log('handle edit', id)
+    navigate(`/clientes/${id}`)
   }
 
   const handleDelete = (id) => {
@@ -44,7 +60,7 @@ export const ClientList = () => {
       },
       {
         field: "actions",
-        headerName: "Actions",
+        headerName: "Acciones",
         sortable: false,
         renderCell: function render({ row }) {
           return (
@@ -62,13 +78,12 @@ export const ClientList = () => {
     []
   );
 
-  useEffect(()=> {
-    loadClientes();
-  }, [])
 
   return (
     <Page title="Clientes">
-      <DataGrid rows={clientes}  columns={columns} />
+      <Suspense fallback={<Loading />}>
+        <DataGrid rows={clients}  columns={columns} />
+      </Suspense>
     </Page>
   );
 };

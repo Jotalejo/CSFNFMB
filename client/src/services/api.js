@@ -1,4 +1,5 @@
 import { env } from "@/config"
+import { wrapPromise } from "./wrapPromise";
 
 function buildUrlWithParams(
     url,
@@ -31,6 +32,8 @@ function buildUrlWithParams(
       next,
     } = options;
     const fullUrl = buildUrlWithParams(`${env.API_URL}${url}`, params);
+
+    console.log(fullUrl)
   
     const response = await fetch(fullUrl, {
       method,
@@ -61,21 +64,21 @@ function buildUrlWithParams(
     return response.json();
   }
   
-  export const api = {
-    get(url, options=null) {
-      return fetchApi(url, { ...options, method: 'GET' });
-    },
-    post(url, body = null, options = null) {
-      return fetchApi(url, { ...options , method: 'POST', body });
-    },
-    put(url, body = null, options = null) {
-      return fetchApi(url, { ...options, method: 'PUT', body });
-    },
-    patch(url, body = null, options = null) {
-      return fetchApi(url, { ...options, method: 'PATCH', body });
-    },
-    delete(url, options = null) {
-      return fetchApi(url, { ...options, method: 'DELETE' });
-    },
-  };
+export const api = {
+  get(url, options=null) {
+    return fetchApi(url, { ...options, method: 'GET' });
+  },
+  post(url, body = null, options = null) {
+    return wrapPromise(fetchApi(url, { ...options , method: 'POST', body }));
+  },
+  put(url, body = null, options = null) {
+    return wrapPromise(fetchApi(url, { ...options, method: 'PUT', body }));
+  },
+  patch(url, body = null, options = null) {
+    return wrapPromise(fetchApi(url, { ...options, method: 'PATCH', body }));
+  },
+  delete(url, options = null) {
+    return wrapPromise(fetchApi(url, { ...options, method: 'DELETE' }));
+  },
+};
   

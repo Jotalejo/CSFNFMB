@@ -6,7 +6,8 @@
 	"image": "mcr.microsoft.com/devcontainers/python:1-3.12-bullseye",
 	"features": {
 		"ghcr.io/devcontainers/features/node:1": {}
-	}
+	},
+	"mounts": ["source=node_modules,target=${containerWorkspaceFolder}/client/node_modules,type=volume"],
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
@@ -15,7 +16,7 @@
 	// "forwardPorts": [],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "pip3 install --user -r requirements.txt",
+	"postCreateCommand": "sudo chown vscode:vscode client/node_modules"
 
 	// Configure tool-specific properties.
 	// "customizations": {},

@@ -1,5 +1,6 @@
-import { createContext, useCallback, useContext, useReducer } from 'react';
+import { createContext, useCallback, useContext } from 'react';
 import {clientsService} from '@/services';
+import useAsyncReducer from '@/hooks/useAsyncReducer';
 
 const initialState = {
   clientes: [],
@@ -7,29 +8,47 @@ const initialState = {
   isLoading: false
 }
 
+const createActions = (dispatch) => {
+  return {
+    loadClientes: () => dispatch({type: "load_clientes"}),
+    createCliente: (cliente) => dispatch({type: "add_cliente"})
+  }
+}
+
+function appReducer(state, action) {
+  const {type, payload} = action
+  return new Promise(resolve=>{
+    switch (type) {
+      case "load_clientes":
+        clientsService.getAll().then(data => resolve({...state, clientes: data}))
+      case "add_cliente":
+        clientsService.update(cliente).then(data => {
+          
+        })
+    }
+  })
+}
+
+
 const AppContext = createContext(initialState);
 
 const AppDispatchContext = createContext(null);
 
 export function AppProvider({ children }) {
 
-  const [state, dispatch] = useReducer(
+  const [state, dispatch] = useAsyncReducer(
     appReducer,
     initialState
   );
 
-  const loadClientes = useCallback(async ()=> {
-    const data = await clientsService.getAll()
-    console.log(data)
-    dispatch({type: "clientes_loaded", 
-      payload: {clientes: data, error: null}})
-  })
+  const actions = createActions(dispatch)
 
   return (
     <AppContext.Provider value={state}>
       <AppDispatchContext.Provider value={{
           dispatch: dispatch,
-          loadClientes: loadClientes
+          actions: actions,
+          //loadClientes: loadClientes
         }}
       >
         {children}
@@ -46,7 +65,8 @@ export function useAppDispatch() {
   return useContext(AppDispatchContext);
 }
 
-function appReducer(state, action) {
+
+/*
   const {type, payload} = action;
   console.log("Reducer ", action.type, payload)
   switch (type) {
@@ -59,6 +79,9 @@ function appReducer(state, action) {
       const new_clientes = state.clientes.filter(t => t.id !== payload.id)
       const new_state = {...state, clientes: new_clientes}
       return new_state
+    }
+    case 'cliente_added': {
+      
     }
     case 'added': {
       return [...clientes, {
@@ -84,5 +107,5 @@ function appReducer(state, action) {
     }
   }
 }
-
+*/
 

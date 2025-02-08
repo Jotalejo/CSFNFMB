@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta name="description" content="Crush it Able The most popular Admin Dashboard template and ui kit">
+<meta name="author" content="PuffinTheme the theme designer">
+
+<link rel="icon" href="static/assets/favicon.ico" type="image/x-icon"/>
+
+<title>:: G R E S A B ::</title>
+
+<!-- Bootstrap Core and vandor -->
+<link rel="stylesheet" href="static/assets/plugins/bootstrap/css/bootstrap.min.css" />
+
+<!-- Plugins css -->
+<link rel="stylesheet" href="static/assets/plugins/charts-c3/c3.min.css"/>
+<link rel="stylesheet" href="static/assets/plugins/jvectormap/jvectormap-2.0.3.css" />
+
+<!-- Core css -->
+<link rel="stylesheet" href="static/assets/css/main.css"/>
+<link rel="stylesheet" href="static/assets/css/theme4.css" id="stylesheet"/>
+</head>
+
+<body class="font-opensans">
+
+<!-- Page Loader -->
+<div class="page-loader-wrapper">
+    <div class="loader">
+    </div>
+</div>
+
+<!-- Start main html -->
+<div id="main_content">
+
+    <!-- Small icon top menu -->
+    <div id="header_top" class="header_top">
+
+        <div class="container">
+            <div class="hleft">
+                <div class="dropdown">
+                    <a href="javascript:void(0)" class="nav-link user_btn"><img class="avatar" src="static/assets/images/userAdor.png" alt=""/></a>
+                    <a href="page-search.html" class="nav-link icon"><i class="fa fa-search"></i></a>
+                    <a href="index.html" class="nav-link icon"><i class="fa fa-home"></i></a>                    
+                    <a href="app-filemanager1.html"  class="nav-link icon app_file xs-hide"><i class="fa fa-folder"></i></a>
+                </div>
+            </div>
+            <div class="hright">
+                <div class="dropdown">
+                    <a href="javascript:void(0)" class="nav-link icon settingbar"><i class="fa fa-bell"></i></a>
+                    <a href="javascript:void(0)" class="nav-link icon menu_toggle"><i class="fa fa-navicon"></i></a>
+                </div>            
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification and  Activity-->
+    <div id="rightsidebar" class="right_sidebar">
+        <a href="javascript:void(0)" class="p-3 settingbar float-right"><i class="fa fa-close"></i></a>
+        <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#notification" aria-expanded="true">Notificación</a></li>
+            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#activity" aria-expanded="false">Actividad</a></li>
+        </ul>
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane   active" id="notification" aria-expanded="true">
+                <ul class="list-unstyled feeds_widget">
+                    <li>
+                        <div class="feeds-left"><i class="fa fa-check"></i></div>
+                        <div class="feeds-body">
+                            <h4 class="title text-danger">Problema Solucionado</h4>
+                            <small>Hemos solucionado el problema de los conductores retrazados</small>
+                            <small class="text-muted">11:05</small>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="feeds-left"><i class="fa fa-user"></i></div>
+                        <div class="feeds-body">
+                            <h4 class="title">Nuevo Usuario</h4>
+                            <small>Bienvenidos los de contabilidad</small>
+                            <small class="text-muted">10:45</small>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="feeds-left"><i class="fa fa-thumbs-o-up"></i></div>
+                        <div class="feeds-body">
+                            <h4 class="title">7 Nuevas Solicitudes</h4>
+                            <small>Hemos recibido 7 nuevas solicitudes de recolección hoy</small>
+                            <small class="text-muted">Today</small>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="feeds-left"><i class="fa fa-question-circle"></i></div>
+                        <div class="feeds-body">
+                            <h4 class="title text-warning">Problemas con las rutas</h4>
+                            <small>Se presentan muchos trancones en la ciudad</small>
+                            <small class="text-muted">10:50</small>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="feeds-left"><i class="fa fa-shopping-cart"></i></div>
+                        <div class="feeds-body">
+                            <h4 class="title">9 Nuevos Clientes</h4>
+                            <small>Registramos 9 nuevos clientes el día de hoy</small>
+                            <small class="text-muted">11:35</small>
+                        </div>
+                    </li>                                   
+                </ul>
+            </div>
+            <div role="tabpanel" class="tab-pane  " id="activity" aria-expanded="false">
+                <ul class="new_timeline mt-3">
+                    <li>
+                        <div class="bullet pink"></div>
+                        <div class="time">11:00am</div>
+                        <div class="desc">
+                            <h3>Atender</h3>
+                            <h4>Clase de Logistica</h4>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="bullet pink"></div>
+                        <div class="time">11:30am</div>
+                        <div class="desc">
+                            <h3>Reunión Interesante</h3>
+                            <h4>“Recibir Actividades Administrativas”</h4>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="bullet green"></div>
+                        <div class="time">12:00pm</div>
+                        <div class="desc">
+                            <h3>Equipo de Trabajo</h3>
+                            <h4>Comité para resúmen</h4>
+                            <ul class="list-unstyled team-info margin-0 p-t-5">                                            
+                                <li><img src="static/assets/images/xs/avatar1.jpg" alt="Avatar"></li>
+                                <li><img src="static/assets/images/xs/avatar2.jpg" alt="Avatar"></li>
+                                <li><img src="static/assets/images/xs/avatar3.jpg" alt="Avatar"></li>
+                                <li><img src="static/assets/images/xs/avatar4.jpg" alt="Avatar"></li>                                            
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="bullet green"></div>
+                        <div class="time">2:00pm</div>
+                        <div class="desc">
+                            <h3>Responder a necesidades</h3>
+                            <a href="javascript:void(0)">“Atención al Cliente”</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="bullet orange"></div>
+                        <div class="time">3:30pm</div>
+                        <div class="desc">
+                            <h3>Pausa Activa</h3>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="bullet green"></div>
+                        <div class="time">5:30pm</div>
+                        <div class="desc">
+                            <h3>Fin</h3>
+                            <h4>Ir a la casa</h4>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- start User detail -->
+    <div class="user_div">
+        <h5 class="brand-name mb-4">User Crush<a href="javascript:void(0)" class="user_btn"><i class="icon-close"></i></a></h5>
+        <div class="card">
+            <img class="card-img-top" src="static/assets/images/gallery/6.jpg" alt="Card image cap">
+            <div class="card-body">
+                <h5 class="card-title">Daniel Kristeen</h5>
+                <p class="card-text">795 Folsom Ave, Suite 600 San Francisco, 94107</p>
+                <div class="row">
+                    <div class="col-4">
+                        <h6><strong>3265</strong></h6>
+                        <small>Post</small>
+                    </div>
+                    <div class="col-4">
+                        <h6><strong>1358</strong></h6>
+                        <small>Followers</small>
+                    </div>
+                    <div class="col-4">
+                        <h6><strong>10K</strong></h6>
+                        <small>Likes</small>
+                    </div>
+                </div>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">michael@example.com</li>
+                <li class="list-group-item">+ 202-555-2828</li>
+                <li class="list-group-item">October 22th, 1990</li>
+            </ul>
+            <div class="card-body">
+                <a href="javascript:void(0);" class="card-link">View More</a>
+                <a href="javascript:void(0);" class="card-link">Another link</a>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="form-group">
+                    <label class="d-block">Total Income<span class="float-right">77%</span></label>
+                    <div class="progress progress-xs">
+                        <div class="progress-bar bg-blue" role="progressbar" aria-valuenow="77" aria-valuemin="0" aria-valuemax="100" style="width: 77%;"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="d-block">Total Expenses <span class="float-right">50%</span></label>
+                    <div class="progress progress-xs">
+                        <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%;"></div>
+                    </div>
+                </div>
+                <div class="form-group mb-0">
+                    <label class="d-block">Gross Profit <span class="float-right">23%</span></label>
+                    <div class="progress progress-xs">
+                        <div class="progress-bar bg-green" role="progressbar" aria-valuenow="23" aria-valuemin="0" aria-valuemax="100" style="width: 23%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="d-block">Storage <span class="float-right">77%</span></label>
+            <div class="progress progress-sm">
+                <div class="progress-bar" role="progressbar" aria-valuenow="77" aria-valuemin="0" aria-valuemax="100" style="width: 77%;"></div>
+            </div>
+            <button type="button" class="btn btn-primary btn-block mt-3">Upgrade Storage</button>
+        </div>
+    </div>
+
+    <!-- start Main menu -->
+    <div id="left-sidebar" class="sidebar">
+        <div class="d-flex justify-content-between brand_name">
+            <h5><img src="static/assets/images/logoGrsab.png" width="150" height="50" style="border-radius: 20px;" alt="GRESAB" /></h5>
+            <div class="theme_btn">
+                <a class="theme1" data-toggle="tooltip" title="Theme Radical" href="#" onclick="setStyleSheet('static/assets/css/theme1.css', 0);"></a>
+                <a class="theme2" data-toggle="tooltip" title="Theme Turmeric" href="#" onclick="setStyleSheet('static/assets/css/theme2.css', 0);"></a>
+                <a class="theme3" data-toggle="tooltip" title="Theme Caribbean" href="#" onclick="setStyleSheet('static/assets/css/theme3.css', 0);"></a>
+                <a class="theme4" data-toggle="tooltip" title="Theme Cascade" href="#" onclick="setStyleSheet('static/assets/css/theme4.css', 0);"></a>
+            </div>
+        </div>
+        <div class="input-icon">
+            <span class="input-icon-addon">
+                <i class="fe fe-search"></i>
+            </span>
+            <input type="text" class="form-control" placeholder="Buscar...">
+        </div>
+        <ul class="nav nav-tabs b-none">
+            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#all-tab"><i class="fa fa-list-ul"></i> Todo</a></li>
+            <!-- <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#app-tab">Elementos</a></li> -->
+            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#setting-tab">Configuración</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane fade active show" id="all-tab">
+                <nav class="sidebar-nav">
+                    <ul class="metismenu ci-effect-1">
+                        <li class="g_heading">Opciones</li>
+                        <li class="active">
+                            <a href="javascript:void(0)" class="has-arrow arrow-b"><i class="icon-home"></i><span data-hover="Menú Principal">Menú Principal</span></a>
+                            <ul>
+                                <li class="active"><a href="index.html"><span data-hover="Fuente Generadora">Fuente Generadora</span></a></li>
+                                <li><a href="index2.html"><span data-hover="Recolección">Recolección</span></a></li>
+                                <li><a href="index3.html"><span data-hover="Transporte">Transporte</span></a></li>
+                                <li><a href="index4.html"><span data-hover="Pesaje">Pesaje y Clasificación</span></a></li>
+                                <li><a href=""><span data-hover="Tratamiento">Tratamiento - Incineración</span></a></li>
+                            </ul>
+                        </li>
+                        <li><a href=""><i class="icon-calendar"></i><span data-hover="Calendario">Calendario</span></a></li>
+                        <li><a href=""><i class="icon-folder-alt"></i><span data-hover="Archivos">Archivos</span></a></li>
+                        <li class="g_heading">Utilidades</li>
+                        <li>
+                            <a href="javascript:void(0)" class="has-arrow arrow-b"><i class="icon-bar-chart"></i><span data-hover="Gráficas">Gráficas</span></a>
+                            <ul>
+                                
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)" class="has-arrow arrow-b"><i class="icon-layers"></i><span data-hover="Formularios">Formularios</span></a>                            
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)" class=""><i class="icon-tag"></i><span data-hover="Tablas">Tablas</span></a>                            
+                        </li>                                                                                                
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- start main body part-->
+    <div class="page">
+
+        <!-- start body header -->
+        <div id="page_top" class="section-body">
+            <div class="container-fluid">
+                <div class="page-header">                    
+                    <div class="left">
+                        <h1 class="page-title">Gestión, Recolección y Saneamiento Ambiental - Barrancabermeja</h1>                        
+                    </div>
+                    <div class="right">
+                        <div class="notification d-flex">
+                            <button type="button" class="btn btn-facebook"><i class="fa fa-info-circle mr-2"></i>Ayuda</button>
+                            <button type="button" class="btn btn-facebook"><i class="fa fa-file-text mr-2"></i>Exportar Datos</button>
+                            <button type="button" class="btn btn-facebook"><i class="fa fa-power-off mr-2"></i>Salir</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="section-body">
+            <div class="container-fluid">
+                <div class="row clearfix">
+                    <div class="col-lg-12">
+                        <div class="mb-4">
+                            <h2>Bienvenido Administrador !</h2>                            
+                            <small>Acá puedes revisar la evolución de la recolección por clases de residuos <a href="#">Saber más</a></small>
+                        </div>                        
+                    </div>
+                </div>
+                {% block content %}
+                {% endblock %}
+            </div>
+        </div>
+
+
+        <!-- Start page footer -->
+        <div class="section-body">
+            <footer class="footer">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12">
+                            Copyright © 2025 <a href="">Jotalejo</a>.
+                        </div>                        
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+</div>
+
+
+<!-- jQuery and bootstrtap js -->
+<script src="static/assets/bundles/lib.vendor.bundle.js"></script>
+
+<!-- start plugin js file  -->
+<script src="static/assets/bundles/apexcharts.bundle.js"></script>
+<script src="static/assets/bundles/counterup.bundle.js"></script>
+<script src="static/assets/bundles/knobjs.bundle.js"></script>
+<script src="static/assets/bundles/c3.bundle.js"></script>
+<script src="static/assets/bundles/flot.bundle.js"></script>
+<script src="static/assets/bundles/jvectormap1.bundle.js"></script>
+
+<!-- Start core js and page js -->
+<script src="static/assets/js/core.js"></script>
+<script src="assets/js/page/index.js"></script>
+
+<script>
+function setStyleSheet(url){
+    var stylesheet = document.getElementById("stylesheet");
+    stylesheet.setAttribute('href', url);
+}
+</script>
+</body>
+</html>

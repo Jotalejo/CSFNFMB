@@ -10,7 +10,7 @@ class Cliente(Base):
     direccion=Column("direc_cli", String(150))
     telefono=Column("telef_cli", String(15))
     ciudad=Column("ciudad_cli", String(50))
-    actividad=Column("actividad_cli", String(100))
     contacto=Column("contacto_cli", String(50))
     telefonoContacto=Column("telcont_cli", String(15))
     observaciones=Column("observ_cli", String(200))
+    email=Column("email_cli", String(50))

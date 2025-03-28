@@ -29,7 +29,15 @@
                             </div>
                             <div class="form-group">
                                 <label>Ciudad</label>
-                                <input id="ciudad" name="ciudad" type="text" class="form-control" required value="{{cliente.ciudad if cliente is not none else ""}}">
+                                <input type="hidden" id="ciudad" name="ciudad" value="{{cliente.ciudad if cliente is not none else ""}}" />
+                                <input id="ciudad" name="ciudad" type="text" class="form-control" list="ciudades">
+                                <datalist id="ciudades">
+                                    {% for ciudad in ciudades %}
+                                        <option value="codigo" title="nombre"></option>
+                                    {% endfor %}
+
+                                </datalist>
+
                             </div>
                             <div class="form-group">
                                 <label>Email</label>

@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request, Form
 from dependencies import templates
 from dependencies import get_db
 from schemas import ClienteCreate, Cliente
-from services import ClienteService
+from services import ClienteService, CiudadService
 from sqlalchemy.orm import Session
 from typing import Annotated
 
@@ -38,10 +38,15 @@ async def create_client(client: ClienteCreate,  db:Session=Depends(get_db)):
 @router.get("/{cliente_id}")
 async def get_client(cliente_id: int, request: Request, db:Session=Depends(get_db)):
     service = ClienteService(db)
+    ciudadesService = CiudadService(db)
+
     cliente = service.get_cliente(cliente_id)
     action = "/clientes/{}".format(cliente.id)
     method = "patch"
-    return templates.TemplateResponse("/clientes/edit.html", {"request": request, "cliente": cliente, "action": action, "method": method} )
+
+    ciudades = ciudadesService.get_ciudades()
+
+    return templates.TemplateResponse("/clientes/edit.html", {"request": request, "cliente": cliente, "action": action, "method": method, "ciudades": ciudades} )
 
 @router.patch("/{cliente_id}")
 async def update_client(cliente_id: int, client: Cliente, request: Request, db:Session=Depends(get_db)):

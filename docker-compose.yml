@@ -7,6 +7,8 @@ services:
     - DB_URL=${DB_URL}
     - DOMAIN=${DOMAIN}
     restart: always
+    ports:
+      - "8000:8000"
     labels:
       - traefik.enable=true
       - traefik.http.routers.project1-https.rule=Host(`${DOMAIN}`)

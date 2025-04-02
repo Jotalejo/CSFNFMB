@@ -39,15 +39,17 @@
                                                 <label>Teléfono</label>
                                                 <input id="telefono" name="telefono" type="text" class="form-control" required value="{{cliente.telefono if cliente is not none else ""}}">
                                             </div>
+
                                             <div class="form-group">
-                                                <label>Ciudad</label>
+                                                <label for="ciudades">Elija la Ciudad</label>
                                                 <input type="hidden" id="ciudad" name="ciudad" value="{{cliente.ciudad if cliente is not none else ""}}" />
                                                 <input id="ciudad" name="ciudad" type="text" class="form-control" list="ciudades">
-                                                <datalist id="ciudades">
+                                                <select id="ciudades" name="ciudades" class="form-control">
+                                                    <option label="Ciudad del cliente ..." selected disabled></option>
                                                     {% for ciudad in ciudades %}
-                                                        <option value="codigo" title="nombre"></option>
+                                                        <option>{{ ciudad.1 }}</option>
                                                     {% endfor %}
-                                                </datalist>
+                                                </select>
                                             </div>
                                             <div class="form-group">
                                                 <label>Email</label>
@@ -69,6 +71,26 @@
                                             <button id="btnguardc" name="btnguardc" type="submit" class="btn btn-primary">{{ "Crear" if cliente is none or cliente.id is none else "Guardar" }}</button>
                                         </div>
                                     </form>
+                                </div>
+                                <div class="col-md-12 col-lg-5">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h3 class="card-title">Validaciones</h3>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="form-group">
+                                                <label class="form-label">Nombre del Usuario</label>
+                                                <div class="input-icon">
+                                                    <span class="input-icon-addon"><i class="fe fe-user"></i></span>
+                                                    <input type="text" class="form-control" id = "nuser" name="nuser" placeholder="Usuario..">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="form-label">Password</label>
+                                                <input type="password" class="form-control" id = "passusr" name="passusr" placeholder="Password..">
+                                            </div>                                
+                                        </div>
+                                    </div>                                                
                                 </div>
                             </div>
                         </div>

@@ -8,6 +8,6 @@ class CiudadService:
     def __init__(self, db: Session):
         self.db = db
 
-    def get_ciudades(db: Session, skip:int=0, limit:int=100):
-        return db.query(Ciudad).offset(skip).limit(limit).all()
+    def get_ciudades(self, skip:int=0, limit:int=200):
+        return self.db.query(Ciudad).offset(skip).limit(limit).all()
 

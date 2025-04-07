@@ -24,10 +24,13 @@ async def search_clients(request: Request, nit: Annotated[str, Form()], db:Sessi
     action = "/clientes"
     method = "post"
 
+    ciudadesService = CiudadService(db)
+    ciudades = ciudadesService.get_ciudades()
+
     if (cliente != None):
         action =  "/clientes/{}".format(cliente.id)
         method = "patch"
-    return templates.TemplateResponse("/clientes/edit.html", {"request": request, "cliente": cliente, "action": action, "method": method} )
+    return templates.TemplateResponse("/clientes/edit.html", {"request": request, "cliente": cliente, "action": action, "method": method, "ciudades": ciudades} )
 
 @router.post("/")
 async def create_client(client: ClienteCreate,  db:Session=Depends(get_db)):

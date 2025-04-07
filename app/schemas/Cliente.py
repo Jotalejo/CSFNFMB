@@ -5,7 +5,7 @@ class ClienteBase(BaseModel):
     nit : str | None = None
     direccion : str | None = None 
     telefono : str | None = None 
-    ciudad : str | None = None 
+    ciudad : int | None = None 
     contacto : str | None = None 
     telefonoContacto : str | None = None 
     observaciones : str | None = None 

@@ -18,9 +18,9 @@
                     <div class="section-body">
                         <div class="container-fluid">
                             <div class="row">
-                                <div class="col-md-12 col-lg-9">
+                                <div class="col-md-12 col-lg-7">
                                     <form class="card" id="basic-form" method={{method}} novalidate action="{{action}}">
-                                        
+                                        <div class="card-body">    
                                             <h3 class="card-title">Perfil del Cliente</h3>
                                             <input hidden id="id" name="id" value="{{cliente.id if cliente is not none else ""}}" />
                                             <div class="form-group">
@@ -66,7 +66,7 @@
                                             </div>                                    
                                             <br>
                                             <button id="btnguardc" name="btnguardc" type="submit" class="btn btn-primary">{{ "Crear" if cliente is none or cliente.id is none else "Guardar" }}</button>
-                                        
+                                        </div>
                                     </form>
                                 </div>
                                 <div class="col-md-12 col-lg-5">

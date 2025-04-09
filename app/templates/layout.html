@@ -352,9 +352,11 @@
 <script src="/static/assets/bundles/jvectormap1.bundle.js"></script>
 
 <!-- Start core js and page js -->
-<script src="/static/assets/js/core.js"></script>
-<script src="/static/assets/js/page/index.js"></script>
-<script src="/static/assets/js/common.js"></script>
+
+
+<script src="{{ url_for('static', path='/assets/js/core.js')}}"></script>
+<script src="{{ url_for('static', path='/assets/js/common.js')}}"></script>
+
 
 <script>
 function setStyleSheet(url){

@@ -1,4 +1,316 @@
 {% extends "layout.html" %}
 {% block content %}
-
+<div class="row clearfix row-deck">
+    <div class="col-lg-4 col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Reporte General</h3>
+                <div class="card-options">
+                    <a href="#" class="card-options-fullscreen" data-toggle="card-fullscreen"><i class="fe fe-maximize"></i></a>
+                    <a href="#" class="card-options-remove" data-toggle="card-remove"><i class="fe fe-x"></i></a>
+                    <div class="item-action dropdown ml-2">
+                        <a href="javascript:void(0)" data-toggle="dropdown"><i class="fe fe-more-vertical"></i></a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-eye"></i> Ver Detalles </a>
+                            <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-cloud-download"></i> Descargar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <span>Balance</span>
+                <h4>$<span class="counter">20,508</span></h4>
+                <div id="apexspark1" class="mb-4"></div>
+                <div class="form-group">
+                    <label class="d-block">Sean Black <span class="float-right">$<span class="counter">15,025</span></span></label>
+                    <div class="progress progress-xs">
+                        <div class="progress-bar bg-azure" role="progressbar" aria-valuenow="77" aria-valuemin="0" aria-valuemax="100" style="width: 77%;"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="d-block">Evan Rees <span class="float-right">$<span class="counter">1,843</span></span></label>
+                    <div class="progress progress-xs">
+                        <div class="progress-bar bg-green" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%;"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="d-block">Kevin James <span class="float-right">$<span class="counter">3,641</span></span></label>
+                    <div class="progress progress-xs">
+                        <div class="progress-bar bg-blue" role="progressbar" aria-valuenow="23" aria-valuemin="0" aria-valuemax="100" style="width: 23%;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <a href="javascript:void(0)" class="btn btn-block btn-info btn-sm">Ver Más</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-8 col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Clases de Residuos</h3>
+                <div class="card-options">
+                    <label class="custom-switch m-0">
+                        <input type="checkbox" value="1" class="custom-switch-input" checked="">
+                        <span class="custom-switch-indicator"></span>
+                    </label>
+                </div>
+            </div>
+            <div class="card-body">
+                <div id="chart-bar" style="height: 350px"></div>
+            </div>
+            <div class="card-footer">
+                <div class="d-flex justify-content-between">
+                    <a href="javascript:void(0)" class="btn btn-info btn-sm w200">Generar Reporte</a>
+                    <small>Acá puedes revisar la evolución de la recolección por clases de residuos. <a href="#">Saber más</a></small>                                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="section-body">
+    <div class="container-fluid">
+        <div class="row clearfix row-deck">
+            <div class="col-lg-8 col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Estadísticas de Ventas</h3>
+                        <div class="card-options">
+                            <div class="item-action dropdown ml-2">
+                                <a href="#" class="card-options-fullscreen" data-toggle="card-fullscreen"><i class="fe fe-maximize"></i></a>
+                                <a href="javascript:void(0)" data-toggle="dropdown"><i class="fe fe-more-vertical"></i></a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-eye"></i> View Details </a>
+                                    <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-cloud-download"></i> Download</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row clearfix">
+                            
+                        </div>
+                        <div id="flotChart" class="flot-chart"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Ingresos por Ventas</h3>
+                        <div class="card-options">
+                            <a href="#" class="card-options-fullscreen" data-toggle="card-fullscreen"><i class="fe fe-maximize"></i></a>
+                            <a href="#" class="card-options-remove" data-toggle="card-remove"><i class="fe fe-x"></i></a>
+                            <div class="item-action dropdown ml-2">
+                                <a href="javascript:void(0)" data-toggle="dropdown"><i class="fe fe-more-vertical"></i></a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-eye"></i> View Details </a>
+                                    <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-cloud-download"></i> Download</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body text-center">
+                        <div class="mt-4">
+                            <input type="text" class="knob" value="34" data-width="147" data-height="147" data-thickness="0.07" data-bgColor="#3f454a" data-fgColor="#395bb6">
+                        </div>
+                        <h3 class="mb-0 mt-3 font300">24,301 <span class="text-green font-15">+3.7%</span></h3>
+                        <small>Lorem Ipsum is simply dummy text <br> <a href="#">Read more</a> </small>
+                        <div class="mt-4">
+                            <span class="chart_3">2,5,8,3,6,9,4,5,6,3</span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="javascript:void(0)" class="btn btn-block btn-success btn-sm">Enviar Reporte</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row clearfix row-deck">
+            <div class="col-lg-8 col-md-12">
+                <div class="card visitors-map">
+                    <div class="card-header">
+                        <h3 class="card-title">Resumen de Rutas</h3>
+                        <div class="card-options">
+                            <a href="#" class="card-options-fullscreen" data-toggle="card-fullscreen"><i class="fe fe-maximize"></i></a>
+                            <a href="#" class="card-options-remove" data-toggle="card-remove"><i class="fe fe-x"></i></a>
+                            <div class="item-action dropdown ml-2">
+                                <a href="javascript:void(0)" data-toggle="dropdown"><i class="fe fe-more-vertical"></i></a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-eye"></i> View Details </a>
+                                    <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-cloud-download"></i> Download</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row clearfix">
+                            <div class="col-lg-7 col-md-12">
+                                <div id="world-map-markers" style="height:300px;"></div>
+                            </div>
+                            <div class="col-lg-5 col-md-12">
+                                <span>Evalúe el progreso de la recolección. <a href="#">Ver Más</a></span>
+                                <ul class="list-group mt-3">
+                                    <li class="list-group-item">
+                                        <div class="clearfix">
+                                            <div class="float-left"><strong>35%</strong></div>
+                                            <div class="float-right"><small class="text-muted">Barrio Colombia</small></div>
+                                        </div>
+                                        <div class="progress progress-xs">
+                                            <div class="progress-bar bg-azure" role="progressbar" style="width: 35%" aria-valuenow="42" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <div class="clearfix">
+                                            <div class="float-left"><strong>25%</strong></div>
+                                            <div class="float-right"><small class="text-muted">El Centro</small></div>
+                                        </div>
+                                        <div class="progress progress-xs">
+                                            <div class="progress-bar bg-green" role="progressbar" style="width: 25%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <div class="clearfix">
+                                            <div class="float-left"><strong>15%</strong></div>
+                                            <div class="float-right"><small class="text-muted">Refinería</small></div>
+                                        </div>
+                                        <div class="progress progress-xs">
+                                            <div class="progress-bar bg-orange" role="progressbar" style="width: 15%" aria-valuenow="36" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <div class="clearfix">
+                                            <div class="float-left"><strong>20%</strong></div>
+                                            <div class="float-right"><small class="text-muted">Olaya Herrera</small></div>
+                                        </div>
+                                        <div class="progress progress-xs">
+                                            <div class="progress-bar bg-indigo" role="progressbar" style="width: 20%" aria-valuenow="6" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <div class="clearfix">
+                                            <div class="float-left"><strong>11%</strong></div>
+                                            <div class="float-right"><small class="text-muted">Torcoroma</small></div>
+                                        </div>
+                                        <div class="progress progress-xs">
+                                            <div class="progress-bar bg-pink" role="progressbar" style="width: 11%" aria-valuenow="6" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Estado de las Ordenes</h3>
+                        <div class="card-options">
+                            <a href="#" class="card-options-fullscreen" data-toggle="card-fullscreen"><i class="fe fe-maximize"></i></a>
+                            <a href="#" class="card-options-remove" data-toggle="card-remove"><i class="fe fe-x"></i></a>
+                            <div class="item-action dropdown ml-2">
+                                <a href="javascript:void(0)" data-toggle="dropdown"><i class="fe fe-more-vertical"></i></a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-eye"></i> View Details </a>
+                                    <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-cloud-download"></i> Download</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body text-center">
+                        <div id="Order_status" style="height: 268px"></div>
+                    </div>
+                    <div class="card-footer text-center">
+                        <div class="row clearfix">
+                            <div class="col-6">
+                                <h6 class="mb-0">$3,095</h6>
+                                <small class="text-muted">Mes Pasado</small>
+                            </div>
+                            <div class="col-6">
+                                <h6 class="mb-0">$2,763</h6>
+                                <small class="text-muted">Mes Actual</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>    
+        <div class="row clearfix">
+            <div class="col-12 col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Resumen de Servicios</h3>
+                        <div class="card-options">
+                            <a href="#" class="card-options-fullscreen" data-toggle="card-fullscreen"><i class="fe fe-maximize"></i></a>
+                            <a href="#" class="card-options-remove" data-toggle="card-remove"><i class="fe fe-x"></i></a>
+                            <div class="item-action dropdown ml-2">
+                                <a href="javascript:void(0)" data-toggle="dropdown"><i class="fe fe-more-vertical"></i></a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-eye"></i> Ver Detalles </a>
+                                    <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fa fa-cloud-download"></i> Descargar</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped mb-0 text-nowrap">
+                                <thead>
+                                    <tr>
+                                        <th>#No</th>
+                                        <th>Nombre del Cliente</th>
+                                        <th>Cantidad de Residuo Kg.</th>
+                                        <th>Tipo de Residuo</th>
+                                        <th>Sub Tipo</th>
+                                        <th>Cliente Frecuente</th>
+                                        <th>Estatus</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>#01</td>
+                                        <td>Sean Black</td>
+                                        <td>100</td>
+                                        <td>No Peligroso</td>
+                                        <td>Ordinarios - Comunes</td>
+                                        <td>Si - Rutinario</td>
+                                        <td><span class="badge badge-success">Recogido</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>#02</td>
+                                        <td>Evan Rees</td>
+                                        <td>77</td>
+                                        <td>Peligroso</td>
+                                        <td>Biosanitario</td>
+                                        <td>Ocasional</td>
+                                        <td><span class="badge badge-primary">Por recoger</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>#03</td>
+                                        <td>David Wallace</td>
+                                        <td>85</td>
+                                        <td>Peligroso</td>
+                                        <td>Anatomopatológicos</td>
+                                        <td>Único Servicio</td>
+                                        <td><span class="badge badge-warning">Pendiente</span></td>
+                                    </tr>                                            
+                                    <tr>
+                                        <td>#04</td>
+                                        <td>Kevin James</td>
+                                        <td>33</td>
+                                        <td>Peligroso &amp; Químico</td>
+                                        <td>Farmaco</td>
+                                        <td>Ocasional</td>
+                                        <td><span class="badge badge-danger">Cancelado</span></td>
+                                    </tr>                                            
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

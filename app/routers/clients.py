@@ -14,8 +14,10 @@ router = APIRouter(
 )
 
 @router.get("/")
-async def get_clients(request: Request):
-    return templates.TemplateResponse("/clientes/search.html", {"request": request})
+async def get_clients(request: Request, db:Session=Depends(get_db)):
+    service = ClienteService(db)
+    clientes = service.get_clientes()
+    return templates.TemplateResponse("/clientes/search.html", {"request": request, "clientes": clientes} )
 
 @router.post("/search")
 async def search_clients(request: Request, nit: Annotated[str, Form()], db:Session=Depends(get_db)):

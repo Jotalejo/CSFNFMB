@@ -45,6 +45,7 @@ class ClienteService:
         self.db.commit()
         return db_cliente
 
-    def get_clientes(db: Session, skip:int=0, limit:int=100):
-        return db.query(Cliente).offset(skip).limit(limit).all()
+    def get_clientes(self, skip:int=0, limit:int=100):
+        return self.db.query(Cliente).offset(skip).limit(limit).all()
+    
 

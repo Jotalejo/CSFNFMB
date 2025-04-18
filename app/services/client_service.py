@@ -46,7 +46,7 @@ class ClienteService:
         return db_cliente
 
     def get_clientes(self, skip:int=0, limit:int=100):
-        return self.db.query(Cliente).offset(skip).limit(limit).all().order_by(Cliente.razonSocial.asc())
+        return self.db.query(Cliente).offset(skip).limit(limit).all()
     
     
 

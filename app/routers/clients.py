@@ -45,7 +45,7 @@ async def get_client(cliente_id: int, request: Request, db:Session=Depends(get_d
     service = ClienteService(db)
     ciudadesService = CiudadService(db)
 
-    cliente = service.get_cliente(cliente_id)
+    cliente = service.get_cliente(cliente_id).order_by(Cliente.razonSocial).all()
     action = "/clientes/{}".format(cliente.id)
     method = "patch"
 
@@ -53,8 +53,3 @@ async def get_client(cliente_id: int, request: Request, db:Session=Depends(get_d
 
     return templates.TemplateResponse("/clientes/edit.html", {"request": request, "cliente": cliente, "action": action, "method": method, "ciudades": ciudades} )
 
-@router.patch("/{cliente_id}")
-async def update_client(cliente_id: int, client: Cliente, request: Request, db:Session=Depends(get_db)):
-    service = ClienteService(db)
-    dbCliente = service.update_cliente(client)
-    return dbCliente

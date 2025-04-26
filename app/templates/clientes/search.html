@@ -45,7 +45,7 @@
                                                 <tr>
                                                     <td id="razs">{{ datoscli.razonSocial }}</td>
                                                     <td id="nit">{{ datoscli.nit }}</td>
-                                                    <td id="nomb">{{ datoscli.contacto }}</td>                
+                                                    <td id="nomb">{{ datoscli.contacto }}</td>
                                                     <td id="nomb">{{ datoscli.telefono }}</td>
                                                     <td class="actions">
                                                         <button class="btn btn-sm btn-icon on-editing m-r-5 button-save"
@@ -55,7 +55,7 @@
                                                         <button class="btn btn-sm btn-icon on-default m-r-5 button-edit"
                                                         data-toggle="tooltip" data-original-title="Editar"><i class="icon-pencil" aria-hidden="true"></i></button>
                                                         <button class="btn btn-sm btn-icon on-default button-remove"
-                                                        data-toggle="tooltip" data-original-title="Residuos"><i class="icon-trash" aria-hidden="true"></i></button>
+                                                        data-toggle="modal" data-target="#MdlGestRescli" data-original-title="Residuos"><i class="icon-trash" aria-hidden="true"></i></button>
                                                     </td>
                                                 </tr>
                                                 {% endfor %}
@@ -80,4 +80,100 @@
         </div>
     </div>
 </div>
-{% endblock %}    
+<!-- Modal -->
+<!-- BEGIN primary modal -->
+<div class="modal fade" id="MdlGestRescli" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="left">
+                    <h1 class="page-title">Manejo de Clientes</h1>
+                </div>
+                <button name="elBtnclsAC" id="elBtnclsAC" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body m-3">
+
+                <form action="/add_ctrl" name="validation-formU" id="validation-formU" method="POST">
+                    <div class="form-row" id="pagectrlg">
+                        <div class="form-group col-md-2">
+                            <center>
+                                <label for="codriectrlg">Código del Riesgo</label>
+                                <input type="text" name="codriectrlg" id="codriectrlg" class="form-control" style="text-align: center; background-color: #1e6075; color: white;">
+                            </center>
+                        </div>
+                        <div class="form-group col-md-10">
+                            <label for="respdlacs">Elija la Causa a Controlar</label>
+                            <select id="respdlacs" name="respdlacs" class="form-control" onchange="Prenderdbtn();">
+                                <option label="Responsable Monitoreo ..." selected disabled></option>
+                                {% for respon in resplanM %}
+                                    <option>{{ respon.1 }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <div style="display: block; margin-left: 13px;" class="form-group" id="radiosec1">
+                                <div style="display: none;" class="form-check" id="losradbct">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input" type="radio" name="validation-radios" id="lasec1" data-toggle="modal" data-target="#definiplan" onclick="return veropcpcc();"> Crear Control
+                                    </label>
+                                    <label style="margin-left: 40px;" class="form-check-label">
+                                        <input class="form-check-input" type="radio" name="validation-radios" id="lasec2" data-toggle="modal" data-target="#definiplan" onclick="return noveropcpcc();"> Elegir Control Existente
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display: none;" id="loscon" class="form-group col-md-10">
+                            <label for="listadctr">Lista de Controles</label>
+                            <select id="listadctr" name="listadctr" class="form-control">
+                                <option label="Elija Control ..." selected disabled></option>
+                                {% for loscont in qryPctrl %}
+                                    <option>{{ loscont.2 }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div style="display: none;" id="nomdctrl" class="form-group col-md-6">
+                            <label class="form-label" for="nomdlctrl">Nombre del Control</label>
+                            <textarea class="form-control" name="nomdlctrl" id="nomdlctrl" placeholder="Escriba el nombre asignado al Control" rows="2"></textarea>
+                            <div id="mendernc" style="display: none;" class="form-group col-md-12">
+                                <a id="errNombc" class="formulario__input-error" style="padding: 10px;">Debe escribir un nombre válido de Control</a>
+                            </div>
+                        </div>
+                        <div style="display: none;" id="nomddescp" class="form-group col-md-6">
+                            <label class="form-label" for="descdlctrl">Descripción del Control</label>
+                            <textarea class="form-control" name="descdlctrl" id ="descdlctrl" placeholder="Describa la Acción del Control" rows="2"></textarea>
+                            <div id="menderDesc" style="display: none;" class="form-group col-md-12">
+                                <a id="errDescc" class="formulario__input-error" style="padding: 10px;">Debe escribir una Descripción del control (prendegrab();)</a>
+                            </div>
+                        </div>
+                        <div id="accdelCtrl" class="form-group col-md-6" style="display: none;">
+                            <label for="accdctrl">Acción del Control</label>
+                            <select id="accdctrl" name="accdctrl" class="form-control" onchange="return calcallctrl('accdctrl','codriectrlg');">
+                                <option label="seleccione la Acción..." selected disabled></option>
+                                <option value="Probabilidad">Probabilidad
+                                <option value="Impacto">Impacto
+                                <option value="Probabilidad e Impacto">Probabilidad e Impacto
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <input style="display: none;" type="text" name="codCtrlgen" id="codCtrlgen" class="form-control">
+                            <input style="display: none;" type="text" name="codMeloMuT" id="codMeloMuT" class="form-control">
+                        </div>
+                    </div>
+
+                    <div id="hijodepta" style="display: none;">
+                        <h2 id="encabezado">Control Asignado Satisfactoriamente</h2>
+                    </div>
+                    <div class="modal-footer">															
+                        <button type="submit" id="btnGrab" class="btn btn-success" style="background-color: #1e6075; display: none;" onclick="return grabactrl();">Grabar</button>
+                    </div>
+                    <button style="display: none;" type="submit" id="ylograbaelctrl" class="" data-dismiss="modal" data-toggle="modal" data-target="#ModalPrimGrabaC" onclick="return enviando();">Grabar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- <button style="background-color: #fff; border-style: none;" type="submit" id="ylograbaelctrl" class="btn btn-secondary bodymsg" data-dismiss="modal" data-toggle="modal" data-target="#ModalPrimGrabaC" onclick="return enviando();">Grabar</button> -->
+<!-- END primary modal -->
+{% endblock %}

@@ -45,8 +45,39 @@ class ClienteService:
         self.db.commit()
         return db_cliente
 
+#    def get_clientes(self, skip:int=0, limit:int=100):
+#        return self.db.query(Cliente).offset(skip).limit(limit).all()
+    
     def get_clientes(self, skip:int=0, limit:int=100):
-        return self.db.query(Cliente).offset(skip).limit(limit).all()
+        return (self.db.query(Cliente)
+                .order_by(Cliente.razonSocial)  # Ordenamos por la columna
+                .offset(skip)
+                .limit(limit)
+                .all())
+
+    def get_clixlet(self, letra:str=None, skip:int=0, limit:int=100):
+        query = self.db.query(Cliente)
+
+        if letra:
+            query = query.filter(Cliente.razonSocial.like(f"{letra}%"))
+
+        return (query
+                .order_by(Cliente.razonSocial)
+                .offset(skip)
+                .limit(limit)
+                .all())
+
+    def get_cliporID(self, id:int=None, skip:int=0, limit:int=100):
+        query = self.db.query(Cliente)
+
+        if id is not None:
+            query = query.filter(Cliente.id == id)
+
+        return (query
+                .order_by(Cliente.razon_social)
+                .offset(skip)
+                .limit(limit)
+                .all())
     
     
 

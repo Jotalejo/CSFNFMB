@@ -18,7 +18,7 @@
                                     <form class="card" id="basic-form" method={{method}} novalidate action="{{action}}">
                                         <div class="card-body">    
                                             <h3 class="card-title">Perfil del Cliente</h3>
-                                            <input hidden id="id" name="id" value="{{cliente.id if cliente is not none else ""}}" />
+                                            <input hidden id="id" name="id" value="{{cliente.id if cliente is not none else }}" />
                                             <div class="form-group">
                                                 <label>Razón Social</label>
                                                 <input id="razonSocial" name="razonSocial" type="text" class="form-control" required value="{{cliente.razonSocial if cliente is not none else ""}}">

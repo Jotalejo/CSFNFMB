@@ -94,81 +94,54 @@
                 </button>
             </div>
             <div class="modal-body m-3">
-
-                <form action="/add_ctrl" name="validation-formU" id="validation-formU" method="POST">
-                    <div class="form-row" id="pagectrlg">
-                        <div class="form-group col-md-2">
-                            <center>
-                                <label for="codriectrlg">Código del Riesgo</label>
-                                <input type="text" name="codriectrlg" id="codriectrlg" class="form-control" style="text-align: center; background-color: #1e6075; color: white;">
-                            </center>
+                <form class="card" id="basic-form" method={{method}} novalidate action="{{action}}">
+                    <div class="card-body">
+                        <h3 class="card-title">Perfil del Cliente</h3>
+                        <input hidden id="id" name="id" value="{{cliente.razonSocial if cliente is not none else ""}}">
+                        <div class="form-group">
+                            <label>Razón Social</label>
+                            <input id="razonSocial" name="razonSocial" type="text" class="form-control" required value="{{cliente.razonSocial if cliente is not none else ""}}">
                         </div>
-                        <div class="form-group col-md-10">
-                            <label for="respdlacs">Elija la Causa a Controlar</label>
-                            <select id="respdlacs" name="respdlacs" class="form-control" onchange="Prenderdbtn();">
-                                <option label="Responsable Monitoreo ..." selected disabled></option>
-                                {% for respon in resplanM %}
-                                    <option>{{ respon.1 }}</option>
+                        <div class="form-group">
+                            <label>N.I.T.</label>
+                            <input id="nit" name="nit" type="text" class="form-control" required value="{{cliente.nit if cliente is not none else ""}}">
+                        </div>
+                        <div class="form-group">
+                            <label>Dirección</label>
+                            <input id="direccion" name="direccion" type="text" class="form-control" required value="{{cliente.direccion if cliente is not none else ""}}">
+                        </div>
+                        <div class="form-group">
+                            <label>Teléfono</label>
+                            <input id="telefono" name="telefono" type="text" class="form-control" required value="{{cliente.telefono if cliente is not none else ""}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="ciudades">Elija la Ciudad</label>
+                            <select id="ciudad" name="ciudad" class="form-control">
+                                <option label="Ciudad del cliente ..." selected disabled></option>
+                                {% for ciudad in ciudades %}
+                                    <option value="{{ciudad.id}}">{{ ciudad.nombre }}</option>
                                 {% endfor %}
                             </select>
                         </div>
-                        <div class="form-group col-md-12">
-                            <div style="display: block; margin-left: 13px;" class="form-group" id="radiosec1">
-                                <div style="display: none;" class="form-check" id="losradbct">
-                                    <label class="form-check-label">
-                                        <input class="form-check-input" type="radio" name="validation-radios" id="lasec1" data-toggle="modal" data-target="#definiplan" onclick="return veropcpcc();"> Crear Control
-                                    </label>
-                                    <label style="margin-left: 40px;" class="form-check-label">
-                                        <input class="form-check-input" type="radio" name="validation-radios" id="lasec2" data-toggle="modal" data-target="#definiplan" onclick="return noveropcpcc();"> Elegir Control Existente
-                                    </label>
-                                </div>
-                            </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input id="email" name="email" type="email" class="form-control" required value="{{cliente.email if cliente is not none else ""}}">
                         </div>
-                        <div style="display: none;" id="loscon" class="form-group col-md-10">
-                            <label for="listadctr">Lista de Controles</label>
-                            <select id="listadctr" name="listadctr" class="form-control">
-                                <option label="Elija Control ..." selected disabled></option>
-                                {% for loscont in qryPctrl %}
-                                    <option>{{ loscont.2 }}</option>
-                                {% endfor %}
-                            </select>
+                        <div class="form-group">
+                            <label>Contacto</label>
+                            <input id="contacto" name="contacto" type="text" class="form-control" required value="{{cliente.contacto if cliente is not none else ""}}">
                         </div>
-                        <div style="display: none;" id="nomdctrl" class="form-group col-md-6">
-                            <label class="form-label" for="nomdlctrl">Nombre del Control</label>
-                            <textarea class="form-control" name="nomdlctrl" id="nomdlctrl" placeholder="Escriba el nombre asignado al Control" rows="2"></textarea>
-                            <div id="mendernc" style="display: none;" class="form-group col-md-12">
-                                <a id="errNombc" class="formulario__input-error" style="padding: 10px;">Debe escribir un nombre válido de Control</a>
-                            </div>
+                        <div class="form-group">
+                            <label>Telefono del Contacto</label>
+                            <input id="telefonoContacto" name="telefonoContacto" type="text" class="form-control" required value="{{cliente.telefonoContacto if cliente is not none else ""}}">
                         </div>
-                        <div style="display: none;" id="nomddescp" class="form-group col-md-6">
-                            <label class="form-label" for="descdlctrl">Descripción del Control</label>
-                            <textarea class="form-control" name="descdlctrl" id ="descdlctrl" placeholder="Describa la Acción del Control" rows="2"></textarea>
-                            <div id="menderDesc" style="display: none;" class="form-group col-md-12">
-                                <a id="errDescc" class="formulario__input-error" style="padding: 10px;">Debe escribir una Descripción del control (prendegrab();)</a>
-                            </div>
-                        </div>
-                        <div id="accdelCtrl" class="form-group col-md-6" style="display: none;">
-                            <label for="accdctrl">Acción del Control</label>
-                            <select id="accdctrl" name="accdctrl" class="form-control" onchange="return calcallctrl('accdctrl','codriectrlg');">
-                                <option label="seleccione la Acción..." selected disabled></option>
-                                <option value="Probabilidad">Probabilidad
-                                <option value="Impacto">Impacto
-                                <option value="Probabilidad e Impacto">Probabilidad e Impacto
-                            </select>
-                        </div>
-                        <div class="form-group col-md-3">
-                            <input style="display: none;" type="text" name="codCtrlgen" id="codCtrlgen" class="form-control">
-                            <input style="display: none;" type="text" name="codMeloMuT" id="codMeloMuT" class="form-control">
-                        </div>
+                        <div class="form-group">
+                            <label>Observaciones</label>
+                            <textarea id="observaciones" name="observaciones" class="form-control" rows="5" cols="30" required value="{{cliente.observaciones if cliente is not none else ""}}"></textarea>
+                        </div>                                    
+                        <br>
+                        <button id="btnguardc" name="btnguardc" type="submit" class="btn btn-primary">{{ "Crear" if cliente is none or cliente.id is none else "Guardar" }}</button>
                     </div>
-
-                    <div id="hijodepta" style="display: none;">
-                        <h2 id="encabezado">Control Asignado Satisfactoriamente</h2>
-                    </div>
-                    <div class="modal-footer">															
-                        <button type="submit" id="btnGrab" class="btn btn-success" style="background-color: #1e6075; display: none;" onclick="return grabactrl();">Grabar</button>
-                    </div>
-                    <button style="display: none;" type="submit" id="ylograbaelctrl" class="" data-dismiss="modal" data-toggle="modal" data-target="#ModalPrimGrabaC" onclick="return enviando();">Grabar</button>
                 </form>
             </div>
         </div>
@@ -176,4 +149,10 @@
 </div>
 <!-- <button style="background-color: #fff; border-style: none;" type="submit" id="ylograbaelctrl" class="btn btn-secondary bodymsg" data-dismiss="modal" data-toggle="modal" data-target="#ModalPrimGrabaC" onclick="return enviando();">Grabar</button> -->
 <!-- END primary modal -->
+<script>
+    window.addEventListener('load', function () {
+        const form = document.getElementById("basic-form");
+        form.addEventListener("submit", send_json);
+    })
+</script>
 {% endblock %}

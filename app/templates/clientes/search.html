@@ -21,14 +21,14 @@
                                         <i class="icon wb-plus" aria-hidden="true"></i>Agregar Cliente
                                     </button>
                                     <div class="table-responsive">
-                                        <table class="table table-hover table-vcenter table-striped" cellspacing="0" id="addrowExample">
+                                        <table class="table table-hover table-vcenter table-striped dataTable" cellspacing="0" id="addrowExample">
                                             <thead>
                                                 <tr>
-                                                    <th>NOMBRE</th>
-                                                    <th>NIT</th>
-                                                    <th>Contacto</th>
-                                                    <th>Teléfono</th>
-                                                    <th>Acciones</th>
+                                                    <th class="sorting">NOMBRE</th>
+                                                    <th class="sorting">NIT</th>
+                                                    <th class="sorting">Contacto</th>
+                                                    <th class="sorting">Teléfono</th>
+                                                    <th class="sorting">Acciones</th>
                                                 </tr>
                                             </thead>
                                             <tfoot>
@@ -41,24 +41,6 @@
                                                 </tr>
                                             </tfoot>
                                             <tbody>
-                                                {% for datoscli in clientes %}
-                                                <tr>
-                                                    <td id="razs">{{ datoscli.razonSocial }}</td>
-                                                    <td id="nit">{{ datoscli.nit }}</td>
-                                                    <td id="nomb">{{ datoscli.contacto }}</td>
-                                                    <td id="nomb">{{ datoscli.telefono }}</td>
-                                                    <td class="actions">
-                                                        <button class="btn btn-sm btn-icon on-editing m-r-5 button-save"
-                                                        data-toggle="tooltip" data-original-title="Save" hidden><i class="icon-drawer" aria-hidden="true"></i></button>
-                                                        <button class="btn btn-sm btn-icon on-editing button-discard"
-                                                        data-toggle="tooltip" data-original-title="Discard" hidden><i class="icon-close" aria-hidden="true"></i></button>
-                                                        <button class="btn btn-sm btn-icon on-default m-r-5 button-edit"
-                                                        data-toggle="tooltip" data-original-title="Editar"><i class="icon-pencil" aria-hidden="true"></i></button>
-                                                        <button class="btn btn-sm btn-icon on-default button-remove"
-                                                        data-toggle="modal" data-target="#MdlGestRescli" data-original-title="Residuos"><i class="icon-trash" aria-hidden="true"></i></button>
-                                                    </td>
-                                                </tr>
-                                                {% endfor %}
                                             </tbody>
                                         </table>
                                     </div>
@@ -176,4 +158,50 @@
 </div>
 <!-- <button style="background-color: #fff; border-style: none;" type="submit" id="ylograbaelctrl" class="btn btn-secondary bodymsg" data-dismiss="modal" data-toggle="modal" data-target="#ModalPrimGrabaC" onclick="return enviando();">Grabar</button> -->
 <!-- END primary modal -->
+{% endblock %}
+{% block scripts %}
+<script>
+    $(document).ready(function() {
+        var table = $('#addrowExample').DataTable({
+            "ajax": {
+                "url": "/clientes/json",
+                "type": "GET",
+                "data": function ( d ) {
+                    d.nit = $('#nit').val();
+                }
+            },
+            "language": {
+                "lengthMenu": "Mostrar _MENU_ registros por página",
+                "zeroRecords": "No se encontraron resultados",
+                "info": "Página _PAGE_ de _PAGES_",
+                "infoEmpty": "No hay registros disponibles",
+                "infoFiltered": "(filtrado de _MAX_ total de registros)",
+                "search": "Buscar:",
+                "paginate": {
+                    "first":      "Primero",
+                    "last":       "Último",
+                    "next":       "Siguiente",
+                    "previous":   "Anterior"
+                }
+            },
+            responsive: true,
+            autoWidth: false,
+            "columns": [
+                { "data": "razonSocial" },
+                { "data": "nit" },
+                { "data": "contacto" },
+                { "data": "telefono" },
+                {
+                    "className":      'details-control',
+                    "orderable":      false,
+                    "data":           null,
+                    "defaultContent": '<button class="btn btn-sm btn-icon on-editing button-discard data-toggle="tooltip" data-original-title="Discard" hidden><i class="icon-close" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon on-default m-r-5 button-edit data-toggle="tooltip" data-original-title="Editar"><i class="icon-pencil" aria-hidden="true"></i></button>                                                        <button class="btn btn-sm btn-icon on-default button-remove data-toggle="modal" data-target="#MdlGestRescli" data-original-title="Residuos"><i class="icon-trash" aria-hidden="true"></i></button>'
+                },                
+            ],            
+            columnDefs: [
+                { orderable: false, targets: [4] }
+            ]
+        });
+    });
+</script>
 {% endblock %}

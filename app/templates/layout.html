@@ -364,7 +364,7 @@
 <script src="/static/assets/bundles/c3.bundle.js"></script>
 <script src="/static/assets/bundles/flot.bundle.js"></script>
 <script src="/static/assets/bundles/jvectormap1.bundle.js"></script>
-<script src="static/assets/bundles/dataTables.bundle.js"></script>
+<script src="/static/assets/bundles/dataTables.bundle.js"></script>
 
 <!-- Start core js and page js -->
 
@@ -378,5 +378,7 @@ function setStyleSheet(url){
     stylesheet.setAttribute('href', url);
 }
 </script>
+{% block scripts %}
+{% endblock %}
 </body>
 </html>

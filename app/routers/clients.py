@@ -5,6 +5,7 @@ from schemas import ClienteCreate, Cliente
 from services import ClienteService, CiudadService
 from sqlalchemy.orm import Session
 from typing import Annotated
+from fastapi.responses import JSONResponse  
 
 router = APIRouter(
     prefix="/clientes",
@@ -18,6 +19,12 @@ async def get_clients(request: Request, db:Session=Depends(get_db)):
     service = ClienteService(db)
     clientes = service.get_clientes()
     return templates.TemplateResponse("/clientes/search.html", {"request": request, "clientes": clientes} )
+
+@router.get("/json")
+async def get_clients_json(db:Session=Depends(get_db)):
+    service = ClienteService(db)
+    clientes = service.get_clientes()
+    return {"data":clientes}
 
 @router.post("/search")
 async def search_clients(request: Request, nit: Annotated[str, Form()], db:Session=Depends(get_db)):

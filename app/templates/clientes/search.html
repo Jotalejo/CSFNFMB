@@ -62,84 +62,13 @@
         </div>
     </div>
 </div>
-<!-- Modal -->
-<!-- BEGIN primary modal -->
-<div class="modal fade" id="MdlGestRescli" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="left">
-                    <h1 class="page-title">Manejo de Clientes</h1>
-                </div>
-                <button name="elBtnclsAC" id="elBtnclsAC" type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body m-3">
-                <form class="card" id="basic-form" method={{method}} novalidate action="{{action}}">
-                    <div class="card-body">
-                        <h3 class="card-title">Perfil del Cliente</h3>
-                        <input hidden id="id" name="id" value="{{cliente.razonSocial if cliente is not none else ""}}">
-                        <div class="form-group">
-                            <label>Razón Social</label>
-                            <input id="razonSocial" name="razonSocial" type="text" class="form-control" required value="{{cliente.razonSocial if cliente is not none else ""}}">
-                        </div>
-                        <div class="form-group">
-                            <label>N.I.T.</label>
-                            <input id="nit" name="nit" type="text" class="form-control" required value="{{cliente.nit if cliente is not none else ""}}">
-                        </div>
-                        <div class="form-group">
-                            <label>Dirección</label>
-                            <input id="direccion" name="direccion" type="text" class="form-control" required value="{{cliente.direccion if cliente is not none else ""}}">
-                        </div>
-                        <div class="form-group">
-                            <label>Teléfono</label>
-                            <input id="telefono" name="telefono" type="text" class="form-control" required value="{{cliente.telefono if cliente is not none else ""}}">
-                        </div>
-                        <div class="form-group">
-                            <label for="ciudades">Elija la Ciudad</label>
-                            <select id="ciudad" name="ciudad" class="form-control">
-                                <option label="Ciudad del cliente ..." selected disabled></option>
-                                {% for ciudad in ciudades %}
-                                    <option value="{{ciudad.id}}">{{ ciudad.nombre }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Email</label>
-                            <input id="email" name="email" type="email" class="form-control" required value="{{cliente.email if cliente is not none else ""}}">
-                        </div>
-                        <div class="form-group">
-                            <label>Contacto</label>
-                            <input id="contacto" name="contacto" type="text" class="form-control" required value="{{cliente.contacto if cliente is not none else ""}}">
-                        </div>
-                        <div class="form-group">
-                            <label>Telefono del Contacto</label>
-                            <input id="telefonoContacto" name="telefonoContacto" type="text" class="form-control" required value="{{cliente.telefonoContacto if cliente is not none else ""}}">
-                        </div>
-                        <div class="form-group">
-                            <label>Observaciones</label>
-                            <textarea id="observaciones" name="observaciones" class="form-control" rows="5" cols="30" required value="{{cliente.observaciones if cliente is not none else ""}}"></textarea>
-                        </div>                                    
-                        <br>
-                        <button id="btnguardc" name="btnguardc" type="submit" class="btn btn-primary">{{ "Crear" if cliente is none or cliente.id is none else "Guardar" }}</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- <button style="background-color: #fff; border-style: none;" type="submit" id="ylograbaelctrl" class="btn btn-secondary bodymsg" data-dismiss="modal" data-toggle="modal" data-target="#ModalPrimGrabaC" onclick="return enviando();">Grabar</button> -->
-<!-- END primary modal -->
-<<<<<<< HEAD
+
 <script>
     window.addEventListener('load', function () {
         const form = document.getElementById("basic-form");
         form.addEventListener("submit", send_json);
     })
 </script>
-{% endblock %}
-=======
 {% endblock %}
 {% block scripts %}
 <script>
@@ -187,4 +116,3 @@
     });
 </script>
 {% endblock %}
->>>>>>> d06ded9f329d4b0ca4788e4adb65f17c4e792862

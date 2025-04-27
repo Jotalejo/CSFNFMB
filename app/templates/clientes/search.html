@@ -161,6 +161,38 @@
 {% endblock %}
 {% block scripts %}
 <script>
+    var clientRowTable = {
+        options : {
+            table: "#addrowExample"
+        },
+        initialize: function () {
+            this.setVars().events();
+        },
+        setVars: function() {
+            return this.$table = $(this.options.table), 
+                   this.$addButton = $(this.options.addButton), 
+                   this.dialog = {}, 
+                   this
+        },
+        events: function() {
+            var self = this;
+            this.$addButton.on("click", function(e) {
+                e.preventDefault();
+                self.addRow();
+            });
+            this.$table.on("click", ".button-edit", function(e) {
+                e.preventDefault();
+                var id = e.target.closest("tr").id
+                window.location.href = "/clientes/" + id;
+            });
+            this.$table.on("click", ".button-remove", function(e) {
+                e.preventDefault();
+                self.removeRow($(this).closest("tr"));
+            });
+        },
+
+    }
+
     $(document).ready(function() {
         var table = $('#addrowExample').DataTable({
             "ajax": {
@@ -197,11 +229,14 @@
                     "data":           null,
                     "defaultContent": '<button class="btn btn-sm btn-icon on-editing button-discard data-toggle="tooltip" data-original-title="Discard" hidden><i class="icon-close" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon on-default m-r-5 button-edit data-toggle="tooltip" data-original-title="Editar"><i class="icon-pencil" aria-hidden="true"></i></button>                                                        <button class="btn btn-sm btn-icon on-default button-remove data-toggle="modal" data-target="#MdlGestRescli" data-original-title="Residuos"><i class="icon-trash" aria-hidden="true"></i></button>'
                 },                
-            ],            
+            ],
+            rowId: 'id',            
             columnDefs: [
                 { orderable: false, targets: [4] }
             ]
         });
+        clientRowTable.initialize();
     });
+
 </script>
 {% endblock %}

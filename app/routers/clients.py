@@ -5,7 +5,7 @@ from schemas import ClienteCreate, Cliente
 from services import ClienteService, CiudadService
 from sqlalchemy.orm import Session
 from typing import Annotated
-from fastapi.responses import JSONResponse  
+from fastapi.responses import RedirectResponse
 
 router = APIRouter(
     prefix="/clientes",
@@ -45,18 +45,31 @@ async def search_clients(request: Request, nit: Annotated[str, Form()], db:Sessi
 async def create_client(client: ClienteCreate,  db:Session=Depends(get_db)):
     service = ClienteService(db)
     dbCliente = service.create_cliente(client)
-    return dbCliente 
+    return dbCliente
+
+@router.patch("/{cliente_id}")
+async def update_client(cliente_id: int, client: Cliente,  db:Session=Depends(get_db)):
+    service = ClienteService(db)
+    dbCliente = service.update_cliente(client)
+    return dbCliente
 
 @router.get("/{cliente_id}")
 async def get_client(cliente_id: int, request: Request, db:Session=Depends(get_db)):
     service = ClienteService(db)
     ciudadesService = CiudadService(db)
 
-    cliente = service.get_cliente(cliente_id).order_by(Cliente.razonSocial).all()
+    cliente = service.get_cliente(cliente_id)
     action = "/clientes/{}".format(cliente.id)
     method = "patch"
 
     ciudades = ciudadesService.get_ciudades()
+    url_redirect = router.url_path_for("get_clients")
 
-    return templates.TemplateResponse("/clientes/edit.html", {"request": request, "cliente": cliente, "action": action, "method": method, "ciudades": ciudades} )
+    return templates.TemplateResponse("/clientes/edit.html", {"request": request, 
+                                                              "cliente": cliente, 
+                                                              "action": action, 
+                                                              "method": method, 
+                                                              "ciudades": ciudades,
+                                                              "url_redirect": url_redirect} )
+                                                            
 

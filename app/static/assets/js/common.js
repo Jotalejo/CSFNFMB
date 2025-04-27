@@ -30,6 +30,15 @@ function send_json(event) {
         body: jsonRequest
     })
     .then(response => response.json())
-    .then(data => console.log('Success:', data))
+    .then(data => {
+            let redirectPage = event.target.getAttribute('data-redirect');
+            console.log('Success:', redirectPage)
+            if (redirectPage) {
+                window.location.href = redirectPage;
+            }
+            
+        }
+
+    )
     .catch(error => console.error('Error:', error));
 };

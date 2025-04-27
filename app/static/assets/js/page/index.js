@@ -74,7 +74,7 @@ $(function() {
 
     // Product Valuation 
     var chart = c3.generate({
-        bindto: '#chart-bar', // id of chart wrapper
+        bindto: '#chart-barJ', // id of chart wrapper
         data: {
             columns: [
                 // each columns data

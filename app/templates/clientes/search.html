@@ -44,6 +44,27 @@
                                             </tbody>
                                         </table>
                                     </div>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="MdlGestRescli" tabindex="-1" role="dialog" aria-labelledby="ModalResiduos" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="ModalResiduos">Residuos del Cliente</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                            ...
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                                <button type="button" class="btn btn-primary">Grabar Cambios</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                    <!-- End Modal -->
                                 </div>                        
                             </div>
                         </div>
@@ -106,8 +127,9 @@
                     "className":      'details-control',
                     "orderable":      false,
                     "data":           null,
-                    "defaultContent": '<button class="btn btn-sm btn-icon on-editing button-discard data-toggle="tooltip" data-original-title="Discard" hidden><i class="icon-close" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon on-default m-r-5 button-edit data-toggle="tooltip" data-original-title="Editar"><i class="icon-pencil" aria-hidden="true"></i></button>                                                        <button class="btn btn-sm btn-icon on-default button-remove data-toggle="modal" data-target="#MdlGestRescli" data-original-title="Residuos"><i class="icon-trash" aria-hidden="true"></i></button>'
-                },                
+                    "defaultContent": '<button class="btn btn-sm btn-icon on-editing button-discard data-toggle="tooltip" data-original-title="Discard" hidden><i class="icon-close" aria-hidden="true"></i></button> <button class="btn btn-sm btn-icon on-default m-r-5 button-edit data-toggle="tooltip" data-original-title="Editar"><i class="icon-pencil" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon" data-toggle="modal" data-target="#MdlGestRescli"><i class="icon-trash" aria-hidden="true"></i></button>'
+                } 
+            
             ],            
             columnDefs: [
                 { orderable: false, targets: [4] }

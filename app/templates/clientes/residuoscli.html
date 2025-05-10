@@ -1,0 +1,114 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="section-body">
+    <div class="container-fluid">
+        <div class="row clearfix">
+            <div class="col-md-12">
+                <div class="card">
+                    <!-- start body header -->
+                    <div class="section-body">
+                        <div class="container-fluid">
+                            <div class="page-header">
+                                <div class="left">
+                                    <h1 class="page-title">Tipo y Cantidad de Residuos Generados</h1>
+                                </div>                    
+                            </div></br>
+                            <div class="row">
+                                <div class="col-md-12 col-lg-7">
+                                    <form class="card" id="basic-form" method={{method}} novalidate action="{{action}}"
+                                        data-redirect="{{url_redirect}}">
+                                    
+                                        <div class="card-body">    
+                                            <h3 class="card-title">Selección de Tipos y Cantidad de Residuos Generados</h3>
+                                            <input hidden id="id" name="id" value="{{cliente.id if cliente is not none else ""}}" />
+                                            <div class="form-group">
+                                                <label>Razón Social</label>
+                                                <input id="razonSocial" name="razonSocial" type="text" class="form-control" required value="{{cliente.razonSocial if cliente is not none else ""}}" disabled>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="ciudades">Elija la Ciudad</label>
+                                                <select id="ciudad" name="ciudad" class="form-control">
+                                                    <option label="Ciudad del cliente ..." selected disabled></option>
+                                                    {% for ciudad in ciudades %}
+                                                        <option value="{{ciudad.id}}" {{"selected" if cliente.ciudad == ciudad.id else "" }}>{{ ciudad.nombre }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>N.I.T.</label>
+                                                <input id="nit" name="nit" type="text" class="form-control" required value="{{cliente.nit if cliente is not none else ""}}">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Dirección</label>
+                                                <input id="direccion" name="direccion" type="text" class="form-control" required value="{{cliente.direccion if cliente is not none else ""}}">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Teléfono</label>
+                                                <input id="telefono" name="telefono" type="text" class="form-control" required value="{{cliente.telefono if cliente is not none else ""}}">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="ciudades">Elija la Ciudad</label>
+                                                <select id="ciudad" name="ciudad" class="form-control">
+                                                    <option label="Ciudad del cliente ..." selected disabled></option>
+                                                    {% for ciudad in ciudades %}
+                                                        <option value="{{ciudad.id}}" {{"selected" if cliente.ciudad == ciudad.id else "" }}>{{ ciudad.nombre }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Email</label>
+                                                <input id="email" name="email" type="email" class="form-control" required value="{{cliente.email if cliente is not none else ""}}">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Contacto</label>
+                                                <input id="contacto" name="contacto" type="text" class="form-control" required value="{{cliente.contacto if cliente is not none else ""}}">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Telefono del Contacto</label>
+                                                <input id="telefonoContacto" name="telefonoContacto" type="text" class="form-control" required value="{{cliente.telefonoContacto if cliente is not none else ""}}">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Observaciones</label>
+                                                <textarea id="observaciones" name="observaciones" class="form-control" rows="5" cols="30" required value="{{cliente.observaciones if cliente is not none else ""}}"></textarea>
+                                            </div>                                    
+                                            <br>
+                                            <button id="btnguardc" name="btnguardc" type="submit" class="btn btn-primary">{{ "Crear" if cliente is none or cliente.id is none else "Guardar" }}</button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="col-md-12 col-lg-5">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h3 class="card-title">Validaciones</h3>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="form-group">
+                                                <label class="form-label">Nombre del Usuario</label>
+                                                <div class="input-icon">
+                                                    <span class="input-icon-addon"><i class="fe fe-user"></i></span>
+                                                    <input type="text" class="form-control" id = "nuser" name="nuser" placeholder="Usuario..">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="form-label">Password</label>
+                                                <input type="password" class="form-control" id = "passusr" name="passusr" placeholder="Password..">
+                                            </div>                                
+                                        </div>
+                                    </div>                                                
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>                    
+        </div>
+    </div>
+</div>
+
+<script>
+    window.addEventListener('load', function () {
+        const form = document.getElementById("basic-form");
+        form.addEventListener("submit", send_json);
+    })
+</script>
+{% endblock %}

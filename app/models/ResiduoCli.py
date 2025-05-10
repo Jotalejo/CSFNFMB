@@ -1,13 +1,15 @@
-'''
-residuoscli
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Float
+from sqlalchemy.orm import relationship
+from . import Base
 
-cod_residcli	int	NO	PRI
-codcli_residcli	int	NO	MUL
-codresid_residcli	int	NO	MUL
-cantidad_residcli	double	YES	
-pesoprom_residcli	varchar(50)	YES	
-segregacion_residcli	varchar(50)	YES	
-numbolsas_residcli	int	YES	
-observ_residcli	varchar(200)	YES	
-
-'''
+class ResiduosCli(Base):
+    __tablename__ = "residuoscli"
+    id = Column("cod_residcli", Integer,primary_key=True,index=True)
+    ccliente = Column("codcli_residcli", Integer)
+    cresiduo = Column("codresid_residcli", Integer)
+    cantresiduo = Column("cantidad_residcli", Float)
+    pesopromres = Column("pesoprom_residcli", Float)
+    segregares=Column("segregacion_residcli", String(50))
+    numbolsas=Column("numbolsas_residcli", Integer)
+    observaciones=Column("observ_residcli", String(200))
+    

@@ -4,6 +4,7 @@ from models import Cliente
 from schemas import ClienteCreate
 from schemas import Cliente as ClienteSchema 
 
+# Operaciones en la base de datos para el cliente
 class ClienteService:
     def __init__(self, db: Session):
         self.db = db

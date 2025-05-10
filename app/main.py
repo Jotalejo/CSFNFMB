@@ -5,6 +5,7 @@ from dependencies import get_db
 from routers import clients
 from dependencies import templates
 
+# Importar la ruta de cliente
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="./static"), name="static")
 app.include_router(clients.router)

@@ -42,7 +42,7 @@
                                                 <select id="ciudad" name="ciudad" class="form-control">
                                                     <option label="Ciudad del cliente ..." selected disabled></option>
                                                     {% for ciudad in ciudades %}
-                                                        <option value="{{ciudad.id}}">{{ ciudad.nombre }}</option>
+                                                        <option value="{{ciudad.id}}" {{"selected" if cliente.ciudad == ciudad.id else "" }}>{{ ciudad.nombre }}</option>
                                                     {% endfor %}
                                                 </select>
                                             </div>

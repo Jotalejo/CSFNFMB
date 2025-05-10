@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 from typing import Annotated
 from fastapi.responses import RedirectResponse
 
+# Ruta primaria para el cliente
 router = APIRouter(
     prefix="/clientes",
     tags=["clientes"],
@@ -14,6 +15,7 @@ router = APIRouter(
     responses={404: {"description": "Not found"}},
 )
 
+# Inicio de la ruta para el cliente
 @router.get("/")
 async def get_clients(request: Request, db:Session=Depends(get_db)):
     service = ClienteService(db)
@@ -26,6 +28,7 @@ async def get_clients_json(db:Session=Depends(get_db)):
     clientes = service.get_clientes()
     return {"data":clientes}
 
+# Boton que había de buscar cliente
 @router.post("/search")
 async def search_clients(request: Request, nit: Annotated[str, Form()], db:Session=Depends(get_db)):
     service = ClienteService(db)
@@ -41,18 +44,35 @@ async def search_clients(request: Request, nit: Annotated[str, Form()], db:Sessi
         method = "patch"
     return templates.TemplateResponse("/clientes/edit.html", {"request": request, "cliente": cliente, "action": action, "method": method, "ciudades": ciudades} )
 
+# Crear Cliente
 @router.post("/")
 async def create_client(client: ClienteCreate,  db:Session=Depends(get_db)):
     service = ClienteService(db)
     dbCliente = service.create_cliente(client)
     return dbCliente
 
+# Crea Cliente Mandar al formulario
+@router.get("/nuevo")
+async def creafor_client(request: Request, db:Session=Depends(get_db)):
+    service = ClienteService(db)
+    action = "/clientes"
+    method = "post"
+
+    ciudadesService = CiudadService(db)
+    ciudades = ciudadesService.get_ciudades()
+
+    url_redirect = router.url_path_for("get_clients")
+
+    return templates.TemplateResponse("/clientes/edit.html", {"request": request,"cliente": None, "action": action, "method": method, "ciudades": ciudades, "url_redirect": url_redirect} )
+
+# Actualizar Cliente
 @router.patch("/{cliente_id}")
 async def update_client(cliente_id: int, client: Cliente,  db:Session=Depends(get_db)):
     service = ClienteService(db)
     dbCliente = service.update_cliente(client)
     return dbCliente
 
+# Trae un Cliente
 @router.get("/{cliente_id}")
 async def get_client(cliente_id: int, request: Request, db:Session=Depends(get_db)):
     service = ClienteService(db)
@@ -71,5 +91,10 @@ async def get_client(cliente_id: int, request: Request, db:Session=Depends(get_d
                                                               "method": method, 
                                                               "ciudades": ciudades,
                                                               "url_redirect": url_redirect} )
-                                                            
 
+# Trae Tabla de Residuos de un Cliente
+@router.get("/json")
+async def get_residcli_json(db:Session=Depends(get_db)):
+    service = ClienteService(db)
+    clientes = service.get_clientes()
+    return {"data":clientes}

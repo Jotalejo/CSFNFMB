@@ -17,7 +17,7 @@
                                     <h3 class="card-title">Manejo de datos del Cliente y datos iniciales de los residuos de cada cliente</h3>
                                 </div>
                                 <div class="card-body">
-                                    <button id="addToTable" class="btn btn-primary mb-15" type="button">
+                                    <button id="addToTable" class="btn btn-primary mb-15" type="button" onclick="creacliente">
                                         <i class="icon wb-plus" aria-hidden="true"></i>Agregar Cliente
                                     </button>
                                     <div class="table-responsive">
@@ -49,7 +49,7 @@
                                         <div class="modal-dialog" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="ModalResiduos">Residuos del Cliente</h5>
+                                                <h5 class="modal-title" id="ModalResiduos">Administración de Residuos del Cliente</h5>
                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                     <span aria-hidden="true">&times;</span>
                                                 </button>
@@ -76,17 +76,17 @@
 </div>
 
 <script>
-    window.addEventListener('load', function () {
-        const form = document.getElementById("basic-form");
-        form.addEventListener("submit", send_json);
-    })
+    //window.addEventListener('load', function () {
+      //  const form = document.getElementById("basic-form");
+        //form.addEventListener("submit", send_json);
+    //})
 </script>
 {% endblock %}
 {% block scripts %}
 <script>
     var clientRowTable = {
         options : {
-            table: "#addrowExample"
+            table: "#addrowExample", addButton: "#addToTable",
         },
         initialize: function () {
             this.setVars().events();
@@ -101,7 +101,9 @@
             var self = this;
             this.$addButton.on("click", function(e) {
                 e.preventDefault();
-                self.addRow();
+                //self.addRow();
+                creacliente();
+                console.log("addRow");
             });
             this.$table.on("click", ".button-edit", function(e) {
                 e.preventDefault();
@@ -160,6 +162,10 @@
         });
         clientRowTable.initialize();
     });
+
+    function creacliente (){
+        window.location.href = "/clientes/nuevo";
+    }
 
 </script>
 {% endblock %}

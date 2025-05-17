@@ -16,4 +16,3 @@ class Cliente(Base):
     telefonoContacto=Column("telcont_cli", String(15))
     estadocarta=Column("estadocartera_cli", Integer)
     observaciones=Column("observ_cli", String(200))
-    

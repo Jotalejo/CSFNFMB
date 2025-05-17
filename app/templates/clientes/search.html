@@ -55,7 +55,81 @@
                                                 </button>
                                             </div>
                                             <div class="modal-body">
-                                            ...
+                                                <!-- Start main html -->
+                                                <div id="main_content">
+                                                    <!-- start main body part-->
+                                                    <div class="page">
+                                                        <!-- start body header -->
+                                                        <div id="page_top" class="section-body">
+                                                            <div class="container-fluid">
+                                                                <div class="page-header">
+                                                                    <div class="left">
+                                                                        <h1 class="page-title">Manejo Residuos del Cliente</h1>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="section-body">
+                                                            <div class="container-fluid">
+                                                                <!-- Multi Select -->
+                                                                <div class="row clearfix">
+                                                                    <div class="col-md-12">
+                                                                        <div class="card">
+                                                                            <div class="card-header">
+                                                                                <h3 class="card-title">Selección de Tipos y Cantidad de Residuos Generados</h3>
+                                                                            </div>
+                                                                            <div class="card-body demo-card">
+                                                                                <form id="residuoForm" method="post" action="/residuoscli/">
+                                                                                    data-redirect="{{url_redirect}}">  
+                                                                                    <div class="modal-content">
+                                                                                        <div class="modal-header">
+                                                                                        <h5 class="modal-title" id="residuoModalLabel">Agregar Residuo</h5>
+                                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                                                                                            <span aria-hidden="true">&times;</span>
+                                                                                        </button>
+                                                                                        </div>
+                                                                                        <div class="modal-body">
+                                                                                        <!-- Campos del formulario -->
+                                                                                        <input type="hidden" name="ccliente" value="{{ cliente.id }}">
+                                                                                        <div class="form-group">
+                                                                                            <label for="tresiduo">Tipo de Residuo</label>
+                                                                                            <input type="number" class="form-control" id="tresiduo" name="tresiduo" required>
+                                                                                        </div>
+                                                                                        <div class="form-group">
+                                                                                            <label for="cantresiduo">Cantidad</label>
+                                                                                            <input type="number" step="0.01" class="form-control" id="cantresiduo" name="cantresiduo" required>
+                                                                                        </div>
+                                                                                        <div class="form-group">
+                                                                                            <label for="pesopromres">Peso Promedio</label>
+                                                                                            <input type="number" step="0.01" class="form-control" id="pesopromres" name="pesopromres" required>
+                                                                                        </div>
+                                                                                        <div class="form-group">
+                                                                                            <label for="segregares">Segregación</label>
+                                                                                            <input type="text" class="form-control" id="segregares" name="segregares">
+                                                                                        </div>
+                                                                                        <div class="form-group">
+                                                                                            <label for="numbolsas">Número de Bolsas</label>
+                                                                                            <input type="number" class="form-control" id="numbolsas" name="numbolsas">
+                                                                                        </div>
+                                                                                        <div class="form-group">
+                                                                                            <label for="observaciones">Observaciones</label>
+                                                                                            <textarea class="form-control" id="observaciones" name="observaciones"></textarea>
+                                                                                        </div>
+                                                                                        </div>
+                                                                                        <div class="modal-footer">
+                                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                                                                        <button type="submit" class="btn btn-primary">Guardar</button>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </form>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>

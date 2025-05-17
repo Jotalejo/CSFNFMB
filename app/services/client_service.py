@@ -1,8 +1,7 @@
 from sqlalchemy.orm import Session
-
 from models import Cliente
 from schemas import ClienteCreate
-from schemas import Cliente as ClienteSchema 
+from schemas import Cliente as ClienteSchema
 
 # Operaciones en la base de datos para el cliente
 class ClienteService:
@@ -80,5 +79,7 @@ class ClienteService:
                 .limit(limit)
                 .all())
     
+#######  Residusos del Cliente  :
+# Operaciones en la base de datos para el Residuo del cliente :
     
-
+# Operaciones en la base de datos para el cliente

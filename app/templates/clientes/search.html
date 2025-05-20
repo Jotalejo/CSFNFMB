@@ -58,12 +58,6 @@
     </div>
 </div>
 
-<script>
-    //window.addEventListener('load', function () {
-      //  const form = document.getElementById("basic-form");
-        //form.addEventListener("submit", send_json);
-    //})
-</script>
 {% endblock %}
 {% block scripts %}
 <script>
@@ -99,7 +93,6 @@
                 var id = e.target.closest("tr").id;
                 console.log("ID: " + id);
                 activarModal2(id);
-                //self.removeRow($(this).closest("tr"));
             });
         },
 
@@ -150,6 +143,8 @@
         clientRowTable.initialize();
     });
 
+    //$(document).on('submit', 'form', send_json);
+
     function creacliente (){
         window.location.href = "/clientes/nuevo";
     }
@@ -160,6 +155,8 @@
             .then(response => response.text())
             .then(data => {
                 $('#MdlGestRescli').html(data);
+                const rform = document.getElementById("residuoForm");
+                rform.addEventListener("submit", send_json);
                 $('#MdlGestRescli').modal('show');
             })
             .catch(error => {

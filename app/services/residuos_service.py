@@ -4,7 +4,10 @@ from schemas import ResiduosCliCreate, ResiduosCliUpdate
 					
 class ResiduosCliService:					
     def __init__(self, db: Session):					
-        self.db = db					
+        self.db = db				
+
+    def get_sql():
+        return "SELECT * FROM residuoscli"	
 					
     def create_residuo(self, residuo: ResiduosCliCreate):					
         db_residuo = ResiduosCli(**residuo.dict())					

@@ -12,8 +12,8 @@ router = APIRouter(
     responses={404: {"description": "Not found"}},
 )
 
-@router.post("/", response_model=ResiduosCliOut)
-def create_residuo(residuo: ResiduosCliCreate, db: Session = Depends(get_db)):
+@router.post("/")
+async def create_residuo(residuo: ResiduosCliCreate, db: Session = Depends(get_db)):
     service = ResiduosCliService(db)
     return service.create_residuo(residuo)
 
@@ -21,11 +21,14 @@ def create_residuo(residuo: ResiduosCliCreate, db: Session = Depends(get_db)):
 def get_residuos(cliente_id: int, request: Request, db: Session = Depends(get_db)):
     service = ResiduosCliService(db)
     residuos = service.get_residuos_by_cliente(cliente_id)
-    url_redirect = "/residuoscli/cliente/" + str(cliente_id)
-    return templates.TemplateResponse("/residuos/cliente.html", {"request": request, "url_redirect": url_redirect, "residuos": residuos, "cliente_id": cliente_id} )
+    url_redirect = "/residuoscli"
+    action = "/residuoscli"
+    method = "post"
+
+    return templates.TemplateResponse("/residuos/cliente.html", {"request": request, "url_redirect": url_redirect, "action": action, "method": method, "residuos": residuos, "cliente_id": cliente_id} )
                                                                  
 
-@router.patch("/", response_model=ResiduosCliOut)
+@router.patch("/")
 def update_residuo(residuo: ResiduosCliUpdate, db: Session = Depends(get_db)):
     service = ResiduosCliService(db)
     return service.update_residuo(residuo)

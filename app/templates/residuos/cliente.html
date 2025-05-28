@@ -28,21 +28,10 @@
                                 <div class="col-md-12">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h3 class="card-title">Selección de Tipos y Cantidad de Residuos Generados
-                                            </h3>
+                                            <h3 class="card-title">Selección de Tipos y Cantidad de Residuos Generados</h3><br>
                                         </div>
                                         <div class="card-body demo-card">
-                                            <form id="residuoForm" method="post" action="/residuoscli/" data-redirect="{{url_redirect}}">
-                                                
-                                                    <div class="header">
-                                                        <h5 class="title" id="residuoModalLabel">Agregar Residuo
-                                                        </h5>
-                                                        <button type="button" class="close" data-dismiss="modal"
-                                                            aria-label="Cerrar">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
-                                                    <div class="modal-body">
+                                            <form id="residuoForm" method="post" action="/residuoscli" data-redirect="{{url_redirect}}">
                                                         <!-- Campos del formulario -->
                                                         <input type="hidden" name="ccliente" value="{{cliente_id}}">
                                                         <div class="form-group">
@@ -75,12 +64,6 @@
                                                             <textarea class="form-control" id="observaciones"
                                                                 name="observaciones"></textarea>
                                                         </div>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary"
-                                                            data-dismiss="modal">Cerrar</button>
-                                                        <button type="submit" class="btn btn-primary">Guardar</button>
-                                                    </div>
                                             </form>
                                         </div>
                                     </div>
@@ -92,8 +75,25 @@
             </div>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-            <button type="button" class="btn btn-primary">Grabar Cambios</button>
+            <button id="btnDismiss" type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            <button id="btnSave" type="button" class="btn btn-primary" onclick="">Guardar</button>
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function() {
+        $('#btnSave').on('click', function() {
+            // Validar el formulario antes de enviar
+            if ($('#residuoForm')[0].checkValidity()) {
+                // Si es válido, enviar el formulario
+                send_form('residuoForm');
+                $('#btnDismiss').click(); // Cerrar el modal después de enviar
+                
+            } else {
+                // Si no es válido, mostrar un mensaje de error
+                alert("Por favor, completa todos los campos requeridos.");
+            }
+        });
+    });
+</script>

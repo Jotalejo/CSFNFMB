@@ -9,8 +9,8 @@ class ResiduosCliService:
     def get_sql():
         return "SELECT * FROM residuoscli"	
 					
-    def create_residuo(self, residuo: ResiduosCliCreate):					
-        db_residuo = ResiduosCli(**residuo.dict())					
+    def create_residuo(self, residuo: ResiduosCliCreate):
+        db_residuo = ResiduosCli(**residuo.dict())
         self.db.add(db_residuo)					
         self.db.commit()					
         self.db.refresh(db_residuo)					

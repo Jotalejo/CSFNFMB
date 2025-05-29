@@ -3,6 +3,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from dependencies import get_db
 from routers import clients, residuoscli
+from routers.recolecc import recolecc
 from dependencies import templates
 
 # Importar la ruta de cliente
@@ -22,6 +23,10 @@ async def fuente_generadora(request: Request):
 @app.get("/validation", response_class=HTMLResponse)
 async def validation(request: Request):
     return templates.TemplateResponse("form-validation.html", {"request": request, "lista": [], "name": "World"})
+
+@app.get("/recolecc", response_class=HTMLResponse)
+async def recolecc(request: Request):
+    return templates.TemplateResponse("recolecc.html", {"request": request, "lista": [], "name": "World"})
 
 
 if __name__ == "__main__":

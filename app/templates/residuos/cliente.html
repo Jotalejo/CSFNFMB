@@ -76,14 +76,14 @@
         </div>
         <div class="modal-footer">
             <button id="btnDismiss" type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-            <button id="btnSave" type="button" class="btn btn-primary" onclick="">Guardar</button>
+            <button id="btnSaveResiduos" type="button" class="btn btn-primary" onclick="">Guardar</button>
         </div>
     </div>
 </div>
 
 <script>
     $(document).ready(function() {
-        $('#btnSave').on('click', function() {
+        $('#btnSaveResiduos').on('click', function() {
             // Validar el formulario antes de enviar
             if ($('#residuoForm')[0].checkValidity()) {
                 // Si es válido, enviar el formulario

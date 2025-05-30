@@ -8,8 +8,8 @@ class RecoleccService:
     def __init__(self, db: Session):
         self.db = db
 
-    def get_recolecc(self, cliente_id: int):
-        return self.db.query(Recoleccion).filter(Recoleccion.id == recolecc_id).first()
+    def get_recolecc(self):
+        return self.db.query(Recoleccion).join(Recoleccion.cliente_rel).join(Recoleccion.estado).join(Recoleccion.tipo_residuo).all()
 
     def create_recolecc(self, recoleccion: RecolectCreate):
         db_recoleccion = Recoleccion(cliente=recoleccion.cliente,

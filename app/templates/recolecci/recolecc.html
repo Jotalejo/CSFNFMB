@@ -60,40 +60,18 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    {% for recoleccion in recolecciones %}
                                     <tr class="">
-                                        <td><span class="text-muted">001401</span></td>
-                                        <td>Carlson Limited</td>
-                                        <td>15 Dec 2017</td>
-                                        <td>08:00</td>
-                                        <td>Biosanitarios</td>
-                                        <td><span class="fa fa-envelope-open"></span> Solicitado</td>
-                                        <td>Kg.200</td>
-                                        <td class="text-right"><a href="javascript:void(0)" class="btn btn-secondary btn-sm">Manejo</a></td>
-                                        <td><a class="icon" href="javascript:void(0)"><i class="fe fe-edit"></i></a></td>
+                                        <td><span class="text-muted">{{ recoleccion.id }}</span></td>
+                                        <td>{{ recoleccion.cliente_rel.razonSocial }}</td>
+                                        <td>{{ recoleccion.fecha }}</td>
+                                        <td>{{ recoleccion.hora }}</td>
+                                        <td>{{ recoleccion.tipo_residuo.nombre }}</td>
+                                        <td><span class="{{ recoleccion.estado.clase }}"></span> {{ recoleccion.estado.nombre }}</td>
+                                        <td>{{ recoleccion.peso }} Kg.</td>
                                     </tr>
-                                    <tr class="">
-                                        <td><span class="text-muted">001402</span></td>
-                                        <td><a href="page-invoices.html" class="text-inherit">UX Wireframes</a></td>
-                                        <td>Adobe</td>
-                                        <td>87956421</td>
-                                        <td>12 Apr 2017</td>
-                                        <td><span class="status-icon bg-warning"></span> Pending</td>
-                                        <td>$1200</td>
-                                        <td class="text-right"><a href="javascript:void(0)" class="btn btn-secondary btn-sm">Manage</a></td>
-                                        <td><a class="icon" href="javascript:void(0)"><i class="fe fe-edit"></i></a></td>
-                                    </tr>
-                                    <tr class="">
-                                        <td><span class="text-muted">001403</span></td>
-                                        <td><a href="page-invoices.html" class="text-inherit">New Dashboard</a></td>
-                                        <td>Bluewolf</td>
-                                        <td>87952621</td>
-                                        <td>23 Oct 2017</td>
-                                        <td><span class="status-icon bg-warning"></span> Pending</td>
-                                        <td>$534</td>
-                                        <td class="text-right"><a href="javascript:void(0)" class="btn btn-secondary btn-sm">Manage</a></td>
-                                        <td><a class="icon" href="javascript:void(0)"><i class="fe fe-edit"></i></a></td>
-                                    </tr>
-                                </tbody>
+                                    {% endfor %}
+                               </tbody>
                             </table>
                         </div>
                     </div>

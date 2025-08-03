@@ -6,7 +6,7 @@ from routers import clients, residuoscli, recolecc
 from dependencies import templates
 
 # Importar la ruta de cliente
-app = FastAPI()
+app = FastAPI(redirect_slashes=False)
 app.mount("/static", StaticFiles(directory="./static"), name="static")
 app.include_router(clients.router)
 app.include_router(residuoscli.router)

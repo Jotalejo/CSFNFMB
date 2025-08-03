@@ -33,7 +33,7 @@ async def get_clients_json(db:Session=Depends(get_db)):
 async def search_clients(request: Request, nit: Annotated[str, Form()], db:Session=Depends(get_db)):
     service = ClienteService(db)
     cliente = service.get_cliente_by_nit(nit)
-    action = "/clientes"
+    action = "/clientes/"
     method = "post"
 
     ciudadesService = CiudadService(db)
@@ -55,7 +55,7 @@ async def create_client(client: ClienteCreate,  db:Session=Depends(get_db)):
 @router.get("/nuevo")
 async def creafor_client(request: Request, db:Session=Depends(get_db)):
     service = ClienteService(db)
-    action = "/clientes"
+    action = "/clientes/"
     method = "post"
 
     ciudadesService = CiudadService(db)

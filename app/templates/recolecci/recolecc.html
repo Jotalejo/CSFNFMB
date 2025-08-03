@@ -85,7 +85,10 @@
                                             <div class="form-group">
                                                 <label class="form-label">Cliente</label>
                                                 <select class="form-control custom-select">
-                                                    <option value="">ACCOUNTANT</option>
+                                                    {% for cliente in clientes %}
+                                                        <option value={{cliente.id}}>{{cliente.razonSocial}}</option>
+                                                    {% endfor %}
+                                                   
                                                     <option value="">ACEITE EL DORADO</option>
                                                     <option value="">ACEITES Y LUBRICANTES LA 28</option>
                                                 </select>

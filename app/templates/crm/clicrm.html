@@ -1,0 +1,302 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="section-body">
+    <div class="container-fluid">                
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Gestión de Clientes Potenciales</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="wizard_horizontal">
+                            <h2>Nuevo Cliente Potencial</h2>
+                            <section>
+                                <div class="section-body">
+                                    <div class="container-fluid">
+                                        <div class="row clearfix">
+                                            <div class="col-md-12">
+                                                <div class="card">
+                                                    <div class="card-header">
+                                                        <div class="left">
+                                                            <h1 class="page-title">Clientes Potenciales</h1>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row clearfix">
+                                                        <div class="col-lg-12">
+                                                            <div class="card">
+                                                                <div class="card-header">
+                                                                    <h3 class="card-title">Listado de clientes potenciales a gestionar</h3>
+                                                                </div>
+                                                                <div class="card-body">
+                                                                    <button id="addToTable" class="btn btn-primary mb-15" type="button" onclick="creacliente">
+                                                                        <i class="icon wb-plus" aria-hidden="true"></i>Agrega Cliente Potencial
+                                                                    </button>
+                                                                    <div class="table-responsive">
+                                                                        <table class="table table-hover table-vcenter table-striped dataTable" cellspacing="0" id="addrowExample">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th class="sorting">NOMBRE</th>
+                                                                                    <th class="sorting">NIT</th>
+                                                                                    <th class="sorting">Contacto</th>
+                                                                                    <th class="sorting">Teléfono</th>
+                                                                                    <th class="sorting">Acciones</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tfoot>
+                                                                                <tr>
+                                                                                    <th>NOMBRE</th>
+                                                                                    <th>NIT</th>
+                                                                                    <th>Contacto</th>
+                                                                                    <th>Teléfono</th>
+                                                                                    <th>Acciones</th>
+                                                                                </tr>
+                                                                            </tfoot>
+                                                                            <tbody>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                    <!-- Modal -->
+                                                                    <div class="modal fade" id="MdlGestRescli" tabindex="-1" role="dialog" aria-labelledby="ModalResiduos" aria-hidden="true">
+                                                                    </div>
+                                                                    <!-- End Modal -->
+                                                                </div>                        
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>                    
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                            <h2>Citas Clientes Potenciales</h2>
+                            <section>
+                                <div class="row clearfix">
+                                    <div class="col-md-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <div class="left">
+                                                    <h1 class="page-title">Reunión Cliente Potencial</h1>
+                                                </div>
+                                            </div>
+                                            <div class="card-body demo-card">
+                                                <div class="row clearfix">
+                                                    <div class="col-lg-4 col-md-12">
+                                                        <label class="form-label">Fecha</label>
+                                                        <input type="date" name="fecprogc" class="form-control" data-mask="0000/00/00" data-mask-clearifnotmatch="true" placeholder="0000/00/00" />
+                                                    </div>
+                                                    <div class="col-lg-4 col-md-12">
+                                                        <label class="form-label">Hora</label>
+                                                        <input type="text" name="horaprogc" class="form-control" data-mask="00:00:00" data-mask-clearifnotmatch="true" placeholder="00:00:00" />
+                                                    </div>
+                                                    <div class="col-lg-4 col-md-12">
+                                                        <label class="form-label">Asunto Cita</label>
+                                                        <input id="asuncita" name="asuncita" type="text" class="form-control" required>
+                                                    </div></br>
+                                                    <div class="col-lg-4 col-md-12">
+                                                        <label class="form-label">Tipo de Visita</label>
+                                                        <input id="tipodv" name="tipodv" type="text" class="form-control" required>
+                                                    </div>
+                                                    <div class="col-lg-4 col-md-12">
+                                                        <label class="form-label">Hora de Inicio Cita</label>
+                                                        <input type="text" name="horaIncit" class="form-control" data-mask="00:00:00" data-mask-clearifnotmatch="true" placeholder="00:00:00" />
+                                                    </div>
+                                                    <div class="col-lg-4 col-md-12">
+                                                        <label class="form-label">Hora Final Cita</label>
+                                                        <input type="text" name="horafincit" class="form-control" data-mask="00:00:00" data-mask-clearifnotmatch="true" placeholder="00:00:00" />                                                                
+                                                    </div>
+                                                    <div class="col-lg-4 col-md-12">
+                                                        <label class="form-label">Actividades Pendientes</label>                                                               
+                                                        <textarea id="actpend" name="actpend" rows="2" class="form-control" placeholder="Pendientes" required></textarea>
+                                                    </div>
+                                                    <div class="col-lg-4 col-md-12">
+                                                        <label class="form-label" style="color: rgba(0, 213, 255, 0.727);">Fecha Seguimiento Actividades Pendientes</label>
+                                                        <input type="date" name="fecsegap" class="form-control" data-mask="0000/00/00" data-mask-clearifnotmatch="true" placeholder="0000/00/00" />
+                                                    </div>
+                                                    <div class="col-lg-4 col-md-12">
+                                                        <label class="form-label">Actividades Realizadas</label>                                                                
+                                                        <textarea id="actrealiz" name="actrealiz" rows="2" class="form-control" placeholder="Realizadas" required></textarea>
+                                                    </div>
+                                                    <div class="col-lg-4 col-md-12">
+                                                        <label class="form-label">Compromisos</label>                                                                
+                                                        <textarea id="loscompr" name="loscompr" rows="2" class="form-control" placeholder="Los Compromisos" required></textarea>
+                                                    </div>
+                                                    <div class="col-lg-4 col-md-12">
+                                                        <label class="form-label" style="color: rgba(0, 213, 255, 0.727);">Fecha Seguimiento Compromisos</label>
+                                                        <input type="date" name="fecsegap" class="form-control" data-mask="0000/00/00" data-mask-clearifnotmatch="true" placeholder="0000/00/00" />
+                                                    </div>
+                                                    <div class="col-lg-4 col-md-12">
+                                                        <label class="form-label">Lugar</label>
+                                                        <input id="lugarc" name="lugarc" type="text" class="form-control" required>
+                                                    </div>
+                                                    <div class="col-lg-4 col-md-12">
+                                                        <label class="form-label">Ubicación</label>
+                                                        <input id="ubicacc" name="ubicacc" type="text" class="form-control" required>
+                                                    </div>
+                                                    <div class="col-lg-4 col-md-12">
+                                                        <label class="form-label">Tipo Generador</label>
+                                                        <input id="tipogen" name="tipogen" type="text" class="form-control" required>
+                                                    </div>
+                                                    <div class="col-lg-4 col-md-12">
+                                                        <label class="form-label">Ciudad</label>
+                                                        <input id="ciudadc" name="ciudadc" type="text" class="form-control" required>
+                                                    </div>
+                                                    <div class="col-lg-4 col-md-12">
+                                                        <label class="form-label">Región</label>
+                                                        <input id="regcit" name="regcit" type="text" class="form-control" required>
+                                                    </div>
+                                                    <div class="col-lg-4 col-md-12">
+                                                        <label class="form-label">Observaciones</label>
+                                                        <textarea id="observ" name="observ" rows="3" class="form-control" placeholder="Acá puede colocar una descripción" ></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.addEventListener('load', function () {
+        const form = document.getElementById("basic-form");
+        form.addEventListener("submit", send_json);
+    })
+</script>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    var clientRowTable = {
+        options : {
+            table: "#addrowExample", addButton: "#addToTable",
+        },
+        initialize: function () {
+            this.setVars().events();
+        },
+        setVars: function() {
+            return this.$table = $(this.options.table), 
+                   this.$addButton = $(this.options.addButton), 
+                   this.dialog = {}, 
+                   this
+        },
+        events: function() {
+            var self = this;
+            this.$addButton.on("click", function(e) {
+                e.preventDefault();
+                //self.addRow();
+                creacliente();
+                console.log("addRow");
+            });
+            this.$table.on("click", ".button-edit", function(e) {
+                e.preventDefault();
+                var id = e.target.closest("tr").id
+                window.location.href = "/clientes/" + id;
+            });
+            this.$table.on("click", ".button-remove", function(e) {
+                e.preventDefault();
+                console.log("Boton de canequita")
+                var id = e.target.closest("tr").id;
+                console.log("ID: " + id);
+                activarModal2(id);
+            });
+        },
+
+    }
+
+    $(document).ready(function() {
+        var table = $('#addrowExample').DataTable({
+            "ajax": {
+                "url": "/clientes/json",
+                "type": "GET",
+                "data": function ( d ) {
+                    d.nit = $('#nit').val();
+                }
+            },
+            "language": {
+                "lengthMenu": "Mostrar _MENU_ registros por página",
+                "zeroRecords": "No se encontraron resultados",
+                "info": "Página _PAGE_ de _PAGES_",
+                "infoEmpty": "No hay registros disponibles",
+                "infoFiltered": "(filtrado de _MAX_ total de registros)",
+                "search": "Buscar:",
+                "paginate": {
+                    "first":      "Primero",
+                    "last":       "Último",
+                    "next":       "Siguiente",
+                    "previous":   "Anterior"
+                }
+            },
+            responsive: true,
+            autoWidth: false,
+            "columns": [
+                { "data": "razonSocial" },
+                { "data": "nit" },
+                { "data": "contacto" },
+                { "data": "telefono" },
+                {
+                    "className":      'details-control',
+                    "orderable":      false,
+                    "data":           null,
+                    "defaultContent": '<button class="btn btn-sm btn-icon on-editing button-discard data-toggle="tooltip" data-original-title="Discard" hidden><i class="icon-close" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon on-default m-r-5 button-edit data-toggle="tooltip" data-original-title="Editar"><i class="icon-pencil" aria-hidden="true"></i></button><button class="btn button-remove btn-sm btn-icon" data-original-title="Residuos"><i class="icon-trash" aria-hidden="true"></i></button>'
+                },
+            ],
+            rowId: 'id',            
+            columnDefs: [
+                { orderable: false, targets: [4] }
+            ]
+        });
+        clientRowTable.initialize();
+    });
+
+    //$(document).on('submit', 'form', send_json);
+
+    function creacliente (){
+        window.location.href = "/clientes/nuevo";
+    }
+
+    function activarModal2(id) {
+
+        fetch('/residuoscli/cliente/' + id)
+            .then(response => response.text())
+            .then(data => {
+                $('#MdlGestRescli').html(data);
+                const rform = document.getElementById("residuoForm");
+                rform.addEventListener("submit", send_json);
+                $('#MdlGestRescli').modal('show');
+            })
+            .catch(error => {
+                console.error("Error al cargar los datos del residuo:", error);
+            });
+    }
+
+    function activarModal(id){
+        $('#MdlGestRescli').modal('show');
+        ajax({
+            url: "/residuoscli/cliente/" + id,
+            type: "GET",
+            dataType: "json",
+            success: function(data) {
+                $('#tresiduo').val(data.tresiduo);
+                $('#cantresiduo').val(data.cantresiduo);
+                $('#pesopromres').val(data.pesopromres);
+                $('#segregares').val(data.segregares);
+                $('#numbolsas').val(data.numbolsas);
+                $('#observaciones').val(data.observaciones);
+            },
+            error: function(xhr, status, error) {
+                console.error("Error al cargar los datos del residuo:", error);
+            }
+        });
+        $('#tresiduo').val(tresiduo);
+
+    }
+</script>
+{% endblock %}

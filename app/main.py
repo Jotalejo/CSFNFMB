@@ -14,19 +14,19 @@ app.include_router(recolecc.router)
 
 @app.get("/", response_class=HTMLResponse)
 async def read_root(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request, "name": "World"})
+    return templates.TemplateResponse("index.html", {"request": request, "name": "Gresab"})
 
 @app.get("/fuente", response_class=HTMLResponse)
 async def fuente_generadora(request: Request):
-    return templates.TemplateResponse("fuente_generadora.html", {"request": request, "lista": [], "name": "World"})
+    return templates.TemplateResponse("fuente_generadora.html", {"request": request, "lista": [], "name": "Gresab"})
 
 @app.get("/validation", response_class=HTMLResponse)
 async def validation(request: Request):
-    return templates.TemplateResponse("form-validation.html", {"request": request, "lista": [], "name": "World"})
+    return templates.TemplateResponse("form-validation.html", {"request": request, "lista": [], "name": "Gresab"})
 
 @app.get("/recolecc", response_class=HTMLResponse)
 async def recolecc(request: Request):
-    return templates.TemplateResponse("recolecc.html", {"request": request, "lista": [], "name": "World"})
+    return templates.TemplateResponse("recolecc.html", {"request": request, "lista": [], "name": "Gresab"})
 
 
 if __name__ == "__main__":

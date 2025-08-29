@@ -16,12 +16,6 @@ services:
     - MAIL_SERVER=${MAIL_SERVER}
     - MAIL_TLS=${MAIL_TLS}
     - MAIL_SSL=${MAIL_SSL}
-MAIL_PASSWORD=T9q6jo72Cux7
-MAIL_FROM=desarrollo@selectiva.net.co
-MAIL_PORT=465
-MAIL_SERVER=mail.selectiva.net.co
-MAIL_TLS=False
-MAIL_SSL=True
     restart: always
     ports:
       - "8000:8000"

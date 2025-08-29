@@ -3,3 +3,6 @@ from .ResidCli import *
 from .Recolecc import *
 from .Ciudades import *
 from .Usuarios import *
+from .Clienpot import *
+from .Citas import *
+from .Resclipot import *

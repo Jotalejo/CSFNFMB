@@ -2,7 +2,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from dependencies import get_db
-from routers import clients, residuoscli, recolecc, usuarios
+from routers import clients, residuoscli, recolecc, usuarios, crm
 from dependencies import templates
 from jose import jwt, JWTError
 # Load environment
@@ -26,7 +26,11 @@ app.include_router(clients.router)
 app.include_router(residuoscli.router)
 app.include_router(recolecc.router)
 app.include_router(usuarios.router)
+app.include_router(crm.router)
 
+# Clientes potenciales
+from routers.clienpot import router as clienpot_router
+app.include_router(clienpot_router)
 
 @app.middleware("http")
 async def jwt_middleware(request: Request, call_next):

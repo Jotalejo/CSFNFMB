@@ -8,3 +8,10 @@ from .Recoleccion import Recoleccion
 from .Estado import Estado
 from .TipoResiduo import TipoResiduo
 from .Vehiculo import Vehiculo
+
+from .Citas import Cita
+from .Clienpot import Clientespot
+from .Logispot import Logispot
+from .ResiduoClipot import ResiduosCli
+from .TipoVisita import TipoVisita
+from .TipoGen import TipoGen

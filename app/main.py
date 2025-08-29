@@ -1,3 +1,4 @@
+from routers.clienpot import router as clienpot_router
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
@@ -10,6 +11,9 @@ from dotenv import load_dotenv
 import os
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 load_dotenv()
 SECRET_KEY = os.getenv("SECRET_KEY", "tu_clave_secreta")
@@ -29,8 +33,8 @@ app.include_router(usuarios.router)
 app.include_router(crm.router)
 
 # Clientes potenciales
-from routers.clienpot import router as clienpot_router
 app.include_router(clienpot_router)
+
 
 @app.middleware("http")
 async def jwt_middleware(request: Request, call_next):
@@ -46,11 +50,13 @@ async def jwt_middleware(request: Request, call_next):
     # Verificar token en cookie
     token = request.cookies.get("access_token")
     if not token:
+        logging.info("No token found, redirecting to login.")
         return RedirectResponse(url="/usuarios/login")
 
     try:
         jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
     except JWTError:
+        logging.info("Invalid token, redirecting to login.")
         return RedirectResponse(url="/usuarios/login")
 
     # Si el token es válido, continuar con la petición

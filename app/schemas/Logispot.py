@@ -1,17 +1,25 @@
+# schemas/Logispot.py
 from pydantic import BaseModel
+from typing import Optional
 
-# Todas las propiedades que tiene Logistica en la base de datos, sin el id
+# Base (sin id)
 class Logispot(BaseModel):
-    codclipot : int | None = None 
-    frecuerec : str | None = None
-    capavehic : str | None = None
-    distancia : float | None = None 
-    observaciones : str | None = None 
-    
+    codclipot: Optional[int] = None
+    frecuerec: Optional[str] = None
+    capavehic: Optional[str] = None
+    distancia: Optional[float] = None
+    observaciones: Optional[str] = None
+
     @classmethod
     def from_dictLogp(cls, data: dict):
         return cls(**data)
 
-# Clase para crear una Logistica potencial 
+# Create
 class LogiPotCreate(Logispot):
     pass
+
+# Output / Update (con id)
+class LogiPotOut(Logispot):
+    id: int
+    class Config:
+        from_attributes = True  # (si usas Pydantic v1, usa: orm_mode = True)

@@ -51,7 +51,7 @@ async def login(request: Request,
                   }
     token = jwt.encode(token_data, settings.SECRET_KEY,
                        algorithm=settings.ALGORITHM)
-    response = RedirectResponse(url="/", status_code=302)
+    response = RedirectResponse(url="/dashboard", status_code=302)
     response.set_cookie(key="access_token", value=token, httponly=True)
     return response
 

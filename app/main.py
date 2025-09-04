@@ -38,7 +38,7 @@ app.include_router(clienpot_router)
 
 
 # Rutas públicas (exactas) y prefijos (estáticos)
-PUBLIC_EXACT = {"/", "/usuarios/login", "/usuarios/reset-password", "/favicon.ico"}
+PUBLIC_EXACT = {"/", "/usuarios/login", "/usuarios/reset-password", "/usuarios/logout", "/favicon.ico"}
 PUBLIC_PREFIXES = ("/static",)  # agrega otros prefijos si hace falta
 
 @app.middleware("http")
@@ -86,6 +86,10 @@ async def validation(request: Request):
 @app.get("/recolecc", response_class=HTMLResponse)
 async def recolecc(request: Request):
     return templates.TemplateResponse("recolecc.html", {"request": request, "lista": [], "name": "Gresab"})
+
+@app.get("/exit", response_class=HTMLResponse)
+async def recolecc(request: Request):
+    return templates.TemplateResponse("index1.html", {"request": request, "lista": [], "name": "Gresab"})
 
 @app.get("/__ping")
 async def ping():

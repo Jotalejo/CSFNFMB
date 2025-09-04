@@ -115,3 +115,17 @@ async def reset_password(request: Request,
 
     await send_reset_email(data.email, reset_path, settings)
     return templates.TemplateResponse("/usuarios/reset_password_sent.html", {"request": request})
+
+# routers/usuarios.py
+# from fastapi import APIRouter
+# from fastapi.responses import RedirectResponse
+
+# router = APIRouter(prefix="/usuarios", tags=["usuarios"])
+
+@router.get("/logout")
+async def logout():
+    resp = RedirectResponse(url="/", status_code=303)  # o "/usuarios/login"
+    # Usa el mismo path/domain que usaste al setear la cookie
+    resp.delete_cookie(key="access_token", path="/")
+    return resp
+

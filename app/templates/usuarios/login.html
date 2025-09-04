@@ -1,32 +1,66 @@
-{% extends "layout2.html" %}                
+{% extends "layout2.html" %}
 {% block content %}
+<style>
+  /* Fondo del body: verde pálido */
+  body.font-opensans {
+    background: #e8f5e9 !important; /* o #f1f8e9 si lo quieres aún más claro */
+  }
+
+  /* Centrar el formulario vertical/horizontalmente */
+  .auth {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Tarjeta clara y limpia */
+  .auth .card {
+    background: rgba(255,255,255,0.96) !important;
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+  }
+
+  /* Inputs claros por si el tema los oscurece */
+  .auth .form-control {
+    background: #fff !important;
+    color: #2e7d32;
+    border-color: rgba(0,0,0,0.12);
+  }
+
+  .auth .card-title { color: #1b5e20; }
+</style>
 <div class="auth">
-    <div class="card">
-        <div class="text-center mb-5">
-            <h5><img src="/static/assets/images/logoGrsab.png" width="350" height="150" style="border-radius: 20px;" alt="GRESAB" /></h5>
-        </div>
-        <div class="card-body">
-            <div class="card-title">Ingresar a tu cuenta</div>
-            <form method="post" action="/usuarios/login">
-            <div class="form-group style2">
-                <label class="form-label">Email</label>
-                <input name="email" type="email" class="form-control" placeholder="Digite su email">
-            </div>
-            <div class="form-group style2">
-                <label class="form-label">Password<a href="/usuarios/reset-password" class="float-right small">Olvidé mi password</a></label>
-                <input name="password" type="password" class="form-control" placeholder="Ingrese su password">
-            </div>
-            <div class="form-group">
-                <label class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" />
-                <span class="custom-control-label">Recordarme</span>
-                </label>
-            </div>
-            <div class="form-footer">
-                <button type="submit" class="btn btn-primary btn-block">Ingresar</button>
-            </div>
-            </form>
-        </div>
+  <div class="card">
+    <div class="text-center mb-5">
+      <h5><img src="/static/assets/images/logoGrsab.png" width="350" height="150" style="border-radius: 20px;" alt="GRESAB" /></h5>
     </div>
+    <div class="card-body">
+      <div class="card-title">Ingresar a tu cuenta</div>
+      <form method="post" action="/usuarios/login">
+        <div class="form-group style2">
+          <label class="form-label">Email</label>
+          <input name="email" type="email" class="form-control" placeholder="Digite su email">
+        </div>
+        <div class="form-group style2">
+          <label class="form-label">
+            Password
+            <a href="/usuarios/reset-password" class="float-right small">Olvidé mi password</a>
+          </label>
+          <input name="password" type="password" class="form-control" placeholder="Ingrese su password">
+        </div>
+        <div class="form-group">
+          <label class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" />
+            <span class="custom-control-label">Recordarme</span>
+          </label>
+        </div>
+        <div class="form-footer">
+          <button type="submit" class="btn btn-primary btn-block">Ingresar</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
 {% endblock %}

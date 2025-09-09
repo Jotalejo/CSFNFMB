@@ -6,3 +6,4 @@ from .Usuarios import *
 from .Clienpot import *
 from .Citas import *
 from .Resclipot import *
+from .Tiporesid import *

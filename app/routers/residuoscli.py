@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, Request
 from sqlalchemy.orm import Session
 from dependencies import get_db, templates
-from services import ResiduosCliService
+from services import ResiduosCliService, TipoResidService
 from schemas import ResiduosCliCreate, ResiduosCliUpdate, ResiduosCliOut
 from typing import List
 
@@ -21,11 +21,13 @@ async def create_residuo(residuo: ResiduosCliCreate, db: Session = Depends(get_d
 def get_residuos(cliente_id: int, request: Request, db: Session = Depends(get_db)):
     service = ResiduosCliService(db)
     residuos = service.get_residuos_by_cliente(cliente_id)
+    TipoResiduo = TipoResidService(db)
+    tresiduos = TipoResiduo.list_all()
     url_redirect = "/residuoscli"
     action = "/residuoscli"
     method = "post"
 
-    return templates.TemplateResponse("/residuos/cliente.html", {"request": request, "url_redirect": url_redirect, "action": action, "method": method, "residuos": residuos, "cliente_id": cliente_id} )
+    return templates.TemplateResponse("/residuos/cliente.html", {"request": request, "url_redirect": url_redirect, "action": action, "method": method, "residuos": residuos, "cliente_id": cliente_id, "tresiduos": tresiduos} )
                                                                  
 
 @router.patch("/")

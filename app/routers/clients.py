@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request, Form
 from dependencies import templates
 from dependencies import get_db
 from schemas import ClienteCreate, Cliente
-from services import ClienteService, CiudadService
+from services import ClienteService, CiudadService, TipoResidService
 from sqlalchemy.orm import Session
 from typing import Annotated
 from fastapi.responses import RedirectResponse

@@ -31,13 +31,20 @@
                                             <h3 class="card-title">Selección de Tipos y Cantidad de Residuos Generados</h3><br>
                                         </div>
                                         <div class="card-body demo-card">
-                                            <form id="residuoForm" method="post" action="/residuoscli" data-redirect="{{url_redirect}}">
+                                            <form id="residuoForm" method="post" action="/residuoscli/" data-redirect="{{url_redirect}}">
                                                         <!-- Campos del formulario -->
                                                         <input type="hidden" name="ccliente" value="{{cliente_id}}">
                                                         <div class="form-group">
                                                             <label for="tresiduo">Tipo de Residuo</label>
-                                                            <input type="number" class="form-control" id="tresiduo"
-                                                                name="tresiduo" required>
+                                                            <select id="tresiduo" name="tresiduo" class="form-control" required>
+                                                                <option label="Escoja el Tipo de Residuo ..." selected disabled></option>
+                                                                {% for tipores in tresiduos %}
+                                                                    <option value="{{ tipores.id }}"
+                                                                    {% if residuo and residuo.tresiduo == tipores.id %}selected{% endif %}>
+                                                                    {{ tipores.nombre }}
+                                                                    </option>
+                                                                {% endfor %}
+                                                            </select>
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="cantresiduo">Cantidad</label>
@@ -82,11 +89,37 @@
 </div>
 
 <script>
+async function cargarTiposResiduo(selectedId) {
+  try {
+    const res = await fetch('/tiposresid/options');
+    const options = await res.json(); // [{id, text}]
+    const sel = document.getElementById('tresiduo');
+    sel.innerHTML = '<option label="Escoja el Tipo de Residuo ..." disabled></option>';
+
+    options.forEach(opt => {
+      const o = document.createElement('option');
+      o.value = opt.id;
+      o.textContent = opt.text || '';
+      if (selectedId && Number(selectedId) === Number(opt.id)) o.selected = true;
+      sel.appendChild(o);
+    });
+
+    // Selecciona cabecera como disabled si no hay selectedId
+    if (!selectedId) sel.selectedIndex = 0;
+  } catch (e) {
+    console.error('Error cargando tipos de residuo', e);
+    alert('No se pudo cargar la lista de tipos de residuo.');
+  }
+}
+</script>
+
+<script>
     $(document).ready(function() {
         $('#btnSaveResiduos').on('click', function() {
             // Validar el formulario antes de enviar
             if ($('#residuoForm')[0].checkValidity()) {
                 // Si es válido, enviar el formulario
+                
                 send_form('residuoForm');
                 $('#btnDismiss').click(); // Cerrar el modal después de enviar
                 

@@ -45,7 +45,7 @@ function send_form(frmId) {
     const form = document.getElementById(frmId);
 
     const formData = {};
-    const elements = Array.from(form.children);
+    const elements = Array.from(form.querySelectorAll('input, select'));
 
     // Loop through the form elements and add them to the formData object
     for (let i = 0; i < elements.length; i++) {

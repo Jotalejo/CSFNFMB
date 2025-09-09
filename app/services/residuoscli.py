@@ -14,7 +14,7 @@ class ResiduosCliService:
     def create(self, data: Dict[str, Any]) -> Dict[str, Any]:
         obj = ResidModel(
             codcli=data["ccliente"],
-            tresid=data["tresiduo"],
+            tresiduo=data["tresiduo"],
             cantresid=data["cantresiduo"],
             pesopromres=data["pesopromres"],
             segregares=data.get("segregares"),

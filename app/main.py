@@ -3,7 +3,8 @@ from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse, RedirectResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 from dependencies import get_db
-from routers import clients, residuoscli, recolecc, usuarios, crm
+from routers import clients, residuoscli, recolecc, usuarios, crm, tiposresid
+
 from dependencies import templates
 from jose import jwt, JWTError
 # Load environment
@@ -32,6 +33,7 @@ app.include_router(residuoscli.router)
 app.include_router(recolecc.router)
 app.include_router(usuarios.router)
 app.include_router(crm.router)
+app.include_router(tiposresid.router)
 
 # Clientes potenciales
 app.include_router(clienpot_router)

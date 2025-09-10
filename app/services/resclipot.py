@@ -5,11 +5,12 @@ from schemas import ResiduosCliCreate, ResiduosCliUpdate
 
 
 # Usa el alias para dejar claro que es POT:
-from models.ResiduoClipot import ResiduosCli as ResiduosCliPotModel
+from models import ResiduosClientePotencial as ResiduosCliPotModel
 # Si usas paquete "app", cambia a:
 # from app.models.Residuoclipot import ResiduosCli as ResiduosCliPotModel
 
 from schemas.Resclipot import ResiduosCliCreate, ResiduosCliUpdate
+
 
 class ResCliPotService:
     def __init__(self, db: Session):
@@ -23,7 +24,8 @@ class ResCliPotService:
         return [self._to_dict(x) for x in q.all()]
 
     def get_by_id(self, resid_id: int) -> Optional[Dict[str, Any]]:
-        obj = self.db.query(ResiduosCliPotModel).filter(ResiduosCliPotModel.id == resid_id).first()
+        obj = self.db.query(ResiduosCliPotModel).filter(
+            ResiduosCliPotModel.id == resid_id).first()
         return self._to_dict(obj) if obj else None
 
     # -------- Crear / Actualizar (JSON) --------
@@ -35,7 +37,8 @@ class ResCliPotService:
         return self._to_dict(obj)
 
     def update(self, resid_id: int, payload: ResiduosCliUpdate) -> Optional[Dict[str, Any]]:
-        obj = self.db.query(ResiduosCliPotModel).filter(ResiduosCliPotModel.id == resid_id).first()
+        obj = self.db.query(ResiduosCliPotModel).filter(
+            ResiduosCliPotModel.id == resid_id).first()
         if not obj:
             return None
         for field, val in payload.model_dump(exclude_unset=True).items():
@@ -55,7 +58,8 @@ class ResCliPotService:
         return self._to_dict(obj)
 
     def update_from_form(self, resid_id: int, data: Dict[str, Any]) -> Optional[Dict[str, Any]]:
-        obj = self.db.query(ResiduosCliPotModel).filter(ResiduosCliPotModel.id == resid_id).first()
+        obj = self.db.query(ResiduosCliPotModel).filter(
+            ResiduosCliPotModel.id == resid_id).first()
         if not obj:
             return None
         for k, v in data.items():
@@ -68,7 +72,8 @@ class ResCliPotService:
 
     # -------- Borrar --------
     def delete(self, resid_id: int) -> bool:
-        obj = self.db.query(ResiduosCliPotModel).filter(ResiduosCliPotModel.id == resid_id).first()
+        obj = self.db.query(ResiduosCliPotModel).filter(
+            ResiduosCliPotModel.id == resid_id).first()
         if not obj:
             return False
         self.db.delete(obj)

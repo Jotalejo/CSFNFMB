@@ -1,9 +1,8 @@
-from routers.clienpot import router as clienpot_router
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse, RedirectResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 from dependencies import get_db
-from routers import clients, residuoscli, recolecc, usuarios, crm, tiposresid
+from routers import clients, residuoscli, recolecc, usuarios, crm, tiposresid, certificado, clienpot
 
 from dependencies import templates
 from jose import jwt, JWTError
@@ -23,7 +22,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES = os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 60)
 
 # Importar la ruta de cliente
 app = FastAPI(debug=True, redirect_slashes=False)
-#app = FastAPI(redirect_slashes=False)
+# app = FastAPI(redirect_slashes=False)
 app.add_middleware(ProxyHeadersMiddleware)
 app.add_middleware(TrustedHostMiddleware, allowed_hosts=[
                    "*"])  # O tu dominio público
@@ -34,14 +33,17 @@ app.include_router(recolecc.router)
 app.include_router(usuarios.router)
 app.include_router(crm.router)
 app.include_router(tiposresid.router)
+app.include_router(certificado.router)
 
 # Clientes potenciales
-app.include_router(clienpot_router)
+app.include_router(clienpot.router)
 
 
 # Rutas públicas (exactas) y prefijos (estáticos)
-PUBLIC_EXACT = {"/", "/usuarios/login", "/usuarios/reset-password", "/usuarios/logout", "/favicon.ico"}
+PUBLIC_EXACT = {"/", "/usuarios/login",
+                "/usuarios/reset-password", "/usuarios/logout", "/favicon.ico"}
 PUBLIC_PREFIXES = ("/static",)  # agrega otros prefijos si hace falta
+
 
 @app.middleware("http")
 async def jwt_middleware(request: Request, call_next):
@@ -68,30 +70,37 @@ async def jwt_middleware(request: Request, call_next):
         # devuelvo 500 con texto simple para que se vea algo si el error fuera aquí
         return PlainTextResponse(f"Middleware error: {e}", status_code=500)
 
+
 @app.get("/", response_class=HTMLResponse)
 async def landing(request: Request):
     # Si esto falla, es la plantilla. Debajo te dejo un endpoint de diagnóstico.
     return templates.TemplateResponse("index1.html", {"request": request, "name": "Gresab"})
 
+
 @app.get("/dashboard", response_class=HTMLResponse)
 async def dashboard(request: Request):
     return templates.TemplateResponse("index.html", {"request": request, "name": "Gresab"})
+
 
 @app.get("/fuente", response_class=HTMLResponse)
 async def fuente_generadora(request: Request):
     return templates.TemplateResponse("fuente_generadora.html", {"request": request, "lista": [], "name": "Gresab"})
 
+
 @app.get("/validation", response_class=HTMLResponse)
 async def validation(request: Request):
     return templates.TemplateResponse("form-validation.html", {"request": request, "lista": [], "name": "Gresab"})
+
 
 @app.get("/recolecc", response_class=HTMLResponse)
 async def recolecc(request: Request):
     return templates.TemplateResponse("recolecc.html", {"request": request, "lista": [], "name": "Gresab"})
 
+
 @app.get("/exit", response_class=HTMLResponse)
 async def recolecc(request: Request):
     return templates.TemplateResponse("index1.html", {"request": request, "lista": [], "name": "Gresab"})
+
 
 @app.get("/__ping")
 async def ping():

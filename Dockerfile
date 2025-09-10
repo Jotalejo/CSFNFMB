@@ -1,5 +1,5 @@
 FROM python:slim-bullseye
-RUN apt install xvfb libfontconfig wkhtmltopdf -y --no-install-recommends \
+RUN apt-get update && apt-get install xvfb libfontconfig wkhtmltopdf -y --no-install-recommends \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 WORKDIR /app

@@ -1,0 +1,228 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="section-body">
+    <div class="container-fluid">
+        <div class="row clearfix">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="left">
+                            <h1 class="page-title">Tabla de Tipos de Residuo por Cliente</h1>
+                        </div>
+                    </div>
+                    <div class="row clearfix">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Store</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-vcenter text-nowrap mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Tipo de residuo</th>
+                                                    <th>Cantidad</th>
+                                                    <th>Peso promedio</th>
+                                                    <th>Segregación</th>
+                                                    <th>Número de bolsas</th>
+                                                    <th>Observaciones</th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <td>Fármacos</td>
+                                                    <td>236.5</td>
+                                                    <td>10.75</td>
+                                                    <td>Bolsa Verde</td>
+                                                    <td>22</td>
+                                                    <td>Cantidad en Kgs.</td>
+                                                    <td><label class="badge badge-success">Aprobado</label></td>
+                                                    <td><a href="javascript:void(0);" class="btn btn-success btn-sm">View Order</a></td>
+                                                    <td><button class="btn btn-danger btn-sm"><i class="icon-trash"></i></button></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Q02</td>
+                                                    <td>Galaxy S8</td>
+                                                    <td>18 Jan 2018</td>
+                                                    <td>Dispatched</td>
+                                                    <td>Internet banking</td>
+                                                    <td><label class="badge badge-warning">Pending</label></td>
+                                                    <td><a href="javascript:void(0);" class="btn btn-success btn-sm">View Order</a></td>
+                                                    <td><button class="btn btn-danger btn-sm"><i class="icon-trash"></i></button></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Q03</td>
+                                                    <td>Amazon Echo</td>
+                                                    <td>22 Feb 2018</td>
+                                                    <td>Dispatched</td>
+                                                    <td>Credit card</td>
+                                                    <td><label class="badge badge-success">Approved</label></td>
+                                                    <td><a href="javascript:void(0);" class="btn btn-success btn-sm">View Order</a></td>
+                                                    <td><button class="btn btn-danger btn-sm"><i class="icon-trash"></i></button></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Q04</td>
+                                                    <td>Google Pixel</td>
+                                                    <td>22 Feb 2018</td>
+                                                    <td>Dispatched</td>
+                                                    <td>Cash on delivery</td>
+                                                    <td><label class="badge badge-danger">Rejected</label></td>
+                                                    <td><a href="javascript:void(0);" class="btn btn-success btn-sm">View Order</a></td>
+                                                    <td><button class="btn btn-danger btn-sm"><i class="icon-trash"></i></button></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Q05</td>
+                                                    <td>Mac Mini</td>
+                                                    <td>8 March 2018</td>
+                                                    <td>Dispatched</td>
+                                                    <td>Debit card</td>
+                                                    <td><label class="badge badge-success">Approved</label></td>
+                                                    <td><a href="javascript:void(0);" class="btn btn-success btn-sm">View Order</a></td>
+                                                    <td><button class="btn btn-danger btn-sm"><i class="icon-trash"></i></button></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>                    
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+{% block scripts %}
+<script>
+    var clientRowTable = {
+        options : {
+            table: "#addrowExample", addButton: "#addToTable",
+        },
+        initialize: function () {
+            this.setVars().events();
+        },
+        setVars: function() {
+            return this.$table = $(this.options.table), 
+                   this.$addButton = $(this.options.addButton), 
+                   this.dialog = {}, 
+                   this
+        },
+        events: function() {
+            var self = this;
+            this.$addButton.on("click", function(e) {
+                e.preventDefault();
+                //self.addRow();
+                creacliente();
+                console.log("addRow");
+            });
+            this.$table.on("click", ".button-edit", function(e) {
+                e.preventDefault();
+                var id = e.target.closest("tr").id
+                window.location.href = "/clientes/" + id;
+            });
+            this.$table.on("click", ".button-remove", function(e) {
+                e.preventDefault();
+                console.log("Boton de canequita")
+                var id = e.target.closest("tr").id;
+                console.log("ID: " + id);
+                activarModal2(id);
+            });
+        },
+
+    }
+
+    $(document).ready(function() {
+        var table = $('#addrowExample').DataTable({
+            "ajax": {
+                "url": "/clientes/json",
+                "type": "GET",
+                "data": function ( d ) {
+                    d.nit = $('#nit').val();
+                }
+            },
+            "language": {
+                "lengthMenu": "Mostrar _MENU_ registros por página",
+                "zeroRecords": "No se encontraron resultados",
+                "info": "Página _PAGE_ de _PAGES_",
+                "infoEmpty": "No hay registros disponibles",
+                "infoFiltered": "(filtrado de _MAX_ total de registros)",
+                "search": "Buscar:",
+                "paginate": {
+                    "first":      "Primero",
+                    "last":       "Último",
+                    "next":       "Siguiente",
+                    "previous":   "Anterior"
+                }
+            },
+            responsive: true,
+            autoWidth: false,
+            "columns": [
+                { "data": "razonSocial" },
+                { "data": "nit" },
+                { "data": "contacto" },
+                { "data": "telefono" },
+                {
+                    "className":      'details-control',
+                    "orderable":      false,
+                    "data":           null,
+                    "defaultContent": '<button class="btn btn-sm btn-icon on-editing button-discard data-toggle="tooltip" data-original-title="Discard" hidden><i class="icon-close" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon on-default m-r-5 button-edit data-toggle="tooltip" data-original-title="Editar"><i class="icon-pencil" aria-hidden="true"></i></button><button class="btn button-remove btn-sm btn-icon" data-original-title="Residuos"><i class="icon-trash" aria-hidden="true"></i></button>'
+                },
+            ],
+            rowId: 'id',            
+            columnDefs: [
+                { orderable: false, targets: [4] }
+            ]
+        });
+        clientRowTable.initialize();
+    });
+
+    //$(document).on('submit', 'form', send_json);
+
+    function creacliente (){
+        window.location.href = "/clientes/nuevo";
+    }
+
+    function activarModal2(id) {
+
+        fetch('/residuoscli/cliente/' + id)
+            .then(response => response.text())
+            .then(data => {
+                $('#MdlGestRescli').html(data);
+                const rform = document.getElementById("residuoForm");
+                rform.addEventListener("submit", send_json);
+                $('#MdlGestRescli').modal('show');
+            })
+            .catch(error => {
+                console.error("Error al cargar los datos del residuo:", error);
+            });
+    }
+
+    function activarModal(id){
+        $('#MdlGestRescli').modal('show');
+        ajax({
+            url: "/residuoscli/cliente/" + id,
+            type: "GET",
+            dataType: "json",
+            success: function(data) {
+                $('#tresiduo').val(data.tresiduo);
+                $('#cantresiduo').val(data.cantresiduo);
+                $('#pesopromres').val(data.pesopromres);
+                $('#segregares').val(data.segregares);
+                $('#numbolsas').val(data.numbolsas);
+                $('#observaciones').val(data.observaciones);
+            },
+            error: function(xhr, status, error) {
+                console.error("Error al cargar los datos del residuo:", error);
+            }
+        });
+        $('#tresiduo').val(tresiduo);
+
+    }
+</script>
+{% endblock %}

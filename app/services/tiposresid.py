@@ -1,9 +1,10 @@
 # services/tiposresid.py
 from sqlalchemy.orm import Session
 from typing import List, Dict, Any, Optional
-
+from models.ResiduoCli import ResiduosCli
 from models.TipoResiduo import TipoResiduo as TipoResidModel
 from schemas.Tiporesid import TipoResidCreate, TipoResidOut
+from models.Cliente import Cliente
 
 class TipoResidService:
     def __init__(self, db: Session):
@@ -57,3 +58,20 @@ class TipoResidService:
             "clasificacion": x.clasificacion,
             "observaciones": x.observaciones,
         }
+    
+    # Query Tipos de residuos ordenados por cliente
+    """ SELECT
+        c.razonsoc_cli,
+        tr.nomtipo_tipores,
+        rc.cantidad_residcli      AS cantidad,
+        rc.pesoprom_residcli      AS pesopromedio,
+        rc.segregacion_residcli,
+        rc.numbolsas_residcli     AS numero,
+        rc.observ_residcli
+    FROM clientes c
+    LEFT JOIN residuoscli rc ON rc.codcli_residcli = c.cod_cli
+    LEFT JOIN tiposresid tr  ON tr.cod_tipores = rc.codtipores_residcli; """
+
+    def list_tiporescli(self, cliente_id) -> List[Dict[str, Any]]:
+        q = self.db.query(Cliente).join(ResiduosCli,Cliente.id==ResiduosCli.codcli,isouter=True).join(TipoResidModel,ResiduosCli.tresiduo==TipoResidModel.id).where(Cliente.id == cliente_id).order_by(TipoResidModel.nombre.asc())        
+        return q.all()

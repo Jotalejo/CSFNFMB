@@ -1,5 +1,6 @@
 # routers/tiposresid.py
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request, Form
+from dependencies import templates
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
@@ -21,6 +22,12 @@ router = APIRouter(
 async def list_tiposresid(db: Session = Depends(get_db)):
     return [TipoResidOut(**row) for row in TipoResidService(db).list_all()]
 
+# Listado para tipos de residuo por cliente
+@router.get("/tipoxcliente/{cliente_id}", response_model=List[TipoResidOut])
+async def list_tiposrescli(cliente_id: int, request: Request, db: Session = Depends(get_db)):
+    data = TipoResidService(db).list_tiporescli(cliente_id)
+    return templates.TemplateResponse("/residuos/tiporesid.html", {"request": request})
+                                                              
 # DataTables-like
 @router.get("/json")
 async def list_tiposresid_json(db: Session = Depends(get_db)):

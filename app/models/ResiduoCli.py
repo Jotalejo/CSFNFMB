@@ -13,3 +13,5 @@ class ResiduosCli(Base):
     segregares = Column("segregacion_residcli", String(50))
     numbolsas = Column("numbolsas_residcli", Integer)
     observaciones = Column("observ_residcli", String(200))
+    cliente_rel = relationship("Cliente", back_populates="residuos")
+    tipo_residuo_rel = relationship("TipoResiduo", back_populates="residuoscli_rel")

@@ -10,5 +10,5 @@ class TipoResiduo(Base):
     nombre = Column("nomtipo_tipores", String(45), unique=True, nullable=True)
     clasificacion = Column("codsubclres_tipores", Integer, nullable=True)
     observaciones = Column("observ_tipores", String(200), nullable=True)
-
+    residuoscli_rel = relationship("ResiduosCli", back_populates="tipo_residuo_rel")
     recolecciones = relationship("Recoleccion", back_populates="tipo_residuo")

@@ -94,6 +94,11 @@
                 console.log("ID: " + id);
                 activarModal2(id);
             });
+            this.$table.on("click", ".button-view", function(e) {
+                e.preventDefault();
+                var id = e.target.closest("tr").id;
+                window.location.href = "/tiposresid/tipoxcliente/" + id;
+            });
         },
 
     }
@@ -132,7 +137,7 @@
                     "className":      'details-control',
                     "orderable":      false,
                     "data":           null,
-                    "defaultContent": '<button class="btn btn-sm btn-icon on-editing button-discard data-toggle="tooltip" data-original-title="Discard" hidden><i class="icon-close" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon on-default m-r-5 button-edit data-toggle="tooltip" data-original-title="Editar"><i class="icon-pencil" aria-hidden="true"></i></button><button class="btn button-remove btn-sm btn-icon" data-original-title="Residuos"><i class="icon-trash" aria-hidden="true"></i></button>'
+                    "defaultContent": '<button class="btn btn-sm btn-icon on-editing button-discard data-toggle="tooltip" data-original-title="Discard" hidden><i class="icon-close" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon on-default m-r-5 button-edit data-toggle="tooltip" data-original-title="Editar"><i class="icon-pencil" aria-hidden="true"></i></button><button class="btn button-remove btn-sm btn-icon" data-original-title="Residuos"><i class="icon-trash" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon on-default m-r-5 button-view data-toggle="tooltip" data-original-title="Visualizar"><i class="icon-eye" aria-hidden="true"></i></button>'
                 },
             ],
             rowId: 'id',            

@@ -73,5 +73,5 @@ class TipoResidService:
     LEFT JOIN tiposresid tr  ON tr.cod_tipores = rc.codtipores_residcli; """
 
     def list_tiporescli(self, cliente_id) -> List[Dict[str, Any]]:
-        q = self.db.query(Cliente).join(ResiduosCli,Cliente.id==ResiduosCli.codcli,isouter=True).join(TipoResidModel,ResiduosCli.tresiduo==TipoResidModel.id).where(Cliente.id == cliente_id).order_by(TipoResidModel.nombre.asc())        
+        q = self.db.query(ResiduosCli).join(Cliente,Cliente.id==ResiduosCli.codcli,isouter=True).join(TipoResidModel,ResiduosCli.tresiduo==TipoResidModel.id).where(Cliente.id == cliente_id).order_by(TipoResidModel.nombre.asc())        
         return q.all()

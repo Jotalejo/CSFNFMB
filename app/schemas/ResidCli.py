@@ -8,6 +8,7 @@ class ResiduosCliBase(BaseModel):
     pesopromres: float
     segregares: Optional[str] = None
     numbolsas: Optional[int] = None
+    colorbolsa: Optional[str] = None
     observaciones: Optional[str] = None
 		
 class ResiduosCliCreate(ResiduosCliBase):

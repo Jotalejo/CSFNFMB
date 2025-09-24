@@ -26,7 +26,7 @@ async def list_tiposresid(db: Session = Depends(get_db)):
 @router.get("/tipoxcliente/{cliente_id}", response_model=List[TipoResidOut])
 async def list_tiposrescli(cliente_id: int, request: Request, db: Session = Depends(get_db)):
     data = TipoResidService(db).list_tiporescli(cliente_id)
-    return templates.TemplateResponse("/residuos/tiporesid.html", {"request": request})
+    return templates.TemplateResponse("/residuos/tiporesid.html", {"request": request, "data": data, "cliente_id": cliente_id})
                                                               
 # DataTables-like
 @router.get("/json")

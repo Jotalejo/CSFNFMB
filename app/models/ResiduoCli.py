@@ -13,6 +13,7 @@ class ResiduosCli(Base):
     pesopromres = Column("pesoprom_residcli", Float)
     segregares = Column("segregacion_residcli", String(50))
     numbolsas = Column("numbolsas_residcli", Integer)
+    colorbolsa = Column("colorbol_residcli", String(45))
     observaciones = Column("observ_residcli", String(200))
     cliente = relationship("Cliente", back_populates="residuos")
     tipo_residuo = relationship(

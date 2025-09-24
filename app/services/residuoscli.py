@@ -19,6 +19,7 @@ class ResiduosCliService:
             pesopromres=data["pesopromres"],
             segregares=data.get("segregares"),
             numbolsas=data.get("numbolsas"),
+            colorbolsa=data.get("colorbolsa"),
             observaciones=data.get("observaciones"),
         )
         self.db.add(obj)
@@ -55,5 +56,6 @@ class ResiduosCliService:
             "pesopromres": r.pesopromres,
             "segregares": r.segregares,
             "numbolsas": r.numbolsas,
+            "colorbolsa": r.colorbolsa,            
             "observaciones": r.observaciones,
         }

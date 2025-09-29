@@ -5,6 +5,7 @@ from models.ResiduoCli import ResiduosCli
 from models.TipoResiduo import TipoResiduo as TipoResidModel
 from schemas.Tiporesid import TipoResidCreate, TipoResidOut
 from models.Cliente import Cliente
+from sqlalchemy import text
 
 class TipoResidService:
     def __init__(self, db: Session):
@@ -75,3 +76,20 @@ class TipoResidService:
     def list_tiporescli(self, cliente_id) -> List[Dict[str, Any]]:
         q = self.db.query(ResiduosCli).join(Cliente,Cliente.id==ResiduosCli.codcli,isouter=True).join(TipoResidModel,ResiduosCli.tresiduo==TipoResidModel.id).where(Cliente.id == cliente_id).order_by(TipoResidModel.nombre.asc())        
         return q.all()
+    
+    # Query para escoger el Tipos de residuos de un cliente
+
+    def list_by_cliente(self, cliente_id: int) -> List[Dict]:
+        sql = text("""
+            SELECT DISTINCT
+                tr.cod_tipores           AS id,
+                tr.nomtipo_tipores       AS nombre,
+                tr.codsubclres_tipores   AS codsubclres,
+                tr.observ_tipores        AS observaciones
+            FROM residuoscli rc
+            JOIN tiposresid tr ON rc.codtipores_residcli = tr.cod_tipores
+            WHERE rc.codcli_residcli = :cliente_id
+            ORDER BY tr.nomtipo_tipores
+        """)
+        rows = self.db.execute(sql, {"cliente_id": cliente_id}).mappings().all()
+        return [dict(r) for r in rows]

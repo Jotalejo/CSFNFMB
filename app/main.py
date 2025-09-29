@@ -76,6 +76,11 @@ async def landing(request: Request):
     # Si esto falla, es la plantilla. Debajo te dejo un endpoint de diagnóstico.
     return templates.TemplateResponse("index1.html", {"request": request, "name": "Gresab"})
 
+@app.get("/dash1", response_class=HTMLResponse)
+async def landing(request: Request):
+    # Si esto falla, es la plantilla. Debajo te dejo un endpoint de diagnóstico.
+    return templates.TemplateResponse("index.html", {"request": request, "name": "Gresab"})
+
 
 @app.get("/dashboard", response_class=HTMLResponse)
 async def dashboard(request: Request):

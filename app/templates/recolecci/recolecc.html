@@ -1,302 +1,389 @@
 {% extends "layout.html" %}
-{% block content %}    
-    <!-- start main body part-->
-    <div class="page">        
-        <div class="section-body">
-            <div class="container-fluid">
-                <div class="row clearfix">
-                    <div class="col-lg-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="d-md-flex justify-content-between">
-                                    <ul class="nav nav-tabs b-none">
-                                        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#list-recolec">Lista de Recolecciones</a></li>
-                                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#prog-recolec">Programar Recolección</a></li>
-                                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#detalle-recolec">Detalle</a></li>
-                                    </ul>
-                                    <div class="d-flex align-items-center sort_stat">
-                                        <div class="d-flex">
-                                            <span class="bh_income">2,5,1,8,3,6,7,5,3,6,7,5</span>
-                                            <div class="ml-2">
-                                                <p class="mb-0 font-11">Recolecciones</p>
-                                                <h5 class="font-16 mb-0">510</h5>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex ml-3">
-                                            <span class="bh_traffic">5,8,9,10,5,2,5,8,9,10</span> 
-                                            <div class="ml-2">
-                                                <p class="mb-0 font-11">PRESUPUESTO</p>
-                                                <h5 class="font-16 mb-0">53% Arriba</h5>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="input-group mt-2">
-                                    <input type="text" class="form-control search" placeholder="Search...">
-                                </div>
+{% block content %}
+
+<!-- start main body part-->            
+<div class="row clearfix">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="left">
+                    <h1 class="page-title">Recolecciones</h1><br>
+                    <h3 class="card-title" style="margin-left: 20px">Organizar las recolecciones para cada Cliente y sacar el manifiesto</h3>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="d-md-flex justify-content-between">
+                    <ul class="nav nav-tabs b-none">
+                        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#prog-recolec">Programar Recolección</a></li>
+                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#detalle-recolec">Detalle</a></li>
+                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#list-recolec">Lista de Recolecciones</a></li>
+                    </ul>
+                    <div class="d-flex align-items-center sort_stat">
+                        <div class="d-flex">
+                            <span class="bh_income">2,5,1,8,3,6,7,5,3,6,7,5</span>
+                            <div class="ml-2">
+                                <p class="mb-0 font-11">Recolecciones</p>
+                                <h5 class="font-16 mb-0">510</h5>
+                            </div>
+                        </div>
+                        <div class="d-flex ml-3">
+                            <span class="bh_traffic">5,8,9,10,5,2,5,8,9,10</span> 
+                            <div class="ml-2">
+                                <p class="mb-0 font-11">PRESUPUESTO</p>
+                                <h5 class="font-16 mb-0">53% Arriba</h5>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="section-body">
-            <div class="container-fluid">
-                <div class="tab-content">
-                    <div class="tab-pane fade show active" id="list-recolec" role="tabpanel">
-                        <div class="table-responsive">
-                            <table class="table card-table table-vcenter text-nowrap table_custom">
-                                <thead>
-                                    <tr class="">
-                                        <th>Código</th>
-                                        <th>Cliente</th>
-                                        <th>Fecha</th>
-                                        <th>Hora</th>
-                                        <th>Tipo de Residuo</th>
-                                        <th>Estatus</th>
-                                        <th>Peso</th>
-                                        <th></th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for recoleccion in recolecciones %}
-                                    <tr class="">
-                                        <td><span class="text-muted">{{ recoleccion.id }}</span></td>
-                                        <td>{{ recoleccion.cliente_rel.razonSocial }}</td>
-                                        <td>{{ recoleccion.fecha }}</td>
-                                        <td>{{ recoleccion.hora }}</td>
-                                        <td>{{ recoleccion.tipo_residuo.nombre }}</td>
-                                        <td><span class="{{ recoleccion.estado.clase }}"></span> {{ recoleccion.estado.nombre }}</td>
-                                        <td>{{ recoleccion.peso }} Kg.</td>
-                                    </tr>
-                                    {% endfor %}
-                               </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="tab-pane fade" id="prog-recolec" role="tabpanel">
-                        <div class="container-fluid">
-                            <form class="card">
-                                <div class="card-body">
-                                    <h3 class="card-title">Datos de la Recolección</h3>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label class="form-label">Cliente</label>
-                                                <select class="form-control custom-select">
-                                                    {% for cliente in clientes %}
-                                                        <option value={{cliente.id}}>{{cliente.razonSocial}}</option>
-                                                    {% endfor %}
-                                                   
-                                                    <option value="">ACEITE EL DORADO</option>
-                                                    <option value="">ACEITES Y LUBRICANTES LA 28</option>
-                                                </select>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-sm-6 col-md-4">
-                                                    <div class="form-group">
-                                                        <label>Fecha de Recolección</label>
-                                                        <div class="form-group">
-                                                            <div class="input-group">
-                                                                <div class="input-group-prepend">
-                                                                    <span class="input-group-text"><i class="icon-calendar"></i></span>
-                                                                </div>
-                                                                <input data-provide="datepicker" data-date-autoclose="true" class="form-control">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-6 col-md-4">
-                                                    <div class="form-group">
-                                                        <label>Hora</label>
-                                                        <div class="input-group mb-3">
-                                                            <div class="input-group-prepend">
-                                                                <span class="input-group-text"><i class="icon-clock"></i></span>
-                                                            </div>
-                                                            <input type="text" class="form-control time24" placeholder="Ej: 23:59" required>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-6 col-md-4">
-                                                    <div class="form-group">
-                                                        <label class="form-label">Tipo de Residuo</label>
-                                                        <select class="form-control custom-select">
-                                                            <option value="">Biosanitario</option>
-                                                            <option value="">Anatomopatológico</option>
-                                                            <option value="">Reciclable</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>                                                                                      
-                                        </div>
-                                        <div class="col-sm-6 col-md-4">
-                                            <div class="form-group">
-                                                <label>Cantidad de Bolsas</label>
-                                                <input id="cantbol" name="cantbol" type="number" class="form-control" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6 col-md-4">
-                                            <div class="form-group">
-                                                <label>Peso</label>
-                                                <input id="pesobol" name="pesobol" type="number" step="any" class="form-control" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6 col-md-4">
-                                            <div class="form-group">
-                                                <label>Total Peso</label>
-                                                <input id="totpeso" name="totpeso" type="text" class="form-control" disabled>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6 col-md-8">
-                                            <div class="form-group">
-                                                <label>Dirección</label>
-                                                <input id="direc" name="direc" type="text" class="form-control" disabled>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6 col-md-4">
-                                            <div class="form-group">
-                                                <label>Teléfono</label>
-                                                <input id="telc" name="telc" type="text" class="form-control" disabled>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6 col-md-4">
-                                            <div class="form-group">
-                                                <label>Ciudad</label>
-                                                <input id="ciud" name="ciud" type="text" class="form-control" disabled>
-                                            </div>
-                                        </div>                                        
-                                        <div class="col-sm-6 col-md-6">
-                                            <div class="form-group">
-                                                <label>Email</label>
-                                                <input id="email" name="email" type="email" class="form-control" placeholder="Email" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label>Contacto</label>
-                                                <input id="conta" name="conta" type="text" class="form-control" placeholder="Nombre del contacto">
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6 col-md-6">
-                                            <div class="form-group">
-                                                <label>Teléfono</label>
-                                                <input id="teldco" name="teldco" type="text" class="form-control" placeholder="Teléfono del Contacto" required>
-                                            </div>
-                                        </div>
-                                    
-                                        <div class="col-md-12">
-                                            <div class="form-group mb-0">
-                                                <label class="form-label">Acerca de la Recolección - Observaciones</label>
-                                                <textarea id="observ" name="observ" rows="5" class="form-control" placeholder="Acá puede colocar una descripción" ></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
+    </div>
+</div>    
+<div class="tab-content px-0">
+    <div class="tab-pane fade show active" id="prog-recolec" role="tabpanel">
+        <div class="row clearfix">
+            <div class="col-12">
+                <form class="card">
+                    <div class="card-body">
+                        <h3 class="card-title">Datos de Recolección</h3>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="form-label">Cliente</label>
+                                    <select id="cliente_id" class="form-control custom-select">
+                                        {% for c in clientes %}
+                                            <option value="{{ c.id }}">{{ c.razonSocial }}</option>
+                                        {% endfor %}
+                                    </select>
                                 </div>
-                                <div class="card-footer text-right">
-                                    <button id="btnguardc" name="btnguardc" type="submit" class="btn btn-primary">Crear Recolección</button>
+                                <div class="row">
+                                    <div class="col-sm-6 col-md-4">
+                                        <div class="form-group">
+                                            <label>Fecha de Recolección</label>
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text"><i class="icon-calendar"></i></span>
+                                                    </div>
+                                                    <input data-provide="datepicker" data-date-autoclose="true" class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-md-4">
+                                        <div class="form-group">
+                                            <label>Hora</label>
+                                            <div class="input-group mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="icon-clock"></i></span>
+                                                </div>
+                                                <input type="text" class="form-control time24" placeholder="Ej: 23:59" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-md-4">
+                                        <div class="form-group">
+                                            <label class="form-label">Tipo de Residuo</label>
+                                            <select id="tipo_residuo" class="form-control custom-select">
+                                                <option value="" selected disabled>Seleccione tipo de residuo…</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>                                                                                      
+                            </div>
+                            <div class="col-sm-6 col-md-4">
+                                <div class="form-group">
+                                    <label>Cantidad de Bolsas</label>
+                                    <input id="cantbol" name="cantbol" type="number" class="form-control" required>
                                 </div>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="tab-pane fade" id="detalle-recolec" role="tabpanel">
-                        <div class="row clearfix">
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h3 class="card-title">#AB0017</h3>
-                                        <div class="card-options">
-                                            <button type="button" class="btn btn-primary"><i class="si si-printer"></i> Print Invoice</button>
-                                        </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row my-8">
-                                            <div class="col-6">
-                                                <p class="h3">Company</p>
-                                                <address>
-                                                Street Address<br>
-                                                State, City<br>
-                                                Region, Postal Code<br>
-                                                ltd@example.com
-                                                </address>
-                                            </div>
-                                            <div class="col-6 text-right">
-                                                <p class="h3">Client</p>
-                                                <address>
-                                                Street Address<br>
-                                                State, City<br>
-                                                Region, Postal Code<br>
-                                                ctr@example.com
-                                                </address>
-                                            </div>
-                                        </div>
-                                        <div class="table-responsive push">
-                                            <table class="table table-bordered table-hover">
-                                                <tr>
-                                                    <th class="text-center width35"></th>
-                                                    <th>Product</th>
-                                                    <th class="text-center" style="width: 1%">Qnt</th>
-                                                    <th class="text-right" style="width: 1%">Unit</th>
-                                                    <th class="text-right" style="width: 1%">Amount</th>
-                                                </tr>
-                                                <tr>
-                                                    <td class="text-center">1</td>
-                                                    <td>
-                                                        <p class="font600 mb-1">Logo Creation</p>
-                                                        <div class="text-muted">Logo and business cards design</div>
-                                                    </td>
-                                                    <td class="text-center">1</td>
-                                                    <td class="text-right">$1.800,00</td>
-                                                    <td class="text-right">$1.800,00</td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="text-center">2</td>
-                                                    <td>
-                                                        <p class="font600 mb-1">Online Store Design &amp; Development</p>
-                                                        <div class="text-muted">Design/Development for all popular modern browsers</div>
-                                                    </td>
-                                                    <td class="text-center">1</td>
-                                                    <td class="text-right">$20.000,00</td>
-                                                    <td class="text-right">$20.000,00</td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="text-center">3</td>
-                                                    <td>
-                                                        <p class="font600 mb-1">App Design</p>
-                                                        <div class="text-muted">Promotional mobile application</div>
-                                                    </td>
-                                                    <td class="text-center">1</td>
-                                                    <td class="text-right">$3.200,00</td>
-                                                    <td class="text-right">$3.200,00</td>
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="4" class="font600 text-right">Subtotal</td>
-                                                    <td class="text-right">$25.000,00</td>
-                                                </tr>
-                                                <tr class="bg-light">
-                                                    <td colspan="4" class="font600 text-right">Vat Rate</td>
-                                                    <td class="text-right">20%</td>
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="4" class="font600 text-right">Vat Due</td>
-                                                    <td class="text-right">$5.000,00</td>
-                                                </tr>
-                                                <tr class="bg-green text-light">
-                                                    <td colspan="4" class="font700 text-right">Total Due</td>
-                                                    <td class="font700 text-right">$30.000,00</td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                        <p class="text-muted text-center">Thank you very much for doing business with us. We look forward to working with you again!</p>
-                                    </div>
+                            </div>
+                            <div class="col-sm-6 col-md-4">
+                                <div class="form-group">
+                                    <label>Peso</label>
+                                    <input id="pesobol" name="pesobol" type="number" step="any" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-4">
+                                <div class="form-group">
+                                    <label>Total Peso</label>
+                                    <input id="totpeso" name="totpeso" type="text" class="form-control" disabled>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-8">
+                                <div class="form-group">
+                                    <label>Dirección</label>
+                                    <input id="direc" name="direc" type="text" class="form-control" disabled>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-4">
+                                <div class="form-group">
+                                    <label>Teléfono</label>
+                                    <input id="telc" name="telc" type="text" class="form-control" disabled>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-4">
+                                <div class="form-group">
+                                    <label>Ciudad</label>
+                                    <input id="ciud" name="ciud" type="text" class="form-control" disabled>
+                                </div>
+                            </div>                                        
+                            <div class="col-sm-6 col-md-6">
+                                <div class="form-group">
+                                    <label>Email</label>
+                                    <input id="email" name="email" type="email" class="form-control" placeholder="Email" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Contacto</label>
+                                    <input id="conta" name="conta" type="text" class="form-control" placeholder="Nombre del contacto">
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-6">
+                                <div class="form-group">
+                                    <label>Teléfono</label>
+                                    <input id="teldco" name="teldco" type="text" class="form-control" placeholder="Teléfono del Contacto" required>
+                                </div>
+                            </div>
+                        
+                            <div class="col-md-12">
+                                <div class="form-group mb-0">
+                                    <label class="form-label">Acerca de la Recolección - Observaciones</label>
+                                    <textarea id="observ" name="observ" rows="5" class="form-control" placeholder="Acá puede colocar una descripción" ></textarea>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>                
+                    <div class="card-footer text-right">
+                        <button id="btnguardc" name="btnguardc" type="submit" class="btn btn-primary">Crear Recolección</button>
+                    </div>
+                </form>
             </div>
-        </div>        
+        </div>
     </div>
+    <div class="tab-pane fade" id="detalle-recolec" role="tabpanel">
+        <div class="row clearfix">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">#AB0017</h3>
+                        <div class="card-options">
+                            <button type="button" class="btn btn-primary"><i class="si si-printer"></i> Print Invoice</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row my-8">
+                            <div class="col-6">
+                                <p class="h3">Company</p>
+                                <address>
+                                Street Address<br>
+                                State, City<br>
+                                Region, Postal Code<br>
+                                ltd@example.com
+                                </address>
+                            </div>
+                            <div class="col-6 text-right">
+                                <p class="h3">Client</p>
+                                <address>
+                                Street Address<br>
+                                State, City<br>
+                                Region, Postal Code<br>
+                                ctr@example.com
+                                </address>
+                            </div>
+                        </div>
+                        <div class="table-responsive push">
+                            <table class="table table-bordered table-hover">
+                                <tr>
+                                    <th class="text-center width35"></th>
+                                    <th>Product</th>
+                                    <th class="text-center" style="width: 1%">Qnt</th>
+                                    <th class="text-right" style="width: 1%">Unit</th>
+                                    <th class="text-right" style="width: 1%">Amount</th>
+                                </tr>
+                                <tr>
+                                    <td class="text-center">1</td>
+                                    <td>
+                                        <p class="font600 mb-1">Logo Creation</p>
+                                        <div class="text-muted">Logo and business cards design</div>
+                                    </td>
+                                    <td class="text-center">1</td>
+                                    <td class="text-right">$1.800,00</td>
+                                    <td class="text-right">$1.800,00</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center">2</td>
+                                    <td>
+                                        <p class="font600 mb-1">Online Store Design &amp; Development</p>
+                                        <div class="text-muted">Design/Development for all popular modern browsers</div>
+                                    </td>
+                                    <td class="text-center">1</td>
+                                    <td class="text-right">$20.000,00</td>
+                                    <td class="text-right">$20.000,00</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center">3</td>
+                                    <td>
+                                        <p class="font600 mb-1">App Design</p>
+                                        <div class="text-muted">Promotional mobile application</div>
+                                    </td>
+                                    <td class="text-center">1</td>
+                                    <td class="text-right">$3.200,00</td>
+                                    <td class="text-right">$3.200,00</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" class="font600 text-right">Subtotal</td>
+                                    <td class="text-right">$25.000,00</td>
+                                </tr>
+                                <tr class="bg-light">
+                                    <td colspan="4" class="font600 text-right">Vat Rate</td>
+                                    <td class="text-right">20%</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" class="font600 text-right">Vat Due</td>
+                                    <td class="text-right">$5.000,00</td>
+                                </tr>
+                                <tr class="bg-green text-light">
+                                    <td colspan="4" class="font700 text-right">Total Due</td>
+                                    <td class="font700 text-right">$30.000,00</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <p class="text-muted text-center">Thank you very much for doing business with us. We look forward to working with you again!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="list-recolec" role="tabpanel">
+        <div class="table-responsive">
+            <div class="input-group mt-2">
+                <input type="text" class="form-control search" placeholder="Search...">
+            </div>
+            <table class="table card-table table-vcenter text-nowrap table_custom">
+                <thead>
+                    <tr class="">
+                        <th>Código</th>
+                        <th>Cliente</th>
+                        <th>Fecha</th>
+                        <th>Hora</th>
+                        <th>Tipo de Residuo</th>
+                        <th>Estatus</th>
+                        <th>Peso</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for recoleccion in recolecciones %}
+                    <tr class="">
+                        <td><span class="text-muted">{{ recoleccion.id }}</span></td>
+                        <td>{{ recoleccion.cliente_rel.razonSocial }}</td>
+                        <td>{{ recoleccion.fecha }}</td>
+                        <td>{{ recoleccion.hora }}</td>
+                        <td>{{ recoleccion.tipo_residuo.nombre }}</td>
+                        <td><span class="{{ recoleccion.estado.clase }}"></span> {{ recoleccion.estado.nombre }}</td>
+                        <td>{{ recoleccion.peso }} Kg.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const selCliente = document.getElementById('cliente_id');
+  const selTipo    = document.getElementById('tipo_residuo');
+
+  async function cargarTipos(clienteId) {
+    selTipo.innerHTML = '<option value="" disabled selected>Cargando…</option>';
+    try {
+      const r = await fetch(`/recolecciones/tiposresiduo/${clienteId}`);
+      const data = await r.json();
+      selTipo.innerHTML = '<option value="" disabled selected>Seleccione tipo de residuo…</option>';
+      data.forEach(tr => {
+        const opt = document.createElement('option');
+        opt.value = tr.id;        // guarda el código
+        opt.textContent = tr.nombre; // muestra el nombre
+        selTipo.appendChild(opt);
+      });
+    } catch (e) {
+      selTipo.innerHTML = '<option value="" disabled selected>Error al cargar</option>';
+      console.error(e);
+    }
+  }
+
+  if (selCliente && selCliente.value) cargarTipos(selCliente.value);
+  selCliente?.addEventListener('change', e => cargarTipos(e.target.value));
+});
+</script>
+<script>
+(function () {
+  const $cant  = document.getElementById('cantbol');
+  const $peso  = document.getElementById('pesobol');
+  const $total = document.getElementById('totpeso');
+  const form   = document.querySelector('#prog-recolec form') || document.querySelector('form');
+
+  function toNumber(v){ return parseFloat(String(v).replace(',', '.')); }
+  function isValid(n){ return !isNaN(n) && n > 0 && n <= 10000; }
+
+  function ensureFeedback(el){
+    let fb = el.parentElement.querySelector('.invalid-feedback');
+    if(!fb){
+      fb = document.createElement('div');
+      fb.className = 'invalid-feedback';
+      el.parentElement.appendChild(fb);
+    }
+    return fb;
+  }
+
+  function setValidity(el, ok, msg){
+    const fb = ensureFeedback(el);
+    if(ok){
+      el.classList.remove('is-invalid');
+      fb.textContent = '';
+    }else{
+      el.classList.add('is-invalid');
+      fb.textContent = msg || 'Valor inválido';
+    }
+  }
+
+  function actualizarTotal(){
+    const c = toNumber($cant.value);
+    const p = toNumber($peso.value);
+
+    setValidity($cant, isValid(c), 'Debe ser > 0 y ≤ 10.000');
+    setValidity($peso, isValid(p), 'Debe ser > 0 y ≤ 10.000');
+
+    if(isValid(c) && isValid(p)){
+      $total.value = (c * p).toFixed(2);
+    }else{
+      $total.value = '';
+    }
+  }
+
+  ['input','change','blur'].forEach(evt => {
+    $cant.addEventListener(evt, actualizarTotal);
+    $peso.addEventListener(evt, actualizarTotal);
+  });
+
+  if(form){
+    form.addEventListener('submit', function(e){
+      actualizarTotal();
+      // evita enviar si hay inválidos
+      if (form.querySelector('.is-invalid')){
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    });
+  }
+
+  actualizarTotal(); // por si hay valores cargados
+})();
+</script>
+
+
 {% endblock %}
 {% block scripts %}
 

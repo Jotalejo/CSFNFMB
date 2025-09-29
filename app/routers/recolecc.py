@@ -2,9 +2,11 @@ from fastapi import APIRouter, Depends, HTTPException, Request, Form
 from dependencies import templates
 from dependencies import get_db
 from sqlalchemy.orm import Session
-from typing import Annotated
+from typing import Annotated, List
 from fastapi.responses import RedirectResponse
 from services import RecoleccService, ClienteService
+from services.tiposresid import TipoResidService
+from schemas.Tiporesid import TipoResidOut
 
 router = APIRouter(
     prefix="/recolecciones",
@@ -26,3 +28,6 @@ async def get_recolecc(request: Request, db:Session=Depends(get_db)):
 #async  def add_recolecc():
 #    return "Grabando una recolección"
 
+@router.get("/tiposresiduo/{cliente_id}", response_model=List[TipoResidOut])
+def tipos_por_cliente(cliente_id: int, db: Session = Depends(get_db)):
+    return TipoResidService(db).list_by_cliente(cliente_id)

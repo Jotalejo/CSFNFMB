@@ -1,0 +1,41 @@
+<div class="container-fluid">
+  <div class="row my-3">
+    <div class="col-md-8">
+      <p class="h5 mb-1">Recolección #{{ r.id }}</p>
+      <div class="text-muted">
+        Fecha: {{ r.fecha }}{% if r.hora %} — Hora: {{ r.hora }}{% endif %}
+      </div>
+    </div>
+    <div class="col-md-4 text-md-right">
+      <span class="badge badge-info">{{ r.estado.nombre }}</span>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="row">
+    <div class="col-sm-6">
+      <p class="h6">Cliente</p>
+      <address class="mb-0">
+        <strong>{{ r.cliente_rel.razonSocial }}</strong><br>
+        {{ r.cliente_rel.direccion }}<br>
+        {{ r.cliente_rel.ciudad }}<br>
+        {{ r.cliente_rel.email }}
+      </address>
+    </div>
+    <div class="col-sm-6 text-sm-right">
+      <p class="h6">Detalle</p>
+      <div>Tipo residuo: <strong>{{ r.tipo_residuo.nombre }}</strong></div>
+      <div>Cant. bolsas: <strong>{{ r.cantresiduo }}</strong></div>
+      <div>Peso total: <strong>{{ r.peso }} kg</strong></div>
+      {% if r.codigobar %}<div>Código barras: {{ r.codigobar }}</div>{% endif %}
+      {% if r.firmarecolec %}<div>Firma entrega: {{ r.firmarecolec }}</div>{% endif %}
+      {% if r.lafirmaderecibo %}<div>Firma recibo: {{ r.lafirmaderecibo }}</div>{% endif %}
+    </div>
+  </div>
+
+  {% if r.observaciones %}
+    <hr>
+    <p class="mb-0"><strong>Observaciones:</strong><br>{{ r.observaciones }}</p>
+  {% endif %}
+</div>

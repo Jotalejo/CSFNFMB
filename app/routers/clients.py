@@ -6,6 +6,8 @@ from services import ClienteService, CiudadService, TipoResidService
 from sqlalchemy.orm import Session
 from typing import Annotated
 from fastapi.responses import RedirectResponse
+from models.Cliente import Cliente as ClienteModel   
+from models.Ciudad import Ciudad as CiudadModel
 
 # Ruta primaria para el cliente
 router = APIRouter(
@@ -91,4 +93,28 @@ async def get_client(cliente_id: int, request: Request, db:Session=Depends(get_d
                                                               "method": method,
                                                               "ciudades": ciudades,
                                                               "url_redirect": url_redirect})
+
+@router.get("/{cliente_id}/json")
+def cliente_json(cliente_id: int, db: Session = Depends(get_db)):
+    c = db.query(ClienteModel).filter(ClienteModel.id == cliente_id).first()
+    if not c:
+        raise HTTPException(status_code=404, detail="Cliente no encontrado")
+
+    ciudad_nombre = None
+    if getattr(c, "ciudad", None):
+        ciu = db.query(CiudadModel).get(c.ciudad)
+        ciudad_nombre = getattr(ciu, "nombre", None) if ciu else None
+
+    return {
+        "id": c.id,
+        "razonSocial": c.razonSocial,
+        "nit": c.nit,
+        "direccion": c.direccion,
+        "telefono": c.telefono,
+        "ciudad": c.ciudad,
+        "ciudad_nombre": ciudad_nombre,
+        "contacto": c.contacto,
+        "telefonoContacto": c.telefonoContacto,
+        "email": c.email,
+    }
 

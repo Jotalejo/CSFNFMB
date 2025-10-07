@@ -15,7 +15,6 @@
                 <div class="d-md-flex justify-content-between">
                     <ul class="nav nav-tabs b-none">
                         <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#prog-recolec">Programar Recolección</a></li>
-                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#detalle-recolec">Detalle</a></li>
                         <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#list-recolec">Lista de Recolecciones</a></li>
                     </ul>
                     <div class="d-flex align-items-center sort_stat">
@@ -43,14 +42,17 @@
     <div class="tab-pane fade show active" id="prog-recolec" role="tabpanel">
         <div class="row clearfix">
             <div class="col-12">
-                <form class="card">
+                <form class="card" method="post" action="/recolecciones/">
                     <div class="card-body">
                         <h3 class="card-title">Datos de Recolección</h3>
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label class="form-label">Cliente</label>
-                                    <select id="cliente_id" class="form-control custom-select">
+                                    <select id="selCliente" name="cliente_id" class="form-control custom-select" required>
+                                        {% set sel_id = selected_id if selected_id is defined else None %}
+                                        <!-- Placeholder por defecto  -->
+                                        <option value="" {% if not sel_id %}selected{% endif %} disabled hidden>Escoja el cliente…</option>
                                         {% for c in clientes %}
                                             <option value="{{ c.id }}">{{ c.razonSocial }}</option>
                                         {% endfor %}
@@ -65,26 +67,15 @@
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text"><i class="icon-calendar"></i></span>
                                                     </div>
-                                                    <input data-provide="datepicker" data-date-autoclose="true" class="form-control">
+                                                    <input data-date-autoclose="true" class="form-control" placeholder="dd/mm/aaaa" name="fecha" type="date" required>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-sm-6 col-md-4">
-                                        <div class="form-group">
-                                            <label>Hora</label>
-                                            <div class="input-group mb-3">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text"><i class="icon-clock"></i></span>
-                                                </div>
-                                                <input type="text" class="form-control time24" placeholder="Ej: 23:59" required>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    </div>                                    
                                     <div class="col-sm-6 col-md-4">
                                         <div class="form-group">
                                             <label class="form-label">Tipo de Residuo</label>
-                                            <select id="tipo_residuo" class="form-control custom-select">
+                                            <select id="selTipoResiduo" name="tipo_residuo_id" class="form-control custom-select">
                                                 <option value="" selected disabled>Seleccione tipo de residuo…</option>
                                             </select>
                                         </div>
@@ -94,19 +85,19 @@
                             <div class="col-sm-6 col-md-4">
                                 <div class="form-group">
                                     <label>Cantidad de Bolsas</label>
-                                    <input id="cantbol" name="cantbol" type="number" class="form-control" required>
+                                    <input id="cantbol" name="cantbol" type="number" step="any" min="1" max="10000" class="form-control" required>
                                 </div>
                             </div>
                             <div class="col-sm-6 col-md-4">
                                 <div class="form-group">
                                     <label>Peso</label>
-                                    <input id="pesobol" name="pesobol" type="number" step="any" class="form-control" required>
+                                    <input id="pesobol" name="pesobol" type="number" step="any" min="1" max="10000" class="form-control" required>
                                 </div>
                             </div>
                             <div class="col-sm-6 col-md-4">
                                 <div class="form-group">
                                     <label>Total Peso</label>
-                                    <input id="totpeso" name="totpeso" type="text" class="form-control" disabled>
+                                    <input id="totpeso" name="totpeso" type="number" class="form-control" readonly>
                                 </div>
                             </div>
                             <div class="col-sm-6 col-md-8">
@@ -141,7 +132,7 @@
                             </div>
                             <div class="col-sm-6 col-md-6">
                                 <div class="form-group">
-                                    <label>Teléfono</label>
+                                    <label>Teléfono (Contacto)</label>
                                     <input id="teldco" name="teldco" type="text" class="form-control" placeholder="Teléfono del Contacto" required>
                                 </div>
                             </div>
@@ -161,100 +152,6 @@
             </div>
         </div>
     </div>
-    <div class="tab-pane fade" id="detalle-recolec" role="tabpanel">
-        <div class="row clearfix">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">#AB0017</h3>
-                        <div class="card-options">
-                            <button type="button" class="btn btn-primary"><i class="si si-printer"></i> Print Invoice</button>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="row my-8">
-                            <div class="col-6">
-                                <p class="h3">Company</p>
-                                <address>
-                                Street Address<br>
-                                State, City<br>
-                                Region, Postal Code<br>
-                                ltd@example.com
-                                </address>
-                            </div>
-                            <div class="col-6 text-right">
-                                <p class="h3">Client</p>
-                                <address>
-                                Street Address<br>
-                                State, City<br>
-                                Region, Postal Code<br>
-                                ctr@example.com
-                                </address>
-                            </div>
-                        </div>
-                        <div class="table-responsive push">
-                            <table class="table table-bordered table-hover">
-                                <tr>
-                                    <th class="text-center width35"></th>
-                                    <th>Product</th>
-                                    <th class="text-center" style="width: 1%">Qnt</th>
-                                    <th class="text-right" style="width: 1%">Unit</th>
-                                    <th class="text-right" style="width: 1%">Amount</th>
-                                </tr>
-                                <tr>
-                                    <td class="text-center">1</td>
-                                    <td>
-                                        <p class="font600 mb-1">Logo Creation</p>
-                                        <div class="text-muted">Logo and business cards design</div>
-                                    </td>
-                                    <td class="text-center">1</td>
-                                    <td class="text-right">$1.800,00</td>
-                                    <td class="text-right">$1.800,00</td>
-                                </tr>
-                                <tr>
-                                    <td class="text-center">2</td>
-                                    <td>
-                                        <p class="font600 mb-1">Online Store Design &amp; Development</p>
-                                        <div class="text-muted">Design/Development for all popular modern browsers</div>
-                                    </td>
-                                    <td class="text-center">1</td>
-                                    <td class="text-right">$20.000,00</td>
-                                    <td class="text-right">$20.000,00</td>
-                                </tr>
-                                <tr>
-                                    <td class="text-center">3</td>
-                                    <td>
-                                        <p class="font600 mb-1">App Design</p>
-                                        <div class="text-muted">Promotional mobile application</div>
-                                    </td>
-                                    <td class="text-center">1</td>
-                                    <td class="text-right">$3.200,00</td>
-                                    <td class="text-right">$3.200,00</td>
-                                </tr>
-                                <tr>
-                                    <td colspan="4" class="font600 text-right">Subtotal</td>
-                                    <td class="text-right">$25.000,00</td>
-                                </tr>
-                                <tr class="bg-light">
-                                    <td colspan="4" class="font600 text-right">Vat Rate</td>
-                                    <td class="text-right">20%</td>
-                                </tr>
-                                <tr>
-                                    <td colspan="4" class="font600 text-right">Vat Due</td>
-                                    <td class="text-right">$5.000,00</td>
-                                </tr>
-                                <tr class="bg-green text-light">
-                                    <td colspan="4" class="font700 text-right">Total Due</td>
-                                    <td class="font700 text-right">$30.000,00</td>
-                                </tr>
-                            </table>
-                        </div>
-                        <p class="text-muted text-center">Thank you very much for doing business with us. We look forward to working with you again!</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="tab-pane fade" id="list-recolec" role="tabpanel">
         <div class="table-responsive">
             <div class="input-group mt-2">
@@ -270,8 +167,7 @@
                         <th>Tipo de Residuo</th>
                         <th>Estatus</th>
                         <th>Peso</th>
-                        <th></th>
-                        <th></th>
+                        <th>Acciones</th>  <!-- 👈 -->
                     </tr>
                 </thead>
                 <tbody>
@@ -284,6 +180,13 @@
                         <td>{{ recoleccion.tipo_residuo.nombre }}</td>
                         <td><span class="{{ recoleccion.estado.clase }}"></span> {{ recoleccion.estado.nombre }}</td>
                         <td>{{ recoleccion.peso }} Kg.</td>
+                        <td>
+                            <button type="button"
+                                    class="btn btn-sm btn-outline-primary btn-ver-detalle"
+                                    data-id="{{ recoleccion.id }}">
+                            <i class="fa fa-eye"></i>
+                            </button>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -291,10 +194,31 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="detalleModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Detalle de recolección</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="text-center py-5">Cargando…</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary" onclick="window.print()">Imprimir</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-  const selCliente = document.getElementById('cliente_id');
-  const selTipo    = document.getElementById('tipo_residuo');
+  const selCliente = document.getElementById('selCliente');
+  const selTipo    = document.getElementById('selTipoResiduo');
 
   async function cargarTipos(clienteId) {
     selTipo.innerHTML = '<option value="" disabled selected>Cargando…</option>';
@@ -382,6 +306,84 @@ document.addEventListener('DOMContentLoaded', () => {
   actualizarTotal(); // por si hay valores cargados
 })();
 </script>
+<script>
+(function () {
+  function setVal(sel, val) {
+    const el = document.querySelector(sel);
+    if (!el) return;
+    el.value = (val ?? '').toString();
+    // por si tienes listeners de input
+    el.dispatchEvent(new Event('input', { bubbles: true }));
+  }
+
+  async function cargarCliente(clienteId) {
+    try {
+      const res = await fetch(`/clientes/${clienteId}/json?ts=` + Date.now(), {
+        headers: { 'Accept': 'application/json' }
+      });
+      if (!res.ok) throw new Error('No se pudo cargar el cliente');
+      const c = await res.json();
+
+      setVal('#direc', c.direccion);
+      setVal('#telc', c.telefono);
+      setVal('#ciud', c.ciudad_nombre || c.ciudad); // muestra nombre si viene
+      setVal('#email', c.email);
+      setVal('#conta', c.contacto);
+      setVal('#teldco', c.telefonoContacto || c.telefono_contacto);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const sel = document.getElementById('selCliente');
+    if (!sel) return;
+
+    sel.addEventListener('change', function (e) {
+      const id = e.target.value;
+      if (id) cargarCliente(id);
+    });
+
+    // Si quieres precargar al primer cliente de la lista:
+    // if (sel.value) cargarCliente(sel.value);
+  });
+})();
+</script>
+<script>
+  $(function () {
+    $('.datepicker').datepicker({
+      format: 'yyyy-mm-dd',     // 👈 esto hace que envíe 2025-06-10
+      language: 'es',
+      autoclose: true,
+      todayHighlight: true
+    });
+  });
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    $(document).on('click', '.btn-ver-detalle', async function () {
+      const id = this.dataset.id;
+      const $modal = $('#detalleModal');
+      const $body  = $modal.find('.modal-body');
+
+      $body.html('<div class="text-center py-5">Cargando…</div>');
+      $modal.modal('show');
+
+      try {
+        // Devuelve HTML parcial
+        const res  = await fetch(`/recolecciones/detalle/${id}`, { headers: { 'X-Requested-With': 'fetch' }});
+        if (!res.ok) throw new Error('Error HTTP ' + res.status);
+        const html = await res.text();
+        $body.html(html);
+      } catch (err) {
+        console.error(err);
+        $body.html('<div class="alert alert-danger">No se pudo cargar el detalle.</div>');
+      }
+    });
+  });
+</script>
+
 
 
 {% endblock %}

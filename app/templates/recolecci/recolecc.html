@@ -168,6 +168,7 @@
                         <th>Estatus</th>
                         <th>Peso</th>
                         <th>Acciones</th>  <!-- 👈 -->
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -183,7 +184,9 @@
                         <td>
                             <button type="button"
                                     class="btn btn-sm btn-outline-primary btn-ver-detalle"
-                                    data-id="{{ recoleccion.id }}">
+                                    data-id="{{ recoleccion.id }}"
+                                    onclick='ver_manifiesto({{ recoleccion.id }})'
+                                    >
                             <i class="fa fa-eye"></i>
                             </button>
                         </td>
@@ -216,6 +219,11 @@
 </div>
 
 <script>
+
+    ver_manifiesto = function(id){
+        window.open('/recolecciones/manifiesto/'+id, '_blank');
+    }
+
 document.addEventListener('DOMContentLoaded', () => {
   const selCliente = document.getElementById('selCliente');
   const selTipo    = document.getElementById('selTipoResiduo');

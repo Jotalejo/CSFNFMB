@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Manifiesto de Recolección de Residuos</title>
+  <style>
+    body {
+      font-family: "Courier New", monospace;
+      font-size: 12px;
+      margin: 10px;
+      width: 80mm;
+    }
+    h1, h2 {
+      text-align: center;
+      margin: 5px 0;
+    }
+    .section {
+      margin-bottom: 10px;
+    }
+    .label {
+      font-weight: bold;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 5px;
+    }
+    th, td {
+      border: 1px solid #000;
+      padding: 4px;
+      text-align: left;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <img src="{{ empresa.logo_url }}" alt="Logo" style="max-width: 100%; height: auto;">
+  </div>
+
+  <h1>{{ empresa.nombre }}</h1>
+  <div class="section">
+    {{ empresa.direccion1 }}<br>
+    PBX: {{ empresa.pbx1 }}<br>
+    {{ empresa.ciudad1 }}<br>
+    {{ empresa.direccion2 }}<br>
+    PBX: {{ empresa.pbx2 }}<br>
+    {{ empresa.ciudad2 }}<br>
+    NIT: {{ empresa.nit }}<br>
+    {{ empresa.web }}
+  </div>
+
+  <h2>MANIFIESTO DE RECOLECCIÓN DE RESIDUOS</h2>
+
+  <div class="section">
+    <span class="label">Fecha:</span> {{ manifiesto.fecha }}<br>
+    <span class="label">Manifiesto:</span> {{ manifiesto.numero }}<br>
+    <span class="label">ID Cliente:</span> {{ cliente.id }}<br>
+    <span class="label">Cliente:</span> {{ cliente.nombre }}<br>
+    <span class="label">Dirección:</span> {{ cliente.direccion }}<br>
+    <span class="label">Ciudad:</span> {{ cliente.ciudad }}<br>
+    <span class="label">Frecuencia:</span> {{ cliente.frecuencia }}<br>
+    <span class="label">NIT Cliente:</span> {{ cliente.nit }}
+  </div>
+
+  <div class="section">
+    <span class="label">Operario:</span> {{ operario.nombre }}<br>
+    <span class="label">CC Operario:</span> {{ operario.cc }}<br>
+    <span class="label">Auxiliar:</span> {{ auxiliar.nombre }}<br>
+    <span class="label">CC Auxiliar:</span> {{ auxiliar.cc }}<br>
+    <span class="label">Vehículo:</span> {{ vehiculo.placa }}
+  </div>
+
+  <div class="section">
+    <span class="label">Residuos recolectados:</span>
+    <table>
+      <thead>
+        <tr>
+          <th>Residuo</th>
+          <th>Cant/Kg</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for residuo in residuos %}
+        <tr>
+          <td>{{ residuo.tipo }}</td>
+          <td>{{ residuo.cantidad }} / {{ residuo.kilos }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <br>
+    <span class="label">Total Cantidad:</span> {{ totales.cantidad }}<br>
+    <span class="label">Total Kilos:</span> {{ totales.kilos }}
+  </div>
+
+  <div class="section">
+    <span class="label">Cliente:</span> {{ cliente.firma_nombre }}<br>
+    <span class="label">CC:</span> {{ cliente.firma_cc }}
+  </div>
+
+  <div class="section">
+    <span class="label">Operario:</span> {{ operario.nombre }}<br>
+    <span class="label">CC:</span> {{ operario.cc }}
+  </div>
+
+  <div class="footer">
+    Documento generado por {{ empresa.nombre }}
+  </div>
+
+</body>
+</html>

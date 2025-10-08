@@ -101,7 +101,8 @@ def get_manifiesto(recoleccion_id: int, request: Request, db: Session = Depends(
     recoleccion = service.get_recoleccion_detallada(recoleccion_id)
     logo_url = "/static/assets/images/logo_gresab.png"
 
-    {
+    data = {
+        "request": request,
         "empresa": {
             "nombre": "DESCONT SAS ESP R-152-01",
             "direccion1": "Cr. 38A No. 48a-71",
@@ -148,4 +149,4 @@ def get_manifiesto(recoleccion_id: int, request: Request, db: Session = Depends(
         }
     }
 
-    return templates.TemplateResponse("/recolecci/manifiesto.html", {"request": request})
+    return templates.TemplateResponse("/recolecci/manifiesto.html", data)

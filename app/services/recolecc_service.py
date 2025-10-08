@@ -71,8 +71,8 @@ class RecoleccService:
                                      )
         self.db.add(db_recoleccion)
         self.db.commit()
-        self.db.refresh(rec)
-        return rec
+        self.db.refresh(recoleccion)
+        return recoleccion
 
     def update_recolecc(self, rec_id: int, data: RecolectCreate) -> Recoleccion:
         rec = self.get_recolecc_by_id(rec_id)

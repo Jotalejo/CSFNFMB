@@ -9,6 +9,7 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 from services import RecoleccService, ClienteService
 from services.tiposresid import TipoResidService
 from schemas.Tiporesid import TipoResidOut
+from models.Recoleccion import Recoleccion as RecoleccionModel
 
 router = APIRouter(
     prefix="/recolecciones",
@@ -150,3 +151,30 @@ def get_manifiesto(recoleccion_id: int, request: Request, db: Session = Depends(
     }
 
     return templates.TemplateResponse("/recolecci/manifiesto.html", data)
+
+@router.post("/")
+def crear_recoleccion(
+    request: Request,
+    cliente_id: int = Form(...),
+    fecha: date = Form(...),
+    tipo_residuo_id: List[int] = Form(...),
+    cantbol: List[float] = Form(...),
+    pesobol: List[float] = Form(...),
+    totpeso: Optional[List[float]] = Form(None),
+    observ: Optional[str] = Form(None),
+    db: Session = Depends(get_db),
+):
+    # estado por defecto = 1
+    for i in range(len(tipo_residuo_id)):
+        rec = RecoleccionModel(
+            cliente=cliente_id,
+            fecha=fecha,
+            tresiduo=tipo_residuo_id[i],
+            cantresiduo=cantbol[i],
+            peso=totpeso[i] if totpeso and i < len(totpeso) and totpeso[i] is not None else (cantbol[i]*pesobol[i]),
+            estado_id=1,
+            observaciones=observ
+        )
+        db.add(rec)
+    db.commit()
+    return RedirectResponse(url="/recolecciones/", status_code=303)

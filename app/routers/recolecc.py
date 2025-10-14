@@ -99,6 +99,8 @@ async def crear_recolecc(
 def get_manifiesto(recoleccion_id: int, request: Request, db: Session = Depends(get_db)):
     service = RecoleccService(db)
     recoleccion = service.get_recoleccion_detallada(recoleccion_id)
+    cliente = recoleccion.cliente_rel
+
     logo_url = "/static/assets/images/logo_gresab.png"
 
     data = {
@@ -119,16 +121,7 @@ def get_manifiesto(recoleccion_id: int, request: Request, db: Session = Depends(
             "fecha": "2019-12-06 13:04:26",
             "numero": "3323618"
         },
-        "cliente": {
-            "id": "244",
-            "nombre": "COOPERATIVA DE SERVICIOS FUNERARIOS DE BARRANCABERMEJA \"COSERFUN\"",
-            "direccion": "Carrera 13 No 49 - 20",
-            "ciudad": "Barrancabermeja",
-            "frecuencia": "Recoger los viernes",
-            "nit": "829000212",
-            "firma_nombre": "David Carreño",
-            "firma_cc": "1007414515"
-        },
+        "cliente": cliente,
         "operario": {
             "nombre": "Marlon Cardona Angarita",
             "cc": "1098657224"
@@ -144,8 +137,8 @@ def get_manifiesto(recoleccion_id: int, request: Request, db: Session = Depends(
             {"tipo": "Biosanitarios", "cantidad": 1, "kilos": 56.00}
         ],
         "totales": {
-            "cantidad": 1,
-            "kilos": 56.00
+            "cantidad": recoleccion.cantresiduo,
+            "kilos": recoleccion.peso
         }
     }
 

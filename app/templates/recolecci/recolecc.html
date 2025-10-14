@@ -40,117 +40,124 @@
 </div>    
 <div class="tab-content px-0">
     <div class="tab-pane fade show active" id="prog-recolec" role="tabpanel">
-        <div class="row clearfix">
-            <div class="col-12">
-                <form class="card" method="post" action="/recolecciones/">
-                    <div class="card-body">
-                        <h3 class="card-title">Datos de Recolección</h3>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label class="form-label">Cliente</label>
-                                    <select id="selCliente" name="cliente_id" class="form-control custom-select" required>
-                                        {% set sel_id = selected_id if selected_id is defined else None %}
-                                        <!-- Placeholder por defecto  -->
-                                        <option value="" {% if not sel_id %}selected{% endif %} disabled hidden>Escoja el cliente…</option>
-                                        {% for c in clientes %}
-                                            <option value="{{ c.id }}">{{ c.razonSocial }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-6 col-md-4">
-                                        <div class="form-group">
-                                            <label>Fecha de Recolección</label>
-                                            <div class="form-group">
-                                                <div class="input-group">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text"><i class="icon-calendar"></i></span>
-                                                    </div>
-                                                    <input data-date-autoclose="true" class="form-control" placeholder="dd/mm/aaaa" name="fecha" type="date" required>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>                                    
-                                    <div class="col-sm-6 col-md-4">
-                                        <div class="form-group">
-                                            <label class="form-label">Tipo de Residuo</label>
-                                            <select id="selTipoResiduo" name="tipo_residuo_id" class="form-control custom-select">
-                                                <option value="" selected disabled>Seleccione tipo de residuo…</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>                                                                                      
-                            </div>
-                            <div class="col-sm-6 col-md-4">
-                                <div class="form-group">
-                                    <label>Cantidad de Bolsas</label>
-                                    <input id="cantbol" name="cantbol" type="number" step="any" min="1" max="10000" class="form-control" required>
-                                </div>
-                            </div>
-                            <div class="col-sm-6 col-md-4">
-                                <div class="form-group">
-                                    <label>Peso</label>
-                                    <input id="pesobol" name="pesobol" type="number" step="any" min="1" max="10000" class="form-control" required>
-                                </div>
-                            </div>
-                            <div class="col-sm-6 col-md-4">
-                                <div class="form-group">
-                                    <label>Total Peso</label>
-                                    <input id="totpeso" name="totpeso" type="number" class="form-control" readonly>
-                                </div>
-                            </div>
-                            <div class="col-sm-6 col-md-8">
-                                <div class="form-group">
-                                    <label>Dirección</label>
-                                    <input id="direc" name="direc" type="text" class="form-control" disabled>
-                                </div>
-                            </div>
-                            <div class="col-sm-6 col-md-4">
-                                <div class="form-group">
-                                    <label>Teléfono</label>
-                                    <input id="telc" name="telc" type="text" class="form-control" disabled>
-                                </div>
-                            </div>
-                            <div class="col-sm-6 col-md-4">
-                                <div class="form-group">
-                                    <label>Ciudad</label>
-                                    <input id="ciud" name="ciud" type="text" class="form-control" disabled>
-                                </div>
-                            </div>                                        
-                            <div class="col-sm-6 col-md-6">
-                                <div class="form-group">
-                                    <label>Email</label>
-                                    <input id="email" name="email" type="email" class="form-control" placeholder="Email" required>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Contacto</label>
-                                    <input id="conta" name="conta" type="text" class="form-control" placeholder="Nombre del contacto">
-                                </div>
-                            </div>
-                            <div class="col-sm-6 col-md-6">
-                                <div class="form-group">
-                                    <label>Teléfono (Contacto)</label>
-                                    <input id="teldco" name="teldco" type="text" class="form-control" placeholder="Teléfono del Contacto" required>
-                                </div>
-                            </div>
-                        
-                            <div class="col-md-12">
-                                <div class="form-group mb-0">
-                                    <label class="form-label">Acerca de la Recolección - Observaciones</label>
-                                    <textarea id="observ" name="observ" rows="5" class="form-control" placeholder="Acá puede colocar una descripción" ></textarea>
-                                </div>
-                            </div>
+      <div class="row clearfix">
+        <div class="col-12">
+          <form class="card" method="post" action="/recolecciones/">
+            <div class="card-body">
+              <h3 class="card-title">Datos de Recolección</h3>
+
+              <!-- Cliente y fecha -->
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="form-label">Cliente</label>
+                    <select id="selCliente" name="cliente_id" class="form-control custom-select" required>
+                      <option value="" selected disabled hidden>Escoja el cliente…</option>
+                      {% for c in clientes %}
+                        <option value="{{ c.id }}">{{ c.razonSocial }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-6 col-md-4">
+                      <div class="form-group">
+                        <label>Fecha de Recolección</label>
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="icon-calendar"></i></span>
+                          </div>
+                          <input class="form-control" name="fecha" type="date" required>
                         </div>
+                      </div>
                     </div>
-                    <div class="card-footer text-right">
-                        <button id="btnguardc" name="btnguardc" type="submit" class="btn btn-primary">Crear Recolección</button>
-                    </div>
-                </form>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Detalle de residuos (múltiples filas) -->
+              <div class="row">
+                <div class="col-12">
+                  <label class="form-label d-flex align-items-center justify-content-between">
+                    <span>Detalle de residuos</span>
+                    <button type="button" id="btnAddRes" class="btn btn-outline-primary btn-sm" disabled>
+                      + Agregar residuo
+                    </button>
+                  </label>
+                  <div class="table-responsive">
+                    <table class="table table-bordered mb-2" id="tablaResiduos">
+                      <thead>
+                        <tr>
+                          <th style="width: 38%">Tipo de Residuo</th>
+                          <th style="width: 18%">Cantidad</th>
+                          <th style="width: 18%">Peso (kg)</th>
+                          <th style="width: 18%">Total (kg)</th>
+                          <th style="width: 8%"></th>
+                        </tr>
+                      </thead>
+                      <tbody id="residuosBody">
+                        <!-- filas dinámicas aquí -->
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="text-right">
+                    <strong>Peso total:</strong> <span id="granTotal">0.00</span> kg
+                  </div>
+                </div>
+              </div>
+
+              <!-- Datos del cliente (autocompletados al elegir cliente) -->
+              <div class="row mt-3">
+                <div class="col-sm-6 col-md-8">
+                  <div class="form-group">
+                    <label>Dirección</label>
+                    <input id="direc" type="text" class="form-control" disabled>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                  <div class="form-group">
+                    <label>Teléfono</label>
+                    <input id="telc" type="text" class="form-control" disabled>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                  <div class="form-group">
+                    <label>Ciudad</label>
+                    <input id="ciud" type="text" class="form-control" disabled>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-6">
+                  <div class="form-group">
+                    <label>Email</label>
+                    <input id="email" name="email" type="email" class="form-control" placeholder="Email" required>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Contacto</label>
+                    <input id="conta" name="conta" type="text" class="form-control" placeholder="Nombre del contacto">
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-6">
+                  <div class="form-group">
+                    <label>Teléfono (Contacto)</label>
+                    <input id="teldco" name="teldco" type="text" class="form-control" placeholder="Teléfono del Contacto" required>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group mb-0">
+                    <label class="form-label">Acerca de la Recolección - Observaciones</label>
+                    <textarea id="observ" name="observ" rows="5" class="form-control" placeholder="Acá puede colocar una descripción"></textarea>
+                  </div>
+                </div>
+              </div>
             </div>
+
+            <div class="card-footer text-right">
+              <button id="btnguardc" name="btnguardc" type="submit" class="btn btn-primary">Crear Recolección</button>
+            </div>
+          </form>
         </div>
+      </div>
     </div>
     <div class="tab-pane fade" id="list-recolec" role="tabpanel">
         <div class="table-responsive">
@@ -197,6 +204,31 @@
         </div>
     </div>
 </div>
+
+<!-- Template de fila -->
+    <template id="tplResiduo">
+      <tr>
+        <td>
+          <select name="tipo_residuo_id[]" class="form-control selTipo" required>
+            <option value="" selected disabled>Seleccione…</option>
+          </select>
+        </td>
+        <td>
+          <input type="number" name="cantbol[]" class="form-control cant" min="1" max="10000" step="any" required>
+          <div class="invalid-feedback"></div>
+        </td>
+        <td>
+          <input type="number" name="pesobol[]" class="form-control peso" min="1" max="10000" step="any" required>
+          <div class="invalid-feedback"></div>
+        </td>
+        <td>
+          <input type="number" name="totpeso[]" class="form-control total" readonly>
+        </td>
+        <td class="text-center">
+          <button type="button" class="btn btn-sm btn-danger btnDel" title="Eliminar fila">&times;</button>
+        </td>
+      </tr>
+    </template>
 
 <div class="modal fade" id="detalleModal" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
@@ -392,7 +424,147 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 </script>
 
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  const selCliente   = document.getElementById('selCliente');
+  const btnAdd       = document.getElementById('btnAddRes');
+  const tbody        = document.getElementById('residuosBody');
+  const tpl          = document.getElementById('tplResiduo');
+  const lblGranTotal = document.getElementById('granTotal');
 
+  let tiposCache = []; // [{id, nombre}, ...]
+
+  function toNum(v){ return parseFloat(String(v).replace(',', '.')); }
+  function isValid(n){ return !isNaN(n) && n > 0 && n <= 10000; }
+
+  function setInvalid(input, msg){
+    const fb = input.parentElement.querySelector('.invalid-feedback');
+    if(!isValid(toNum(input.value))){
+      input.classList.add('is-invalid');
+      if (fb) fb.textContent = msg || 'Debe ser > 0 y ≤ 10.000';
+    }else{
+      input.classList.remove('is-invalid');
+      if (fb) fb.textContent = '';
+    }
+  }
+
+  function calcRowTotal(tr){
+    const cant  = tr.querySelector('.cant');
+    const peso  = tr.querySelector('.peso');
+    const total = tr.querySelector('.total');
+
+    setInvalid(cant, 'Cantidad inválida (1..10000)');
+    setInvalid(peso, 'Peso inválido (1..10000)');
+
+    const c = toNum(cant.value);
+    const p = toNum(peso.value);
+
+    total.value = (isValid(c) && isValid(p)) ? (c * p).toFixed(2) : '';
+    calcGrandTotal();
+  }
+
+  function calcGrandTotal(){
+    let sum = 0;
+    tbody.querySelectorAll('.total').forEach(inp => {
+      const v = toNum(inp.value);
+      if(!isNaN(v)) sum += v;
+    });
+    lblGranTotal.textContent = sum.toFixed(2);
+  }
+
+  function fillTipos(select){
+    select.innerHTML = '<option value="" selected disabled>Seleccione…</option>';
+    tiposCache.forEach(t => {
+      const opt = document.createElement('option');
+      opt.value = t.id;
+      opt.textContent = t.nombre;
+      select.appendChild(opt);
+    });
+  }
+
+  function addRow(){
+    const node = tpl.content.firstElementChild.cloneNode(true);
+    fillTipos(node.querySelector('.selTipo'));
+
+    node.querySelector('.cant').addEventListener('input', () => calcRowTotal(node));
+    node.querySelector('.peso').addEventListener('input', () => calcRowTotal(node));
+    node.querySelector('.btnDel').addEventListener('click', () => {
+      node.remove();
+      calcGrandTotal();
+      if (tbody.children.length === 0) addRow(); // deja al menos 1 fila
+    });
+
+    tbody.appendChild(node);
+  }
+
+  async function cargarTiposPorCliente(clienteId){
+    // reset
+    tbody.innerHTML = '';
+    lblGranTotal.textContent = '0.00';
+    btnAdd.disabled = true;
+
+    if(!clienteId) return;
+
+    try {
+      const r = await fetch(`/recolecciones/tiposresiduo/${clienteId}?_ts=${Date.now()}`);
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const data = await r.json(); // [{id, nombre}]
+      tiposCache = data.map(d => ({id: d.id, nombre: d.nombre}));
+      btnAdd.disabled = (tiposCache.length === 0);
+      if (tiposCache.length > 0) addRow(); // agrega primera fila
+    } catch (e) {
+      console.error('Error cargando tipos:', e);
+      tiposCache = [];
+      btnAdd.disabled = true;
+    }
+  }
+
+  async function cargarDatosCliente(clienteId){
+    try {
+      const res = await fetch(`/clientes/${clienteId}/json?ts=${Date.now()}`, { headers: { 'Accept':'application/json' }});
+      if(!res.ok) return;
+      const c = await res.json();
+      setVal('#direc',  c.direccion);
+      setVal('#telc',   c.telefono);
+      setVal('#ciud',   c.ciudad_nombre || c.ciudad);
+      setVal('#email',  c.email);
+      setVal('#conta',  c.contacto);
+      setVal('#teldco', c.telefonoContacto || c.telefono_contacto);
+    } catch(e){
+      console.warn('No se pudieron cargar datos del cliente', e);
+    }
+  }
+
+  function setVal(sel, val){
+    const el = document.querySelector(sel);
+    if (el) {
+      el.value = (val ?? '').toString();
+      el.dispatchEvent(new Event('input', {bubbles:true}));
+    }
+  }
+
+  // ✅ AHORA SÍ: conectar el botón “Agregar residuo”
+  if (btnAdd) {
+    btnAdd.addEventListener('click', function(e){
+      e.preventDefault();
+      if (!btnAdd.disabled) addRow();
+    });
+  }
+
+  // Cuando cambia el cliente
+  selCliente?.addEventListener('change', (e) => {
+    const id = e.target.value;
+    cargarTiposPorCliente(id);
+    cargarDatosCliente(id);
+  });
+
+  // Si ya hay cliente seleccionado al cargar
+  if (selCliente && selCliente.value) {
+    cargarTiposPorCliente(selCliente.value);
+    cargarDatosCliente(selCliente.value);
+  }
+});
+</script>
 
 {% endblock %}
 {% block scripts %}

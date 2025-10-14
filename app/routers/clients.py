@@ -116,5 +116,6 @@ def cliente_json(cliente_id: int, db: Session = Depends(get_db)):
         "contacto": c.contacto,
         "telefonoContacto": c.telefonoContacto,
         "email": c.email,
+        "observaciones": c.observaciones,  # 👈 añadir
     }
 

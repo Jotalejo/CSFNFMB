@@ -6,3 +6,5 @@ from .auth_service import AuthService
 from .clienpot import ClipotService
 from .resclipot import ResCliPotService
 from .tiposresid import TipoResidService
+from .logistica_service import LogisticaService
+from .frecuencia_service import FrecuenciaService

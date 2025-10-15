@@ -151,18 +151,52 @@
     }
 
     function activarModal2(id) {
+    const $modal = $('#MdlGestRescli');
 
-        fetch('/residuoscli/cliente/' + id)
-            .then(response => response.text())
-            .then(data => {
-                $('#MdlGestRescli').html(data);
-                const rform = document.getElementById("residuoForm");
-                rform.addEventListener("submit", send_json);
-                $('#MdlGestRescli').modal('show');
-            })
-            .catch(error => {
-                console.error("Error al cargar los datos del residuo:", error);
-            });
+    // Opcional: loader rápido
+    $modal.html(
+        '<div class="modal-dialog" role="document">' +
+        '<div class="modal-content">' +
+            '<div class="modal-body text-center p-5">' +
+            '<div class="spinner-border" role="status"></div>' +
+            '<div class="mt-2">Cargando…</div>' +
+            '</div>' +
+        '</div>' +
+        '</div>'
+    );
+
+    // Cargar contenido del modal desde tu endpoint
+    fetch('/residuoscli/cliente/' + id)
+        .then(r => {
+        if (!r.ok) throw new Error('Error al cargar el modal');
+        return r.text();
+        })
+        .then(html => {
+        // Insertar el HTML del modal
+        $modal.html(html);
+
+        // ⚠️ Si tu modal NUEVO no tiene #residuoForm, NO intentes engancharlo.
+        const rform = document.getElementById('residuoForm');
+        if (rform && typeof send_json === 'function') {
+            rform.addEventListener('submit', send_json);
+        }
+
+        // SUGERENCIA: pasa el cliente_id como data-atributo para tu JS de frecuencia
+        // <div id="MdlGestRescli" class="modal fade" data-cliente-id="{{ id }}">
+        $modal.attr('data-cliente-id', id);
+
+        // Mostrar modal
+        $modal.modal('show');
+
+        // Si tienes precarga de frecuencia:
+        if (typeof precargarFrecuencia === 'function') {
+            precargarFrecuencia(id);
+        }
+        })
+        .catch(err => {
+        console.error(err);
+        alert('No se pudo abrir el modal');
+        });
     }
 
     function activarModal(id){

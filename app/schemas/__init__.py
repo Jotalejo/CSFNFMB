@@ -7,3 +7,4 @@ from .Clienpot import *
 from .Citas import *
 from .Resclipot import *
 from .Tiporesid import *
+from .Frecuencia import *

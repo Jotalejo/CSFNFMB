@@ -1,5 +1,3 @@
-
-
 from .Cliente import Cliente
 from .Ciudad import Ciudad
 from .ResiduoCli import ResiduosCli
@@ -13,3 +11,7 @@ from .Logispot import Logispot
 from .TipoVisita import TipoVisita
 from .TipoGen import TipoGen
 from .ResiduoClipot import ResiduosClientePotencial
+from .Logistica import Logistica
+from .FrecuenciaRec import FrecuenciaRec
+from .TipoFrecuencia import TipoFrecuencia
+

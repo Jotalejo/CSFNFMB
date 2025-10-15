@@ -19,3 +19,4 @@ class Cliente(Base):
     observaciones = Column("observ_cli", String(200))
     recolecciones = relationship("Recoleccion", back_populates="cliente_rel")
     residuos = relationship("ResiduosCli", back_populates="cliente")
+ #   cliente = relationship("Cliente", back_populates="frecuencias")

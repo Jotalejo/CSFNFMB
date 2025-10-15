@@ -58,9 +58,9 @@
                                                 <input id="telefonoContacto" name="telefonoContacto" type="text" class="form-control" required value="{{cliente.telefonoContacto if cliente is not none else ""}}">
                                             </div>
                                             <div class="form-group">
-                                                <label>Observaciones</label>
-                                                <textarea id="observaciones" name="observaciones" class="form-control" rows="5" cols="30" required value="{{cliente.observaciones if cliente is not none else ""}}"></textarea>
-                                            </div>                                    
+                                                <label for="observaciones">Observaciones</label>
+                                                <textarea id="observaciones" name="observaciones" class="form-control" rows="4">{{ cliente.observaciones or '' }}</textarea>
+                                            </div>
                                             <br>
                                             <button id="btnguardc" name="btnguardc" type="submit" class="btn btn-primary">{{ "Crear" if cliente is none or cliente.id is none else "Guardar" }}</button>
                                         </div>

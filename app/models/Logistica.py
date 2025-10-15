@@ -1,12 +1,12 @@
-'''
-logística
+from sqlalchemy import Column, Integer, String, Float
+from .base import Base
 
-'cod_logi', 'int', 'NO', 'PRI', NULL, 'auto_increment'
-'codcli_logi', 'int', 'NO', 'MUL', NULL, ''
-'frecuenciarec_logi', 'int', 'YES', '', NULL, ''
-'capacvehiculo_logi', 'int', 'YES', '', NULL, ''
-'distancia_logi', 'double', 'YES', '', NULL, ''
-'observ_logi', 'varchar(200)', 'YES', '', NULL, ''
+class Logistica(Base):
+    __tablename__ = "logistica"
 
-
-'''
+    id = Column("cod_logi", Integer, primary_key=True, autoincrement=True)
+    cliente_id = Column("codcli_logi", Integer, nullable=False)  # FK si la tienes
+    frecuencia = Column("frecuenciarec_logi", String(50))        # resumen humano
+    capacidad_vehiculo = Column("capacvehiculo_logi", Integer)   # si quieres guardar aquí
+    distancia = Column("distancia_logi", Float)
+    observ = Column("observ_logi", String(200))                  # aquí guardamos JSON (trunca si >200)

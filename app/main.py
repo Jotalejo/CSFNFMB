@@ -2,7 +2,8 @@ from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse, RedirectResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 from dependencies import get_db
-from routers import clients, residuoscli, recolecc, usuarios, crm, tiposresid, certificado, clienpot
+from routers import clients, residuoscli, recolecc, usuarios, crm, tiposresid, certificado, clienpot, frecuencia
+
 
 from dependencies import templates
 from jose import jwt, JWTError
@@ -38,6 +39,8 @@ app.include_router(certificado.router)
 # Clientes potenciales
 app.include_router(clienpot.router)
 
+# Frecuencia
+app.include_router(frecuencia.router)
 
 # Rutas públicas (exactas) y prefijos (estáticos)
 PUBLIC_EXACT = {"/", "/usuarios/login",

@@ -24,11 +24,30 @@ async def get_clients(request: Request, db:Session=Depends(get_db)):
     clientes = service.get_clientes()
     return templates.TemplateResponse("/clientes/search.html", {"request": request, "clientes": clientes} )
 
-@router.get("/json")
+@router.get("/json1")
 async def get_clients_json(db:Session=Depends(get_db)):
     service = ClienteService(db)
     clientes = service.get_clientes()
     return {"data":clientes}
+
+@router.get("/json")
+async def get_clients_json(db: Session = Depends(get_db)):
+    service = ClienteService(db)
+    clientes = service.get_clientes()  # ahora devuelve TODOS por defecto
+
+    data = [
+        {
+            "id": c.id,
+            "razonSocial": c.razonSocial,
+            "nit": c.nit,
+            "contacto": c.contacto,
+            "telefono": c.telefono,
+            "observaciones": getattr(c, "observaciones", None),
+        }
+        for c in clientes
+    ]
+    return {"data": data}
+
 
 # Boton que había de buscar cliente
 @router.post("/search")

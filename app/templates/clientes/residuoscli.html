@@ -42,64 +42,81 @@
                                         data-redirect="{{url_redirect}}">
                                 <div class="card-body demo-card">                                
                                     <div class="row clearfix">
-                                        <div class="form-group col-lg-4 col-md-12">
-                                            <label>Razón Social</label>
-                                            <input id="razonSocial" name="razonSocial" type="text" class="form-control" required value="{{cliente.razonSocial if cliente is not none else ""}}" disabled>
+                                        <div class="col-lg-12">
+                                            <h5 class="mb-2">Frecuencia de recolección</h5>
                                         </div>
-                                    </div>
-                                    <div class="row clearfix">
+
                                         <div class="col-lg-4 col-md-12">
-                                            <label>Tipos de Residuo</label>
-                                            <div class="form-group multiselect_div">
-                                                <select id="multiselect4-filter" name="multiselect4[]" class="multiselect multiselect-custom">
-                                                    <option selected disabled>Seleccione</option>
-                                                    <option value="biodeg">Biodegradables</option>
-                                                    <option value="recicl">Recicables</option>
-                                                    <option value="inertes">Inertes</option>
-                                                    <option value="ordina">Ordinarios Comunes</option>
-                                                    <option value="biosanit">Biosanitarios</option>
-                                                    <option value="anatomo">Anatomopatológicos</option>
-                                                    <option value="cortop">Cortopunzantes</option>
-                                                    <option value="danim">De animales</option>
-                                                    <option value="farma">Fármacos</option>
-                                                    <option value="reactiv">Reactivos</option>
-                                                    <option value="acusad">Aceites usados</option>
-                                                    <option value="radioact">Radioactivos</option>
-                                                </select>
+                                            <label>Tipo de frecuencia</label>
+                                            <div class="form-group">
+                                            <div class="custom-controls-stacked">
+                                                <label class="custom-control custom-radio">
+                                                <input type="radio" name="freq_tipo" value="diaria" class="custom-control-input" checked>
+                                                <span class="custom-control-label">Diaria</span>
+                                                </label>
+                                                <label class="custom-control custom-radio">
+                                                <input type="radio" name="freq_tipo" value="semanal" class="custom-control-input">
+                                                <span class="custom-control-label">Semanal</span>
+                                                </label>
+                                                <label class="custom-control custom-radio">
+                                                <input type="radio" name="freq_tipo" value="mensual" class="custom-control-input">
+                                                <span class="custom-control-label">Mensual</span>
+                                                </label>
+                                            </div>
                                             </div>
                                         </div>
-                                        <div class="col-lg-4 col-md-12">
-                                            <label>SubClase de Residuo</label>
-                                            <select id="subclase" name="subclase" class="form-control">
-                                                {% for ciudad in ciudades %}
-                                                    <option value="{{ciudad.id}}" {{"selected" if cliente.ciudad == ciudad.id else "" }}>{{ ciudad.nombre }}</option>
-                                                {% endfor %}
-                                            </select>
+
+                                        <div class="col-lg-4 col-md-12 freq-semanal d-none">
+                                            <label>Días de la semana</label>
+                                            <div class="form-group">
+                                            <div class="custom-controls-stacked">
+                                                <label class="custom-control custom-checkbox"><input type="checkbox" value="1" class="custom-control-input dow"><span class="custom-control-label">Lunes</span></label>
+                                                <label class="custom-control custom-checkbox"><input type="checkbox" value="2" class="custom-control-input dow"><span class="custom-control-label">Martes</span></label>
+                                                <label class="custom-control custom-checkbox"><input type="checkbox" value="3" class="custom-control-input dow"><span class="custom-control-label">Miércoles</span></label>
+                                                <label class="custom-control custom-checkbox"><input type="checkbox" value="4" class="custom-control-input dow"><span class="custom-control-label">Jueves</span></label>
+                                                <label class="custom-control custom-checkbox"><input type="checkbox" value="5" class="custom-control-input dow"><span class="custom-control-label">Viernes</span></label>
+                                                <label class="custom-control custom-checkbox"><input type="checkbox" value="6" class="custom-control-input dow"><span class="custom-control-label">Sábado</span></label>
+                                                <label class="custom-control custom-checkbox"><input type="checkbox" value="0" class="custom-control-input dow"><span class="custom-control-label">Domingo</span></label>
+                                            </div>
+                                            <small class="text-muted">Selecciona los días en que pasas.</small>
+                                            </div>
                                         </div>
+
+                                        <div class="col-lg-4 col-md-12 freq-mensual d-none">
+                                            <label>Días del mes</label>
+                                            <input type="text" id="dom_list" class="form-control" placeholder="Ej: 1, 10, 20, 30">
+                                            <small class="text-muted">Lista separada por comas (1-31).</small>
+                                        </div>
+
                                         <div class="col-lg-4 col-md-12">
-                                            <label>Clase de Residuo</label>
-                                            <select id="clase" name="clase" class="form-control">
-                                                <option value="cheese">Cheese</option>
-                                                <option value="tomatoes">Tomatoes</option>
-                                                <option value="mozarella">Mozzarella</option>
-                                                <option value="mushrooms" disabled="disabled">Mushrooms</option>
-                                                <option value="pepperoni" disabled="disabled">Pepperoni</option>
-                                                <option value="onions" disabled="disabled">Onions</option>
-                                            </select>                                        
+                                            <label>Hora preferida</label>
+                                            <input type="time" id="hora_pref" class="form-control" step="60" value="08:00">
+                                            <small class="text-muted">Ventana de atención opcional:</small>
+                                            <div class="form-row mt-1">
+                                            <div class="col">
+                                                <input type="time" id="ventana_ini" class="form-control" placeholder="Desde">
+                                            </div>
+                                            <div class="col">
+                                                <input type="time" id="ventana_fin" class="form-control" placeholder="Hasta">
+                                            </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-4 col-md-12">
+                                            <label>Veces por semana/mes</label>
+                                            <input type="number" id="veces" class="form-control" min="1" max="30" value="1">
+                                            <small class="text-muted">Interpreta según el tipo (semanal/mensual).</small>
+                                        </div>
+
+                                        <div class="col-lg-4 col-md-12">
+                                            <label>Capacidad estimada por visita (Kg)</label>
+                                            <input type="number" id="cap_estimada" class="form-control" min="1" max="100000" step="0.1">
                                         </div>
                                     </div>
-                                    <div class="row clearfix">
-                                        <div class="col-lg-4 col-md-12">
-                                            <label>Peso Promedio</label>
-                                            <input id="pesopro" name="pesopro" type="number" class="form-control" required>
-                                        </div>
-                                        <div class="col-lg-4 col-md-12">
-                                            <label>Número de Bolsas</label>
-                                            <input id="numbol" name="numbol" type="number" class="form-control" required>
-                                        </div>
-                                        <div class="col-lg-4 col-md-12">
-                                            <label>Cantidad</label>
-                                            <input id="catid" name="catid" type="number" class="form-control" disabled>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <small class="text-muted">Se guardará un resumen en <b>frecuenciarec_logi</b> y los detalles en JSON dentro de <b>observ_logi</b>.</small>
                                         </div>
                                     </div>
                                     <br>
@@ -139,3 +156,175 @@
         form.addEventListener("submit", send_json);
     })
 </script>
+
+<script>
+(function(){
+  const $tipo = () => document.querySelector('input[name="freq_tipo"]:checked')?.value || 'diaria';
+  const $semanal = document.querySelector('.freq-semanal');
+  const $mensual = document.querySelector('.freq-mensual');
+
+  function togglePanels(){
+    const t = $tipo();
+    $semanal.classList.toggle('d-none', t !== 'semanal');
+    $mensual.classList.toggle('d-none', t !== 'mensual');
+  }
+
+  document.querySelectorAll('input[name="freq_tipo"]').forEach(r => {
+    r.addEventListener('change', togglePanels);
+  });
+  togglePanels();
+
+  async function guardarFrecuencia(e){
+    e.preventDefault();
+
+    const tipo = $tipo();
+    const hora_pref = document.getElementById('hora_pref').value || null;
+    const ventana_ini = document.getElementById('ventana_ini').value || null;
+    const ventana_fin = document.getElementById('ventana_fin').value || null;
+    const veces = parseInt(document.getElementById('veces').value||'1', 10);
+    const cap_estimada = parseFloat(document.getElementById('cap_estimada').value||'0');
+
+    let dias_semana = [];
+    let dias_mes = [];
+
+    if (tipo === 'semanal'){
+      dias_semana = Array.from(document.querySelectorAll('.dow:checked')).map(x=>parseInt(x.value,10));
+      if (!dias_semana.length){
+        alert('Selecciona al menos un día de la semana');
+        return;
+      }
+    }
+    if (tipo === 'mensual'){
+      const raw = (document.getElementById('dom_list').value||'').trim();
+      if (!raw){
+        alert('Indica al menos un día del mes (1-31)');
+        return;
+      }
+      dias_mes = raw.split(',').map(s=>parseInt(s.trim(),10)).filter(n=>!isNaN(n) && n>=1 && n<=31);
+      if (!dias_mes.length){
+        alert('Revisa el formato de los días del mes');
+        return;
+      }
+    }
+
+    // Construye resumen humano
+    let resumen = '';
+    if (tipo === 'diaria'){
+      resumen = `Diaria a las ${hora_pref||'—'}`;
+    } else if (tipo === 'semanal'){
+      const mapDias = {0:'Dom',1:'Lun',2:'Mar',3:'Mié',4:'Jue',5:'Vie',6:'Sáb'};
+      const txt = dias_semana.map(d=>mapDias[d]).join(', ');
+      resumen = `Semanal (${txt}) ${veces>1?`x${veces}`:''} a las ${hora_pref||'—'}`;
+    } else {
+      resumen = `Mensual (días: ${dias_mes.join(', ')}) ${veces>1?`x${veces}`:''} a las ${hora_pref||'—'}`;
+    }
+
+    const config = {
+      tipo, dias_semana, dias_mes,
+      hora_pref, ventana_ini, ventana_fin,
+      veces, cap_estimada
+    };
+
+    // Tomamos el cliente del contexto del modal (lo sueles tener en el template)
+    const clienteId = {{cliente.id if cliente is not none else 'null'}};
+    if (!clienteId){ alert('Cliente no válido'); return; }
+
+    // Enviamos JSON a /logistica/cliente/{id}
+    const r = await fetch(`/logistica/cliente/${clienteId}`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        frecuencia_resumen: resumen,
+        capacidad_kg: config.cap_estimada || null,
+        // guardamos JSON como string (el backend lo pondrá en observ_logi)
+        configuracion: config
+      })
+    });
+    if (!r.ok){
+      const j = await r.json().catch(()=>({detail:'Error'}));
+      alert('Error al guardar: ' + (j.detail || r.statusText));
+      return;
+    }
+    alert('Frecuencia guardada');
+    // opcional: cerrar modal o refrescar
+    // $('#MdlGestRescli').modal('hide');
+  }
+
+  // engancha el submit del formulario existente
+  const form = document.getElementById('basic-form');
+  if (form){
+    // si ya usas send_json para otra cosa, puedes reemplazar su handler aquí
+    form.addEventListener('submit', guardarFrecuencia);
+  }
+})();
+</script>
+
+<script>
+(function(){
+  // Helpers para setear valores
+  function setVal(sel, val){
+    const el = document.querySelector(sel);
+    if(!el) return;
+    el.value = (val ?? '').toString();
+    el.dispatchEvent(new Event('input', {bubbles:true}));
+  }
+  function setRadio(name, value){
+    const els = document.querySelectorAll(`input[name="${name}"]`);
+    els.forEach(r => { r.checked = (r.value === value); });
+  }
+  function setChecks(selector, values){
+    const set = new Set((values||[]).map(v => String(v)));
+    document.querySelectorAll(selector).forEach(cb => {
+      cb.checked = set.has(String(cb.value));
+    });
+  }
+
+  // Esta función precarga desde el backend
+  window.precargarFrecuencia = async function(clienteId){
+    try{
+      const r = await fetch(`/logistica/cliente/${clienteId}`, { headers: {'Accept':'application/json'} });
+      if(!r.ok) throw new Error('No se pudo obtener configuración');
+      const j = await r.json();
+      const cfg = j.configuracion || {};
+
+      // tipo: diaria|semanal|mensual
+      setRadio('freq_tipo', cfg.tipo || 'diaria');
+
+      // Mostrar/ocultar paneles según tipo (reusa tu función)
+      if (typeof window.togglePanels === 'function') {
+        window.togglePanels();
+      } else {
+        // fallback sencillo:
+        const $semanal = document.querySelector('.freq-semanal');
+        const $mensual = document.querySelector('.freq-mensual');
+        const t = cfg.tipo || 'diaria';
+        if ($semanal) $semanal.classList.toggle('d-none', t !== 'semanal');
+        if ($mensual) $mensual.classList.toggle('d-none', t !== 'mensual');
+      }
+
+      // Semanal
+      setChecks('.dow', cfg.dias_semana || []);
+
+      // Mensual (muestra texto separado por comas)
+      setVal('#dom_list', (cfg.dias_mes||[]).join(', '));
+
+      // Horas / ventana
+      setVal('#hora_pref', cfg.hora_pref || '08:00');
+      setVal('#ventana_ini', cfg.ventana_ini || '');
+      setVal('#ventana_fin', cfg.ventana_fin || '');
+
+      // Veces / capacidad
+      setVal('#veces', cfg.veces ?? 1);
+      setVal('#cap_estimada', cfg.cap_estimada ?? '');
+
+    }catch(err){
+      console.error(err);
+      // Si falla, deja defaults
+      setRadio('freq_tipo', 'diaria');
+      if (typeof window.togglePanels === 'function') window.togglePanels();
+    }
+  };
+
+})();
+</script>
+

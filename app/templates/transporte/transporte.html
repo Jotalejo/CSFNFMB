@@ -1,0 +1,571 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<!-- start main body part-->            
+<div class="row clearfix">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="left">
+                    <h1 class="page-title">Transporte</h1><br>
+                    <h3 class="card-title" style="margin-left: 20px">Organizar las recolecciones para planear las rutas y sacar el manifiesto</h3>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="d-md-flex justify-content-between">
+                    <ul class="nav nav-tabs b-none">
+                        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#prog-recolec">Recolección detallada</a></li>
+                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#list-recolec">Lista de Recolecciones</a></li>
+                    </ul>
+                    <div class="d-flex align-items-center sort_stat">
+                        <div class="d-flex">
+                            <span class="bh_income">2,5,1,8,3,6,7,5,3,6,7,5</span>
+                            <div class="ml-2">
+                                <p class="mb-0 font-11">Recolecciones</p>
+                                <h5 class="font-16 mb-0">510</h5>
+                            </div>
+                        </div>
+                        <div class="d-flex ml-3">
+                            <span class="bh_traffic">5,8,9,10,5,2,5,8,9,10</span> 
+                            <div class="ml-2">
+                                <p class="mb-0 font-11">PRESUPUESTO</p>
+                                <h5 class="font-16 mb-0">53% Arriba</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>    
+<div class="tab-content px-0">
+    <div class="tab-pane fade show active" id="prog-recolec" role="tabpanel">
+      <div class="row clearfix">
+        <div class="col-12">
+          <form class="card" method="post" action="/recolecciones/">
+            <div class="card-body">
+              <h3 class="card-title">Datos de Recolección</h3>
+
+              <!-- Cliente y fecha -->
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="form-label">Cliente</label>
+                    <select id="selCliente" name="cliente_id" class="form-control custom-select" required>
+                      <option value="" selected disabled hidden>Escoja el cliente…</option>
+                      {% for c in clientes %}
+                        <option value="{{ c.id }}">{{ c.razonSocial }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-6 col-md-4">
+                      <div class="form-group">
+                        <label>Fecha de Recolección</label>
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="icon-calendar"></i></span>
+                          </div>
+                          <input class="form-control" name="fecha" type="date" required>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Detalle de residuos (múltiples filas) -->
+              <div class="row">
+                <div class="col-12">
+                  <label class="form-label d-flex align-items-center justify-content-between">
+                    <span>Detalle de residuos</span>
+                    <button type="button" id="btnAddRes" class="btn btn-outline-primary btn-sm" disabled>
+                      + Agregar residuo
+                    </button>
+                  </label>
+                  <div class="table-responsive">
+                    <table class="table table-bordered mb-2" id="tablaResiduos">
+                      <thead>
+                        <tr>
+                          <th style="width: 38%">Tipo de Residuo</th>
+                          <th style="width: 18%">Cantidad</th>
+                          <th style="width: 18%">Peso (kg)</th>
+                          <th style="width: 18%">Total (kg)</th>
+                          <th style="width: 8%"></th>
+                        </tr>
+                      </thead>
+                      <tbody id="residuosBody">
+                        <!-- filas dinámicas aquí -->
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="text-right">
+                    <strong>Peso total:</strong> <span id="granTotal">0.00</span> kg
+                  </div>
+                </div>
+              </div>
+
+              <!-- Datos del cliente (autocompletados al elegir cliente) -->
+              <div class="row mt-3">
+                <div class="col-sm-6 col-md-8">
+                  <div class="form-group">
+                    <label>Dirección</label>
+                    <input id="direc" type="text" class="form-control" disabled>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                  <div class="form-group">
+                    <label>Teléfono</label>
+                    <input id="telc" type="text" class="form-control" disabled>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                  <div class="form-group">
+                    <label>Ciudad</label>
+                    <input id="ciud" type="text" class="form-control" disabled>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-6">
+                  <div class="form-group">
+                    <label>Email</label>
+                    <input id="email" name="email" type="email" class="form-control" placeholder="Email" required>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Contacto</label>
+                    <input id="conta" name="conta" type="text" class="form-control" placeholder="Nombre del contacto">
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-6">
+                  <div class="form-group">
+                    <label>Teléfono (Contacto)</label>
+                    <input id="teldco" name="teldco" type="text" class="form-control" placeholder="Teléfono del Contacto" required>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group mb-0">
+                    <label class="form-label">Acerca de la Recolección - Observaciones</label>
+                    <textarea id="observ" name="observ" rows="5" class="form-control" placeholder="Acá puede colocar una descripción"></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-footer text-right">
+              <button id="btnguardc" name="btnguardc" type="submit" class="btn btn-primary">Crear Recolección</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="tab-pane fade" id="list-recolec" role="tabpanel">
+        <div class="table-responsive">
+            <div class="input-group mt-2">
+                <input type="text" class="form-control search" placeholder="Search...">
+            </div>
+            <table class="table card-table table-vcenter text-nowrap table_custom">
+                <thead>
+                    <tr class="">
+                        <th>Código</th>
+                        <th>Cliente</th>
+                        <th>Fecha</th>
+                        <th>Hora</th>
+                        <th>Tipo de Residuo</th>
+                        <th>Estatus</th>
+                        <th>Peso</th>
+                        <th>Acciones</th>  <!-- 👈 -->
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for recoleccion in recolecciones %}
+                    <tr class="">
+                        <td><span class="text-muted">{{ recoleccion.id }}</span></td>
+                        <td>{{ recoleccion.cliente_rel.razonSocial }}</td>
+                        <td>{{ recoleccion.fecha }}</td>
+                        <td>{{ recoleccion.hora }}</td>
+                        <td>{{ recoleccion.tipo_residuo.nombre }}</td>
+                        <td><span class="{{ recoleccion.estado.clase }}"></span> {{ recoleccion.estado.nombre }}</td>
+                        <td>{{ recoleccion.peso }} Kg.</td>
+                        <td>
+                            <button type="button"
+                                    class="btn btn-sm btn-outline-primary btn-ver-detalle"
+                                    data-id="{{ recoleccion.id }}"
+                                    >
+                            <i class="fa fa-eye"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Template de fila -->
+    <template id="tplResiduo">
+      <tr>
+        <td>
+          <select name="tipo_residuo_id[]" class="form-control selTipo" required>
+            <option value="" selected disabled>Seleccione…</option>
+          </select>
+        </td>
+        <td>
+          <input type="number" name="cantbol[]" class="form-control cant" min="1" max="10000" step="any" required>
+          <div class="invalid-feedback"></div>
+        </td>
+        <td>
+          <input type="number" name="pesobol[]" class="form-control peso" min="1" max="10000" step="any" required>
+          <div class="invalid-feedback"></div>
+        </td>
+        <td>
+          <input type="number" name="totpeso[]" class="form-control total" readonly>
+        </td>
+        <td class="text-center">
+          <button type="button" class="btn btn-sm btn-danger btnDel" title="Eliminar fila">&times;</button>
+        </td>
+      </tr>
+    </template>
+
+<div class="modal fade" id="detalleModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Detalle de recolección</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="text-center py-5">Cargando…</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary" onclick="window.print()">Imprimir</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+    ver_manifiesto = function(id){
+        window.open('/recolecciones/manifiesto/'+id, '_blank');
+    }
+
+document.addEventListener('DOMContentLoaded', () => {
+  const selCliente = document.getElementById('selCliente');
+  const selTipo    = document.getElementById('selTipoResiduo');
+
+  async function cargarTipos(clienteId) {
+    selTipo.innerHTML = '<option value="" disabled selected>Cargando…</option>';
+    try {
+      const r = await fetch(`/recolecciones/tiposresiduo/${clienteId}`);
+      const data = await r.json();
+      selTipo.innerHTML = '<option value="" disabled selected>Seleccione tipo de residuo…</option>';
+      data.forEach(tr => {
+        const opt = document.createElement('option');
+        opt.value = tr.id;        // guarda el código
+        opt.textContent = tr.nombre; // muestra el nombre
+        selTipo.appendChild(opt);
+      });
+    } catch (e) {
+      selTipo.innerHTML = '<option value="" disabled selected>Error al cargar</option>';
+      console.error(e);
+    }
+  }
+
+  if (selCliente && selCliente.value) cargarTipos(selCliente.value);
+  selCliente?.addEventListener('change', e => cargarTipos(e.target.value));
+});
+</script>
+<script>
+(function () {
+  const $cant  = document.getElementById('cantbol');
+  const $peso  = document.getElementById('pesobol');
+  const $total = document.getElementById('totpeso');
+  const form   = document.querySelector('#prog-recolec form') || document.querySelector('form');
+
+  function toNumber(v){ return parseFloat(String(v).replace(',', '.')); }
+  function isValid(n){ return !isNaN(n) && n > 0 && n <= 10000; }
+
+  function ensureFeedback(el){
+    let fb = el.parentElement.querySelector('.invalid-feedback');
+    if(!fb){
+      fb = document.createElement('div');
+      fb.className = 'invalid-feedback';
+      el.parentElement.appendChild(fb);
+    }
+    return fb;
+  }
+
+  function setValidity(el, ok, msg){
+    const fb = ensureFeedback(el);
+    if(ok){
+      el.classList.remove('is-invalid');
+      fb.textContent = '';
+    }else{
+      el.classList.add('is-invalid');
+      fb.textContent = msg || 'Valor inválido';
+    }
+  }
+
+  function actualizarTotal(){
+    const c = toNumber($cant.value);
+    const p = toNumber($peso.value);
+
+    setValidity($cant, isValid(c), 'Debe ser > 0 y ≤ 10.000');
+    setValidity($peso, isValid(p), 'Debe ser > 0 y ≤ 10.000');
+
+    if(isValid(c) && isValid(p)){
+      $total.value = (c * p).toFixed(2);
+    }else{
+      $total.value = '';
+    }
+  }
+
+  ['input','change','blur'].forEach(evt => {
+    $cant.addEventListener(evt, actualizarTotal);
+    $peso.addEventListener(evt, actualizarTotal);
+  });
+
+  if(form){
+    form.addEventListener('submit', function(e){
+      actualizarTotal();
+      // evita enviar si hay inválidos
+      if (form.querySelector('.is-invalid')){
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    });
+  }
+
+  actualizarTotal(); // por si hay valores cargados
+})();
+</script>
+<script>
+(function () {
+  function setVal(sel, val) {
+    const el = document.querySelector(sel);
+    if (!el) return;
+    el.value = (val ?? '').toString();
+    // por si tienes listeners de input
+    el.dispatchEvent(new Event('input', { bubbles: true }));
+  }
+
+  async function cargarCliente(clienteId) {
+    try {
+      const res = await fetch(`/clientes/${clienteId}/json?ts=` + Date.now(), {
+        headers: { 'Accept': 'application/json' }
+      });
+      if (!res.ok) throw new Error('No se pudo cargar el cliente');
+      const c = await res.json();
+
+      setVal('#direc', c.direccion);
+      setVal('#telc', c.telefono);
+      setVal('#ciud', c.ciudad_nombre || c.ciudad); // muestra nombre si viene
+      setVal('#email', c.email);
+      setVal('#conta', c.contacto);
+      setVal('#teldco', c.telefonoContacto || c.telefono_contacto);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const sel = document.getElementById('selCliente');
+    if (!sel) return;
+
+    sel.addEventListener('change', function (e) {
+      const id = e.target.value;
+      if (id) cargarCliente(id);
+    });
+
+    // Si quieres precargar al primer cliente de la lista:
+    // if (sel.value) cargarCliente(sel.value);
+  });
+})();
+</script>
+<script>
+  $(function () {
+    $('.datepicker').datepicker({
+      format: 'yyyy-mm-dd',     // 👈 esto hace que envíe 2025-06-10
+      language: 'es',
+      autoclose: true,
+      todayHighlight: true
+    });
+  });
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    $(document).on('click', '.btn-ver-detalle', async function () {
+      const id = this.dataset.id;
+      const $modal = $('#detalleModal');
+      const $body  = $modal.find('.modal-body');
+
+      $body.html('<div class="text-center py-5">Cargando…</div>');
+      $modal.modal('show');
+
+      try {
+        // Devuelve HTML parcial
+        const res  = await fetch(`/recolecciones/detalle/${id}`, { headers: { 'X-Requested-With': 'fetch' }});
+        if (!res.ok) throw new Error('Error HTTP ' + res.status);
+        const html = await res.text();
+        $body.html(html);
+      } catch (err) {
+        console.error(err);
+        $body.html('<div class="alert alert-danger">No se pudo cargar el detalle.</div>');
+      }
+    });
+  });
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  const selCliente   = document.getElementById('selCliente');
+  const btnAdd       = document.getElementById('btnAddRes');
+  const tbody        = document.getElementById('residuosBody');
+  const tpl          = document.getElementById('tplResiduo');
+  const lblGranTotal = document.getElementById('granTotal');
+
+  let tiposCache = []; // [{id, nombre}, ...]
+
+  function toNum(v){ return parseFloat(String(v).replace(',', '.')); }
+  function isValid(n){ return !isNaN(n) && n > 0 && n <= 10000; }
+
+  function setInvalid(input, msg){
+    const fb = input.parentElement.querySelector('.invalid-feedback');
+    if(!isValid(toNum(input.value))){
+      input.classList.add('is-invalid');
+      if (fb) fb.textContent = msg || 'Debe ser > 0 y ≤ 10.000';
+    }else{
+      input.classList.remove('is-invalid');
+      if (fb) fb.textContent = '';
+    }
+  }
+
+  function calcRowTotal(tr){
+    const cant  = tr.querySelector('.cant');
+    const peso  = tr.querySelector('.peso');
+    const total = tr.querySelector('.total');
+
+    setInvalid(cant, 'Cantidad inválida (1..10000)');
+    setInvalid(peso, 'Peso inválido (1..10000)');
+
+    const c = toNum(cant.value);
+    const p = toNum(peso.value);
+
+    total.value = (isValid(c) && isValid(p)) ? (c * p).toFixed(2) : '';
+    calcGrandTotal();
+  }
+
+  function calcGrandTotal(){
+    let sum = 0;
+    tbody.querySelectorAll('.total').forEach(inp => {
+      const v = toNum(inp.value);
+      if(!isNaN(v)) sum += v;
+    });
+    lblGranTotal.textContent = sum.toFixed(2);
+  }
+
+  function fillTipos(select){
+    select.innerHTML = '<option value="" selected disabled>Seleccione…</option>';
+    tiposCache.forEach(t => {
+      const opt = document.createElement('option');
+      opt.value = t.id;
+      opt.textContent = t.nombre;
+      select.appendChild(opt);
+    });
+  }
+
+  function addRow(){
+    const node = tpl.content.firstElementChild.cloneNode(true);
+    fillTipos(node.querySelector('.selTipo'));
+
+    node.querySelector('.cant').addEventListener('input', () => calcRowTotal(node));
+    node.querySelector('.peso').addEventListener('input', () => calcRowTotal(node));
+    node.querySelector('.btnDel').addEventListener('click', () => {
+      node.remove();
+      calcGrandTotal();
+      if (tbody.children.length === 0) addRow(); // deja al menos 1 fila
+    });
+
+    tbody.appendChild(node);
+  }
+
+  async function cargarTiposPorCliente(clienteId){
+    // reset
+    tbody.innerHTML = '';
+    lblGranTotal.textContent = '0.00';
+    btnAdd.disabled = true;
+
+    if(!clienteId) return;
+
+    try {
+      const r = await fetch(`/recolecciones/tiposresiduo/${clienteId}?_ts=${Date.now()}`);
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const data = await r.json(); // [{id, nombre}]
+      tiposCache = data.map(d => ({id: d.id, nombre: d.nombre}));
+      btnAdd.disabled = (tiposCache.length === 0);
+      if (tiposCache.length > 0) addRow(); // agrega primera fila
+    } catch (e) {
+      console.error('Error cargando tipos:', e);
+      tiposCache = [];
+      btnAdd.disabled = true;
+    }
+  }
+
+  async function cargarDatosCliente(clienteId){
+    try {
+      const res = await fetch(`/clientes/${clienteId}/json?ts=${Date.now()}`, { headers: { 'Accept':'application/json' }});
+      if(!res.ok) return;
+      const c = await res.json();
+      setVal('#direc',  c.direccion);
+      setVal('#telc',   c.telefono);
+      setVal('#ciud',   c.ciudad_nombre || c.ciudad);
+      setVal('#email',  c.email);
+      setVal('#conta',  c.contacto);
+      setVal('#teldco', c.telefonoContacto || c.telefono_contacto);
+    } catch(e){
+      console.warn('No se pudieron cargar datos del cliente', e);
+    }
+  }
+
+  function setVal(sel, val){
+    const el = document.querySelector(sel);
+    if (el) {
+      el.value = (val ?? '').toString();
+      el.dispatchEvent(new Event('input', {bubbles:true}));
+    }
+  }
+
+  // ✅ AHORA SÍ: conectar el botón “Agregar residuo”
+  if (btnAdd) {
+    btnAdd.addEventListener('click', function(e){
+      e.preventDefault();
+      if (!btnAdd.disabled) addRow();
+    });
+  }
+
+  // Cuando cambia el cliente
+  selCliente?.addEventListener('change', (e) => {
+    const id = e.target.value;
+    cargarTiposPorCliente(id);
+    cargarDatosCliente(id);
+  });
+
+  // Si ya hay cliente seleccionado al cargar
+  if (selCliente && selCliente.value) {
+    cargarTiposPorCliente(selCliente.value);
+    cargarDatosCliente(selCliente.value);
+  }
+});
+</script>
+
+{% endblock %}
+{% block scripts %}
+
+{% endblock %}

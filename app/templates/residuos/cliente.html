@@ -1,94 +1,141 @@
-<div class="modal-dialog" role="document">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title" id="ModalResiduos">Administración de Residuos del Cliente</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="modal-body">
-            <!-- Start main html -->
-            <div id="main_content">
-                <!-- start main body part-->
-                <div>
-                    <!-- start body header -->
-                    <div id="page_top" class="section-body">
-                        <div class="container-fluid">
-                            <div class="page-header">
-                                <div class="left">
-                                    <h1 class="page-title">Manejo Residuos del Cliente</h1>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="section-body">
-                        <div class="container-fluid">
-                            <!-- Multi Select -->
-                            <div class="row clearfix">
-                                <div class="col-md-12">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h3 class="card-title">Selección de Tipos y Cantidad de Residuos Generados</h3><br>
-                                        </div>
-                                        <div class="card-body demo-card">
-                                            <form id="residuoForm" method="post" action="/residuoscli/" data-redirect="{{url_redirect}}">
-                                                        <!-- Campos del formulario -->
-                                                        <input type="hidden" name="codcli" value="{{cliente_id}}">
-                                                        <div class="form-group">
-                                                            <label for="tresiduo">Tipo de Residuo</label>
-                                                            <select id="tresiduo" name="tresiduo" class="form-control" required>
-                                                                <option label="Escoja el Tipo de Residuo ..." selected disabled></option>
-                                                                {% for tipores in tresiduos %}
-                                                                    <option value="{{ tipores.id }}"
-                                                                    {% if residuo and residuo.tresiduo == tipores.id %}selected{% endif %}>
-                                                                    {{ tipores.nombre }}
-                                                                    </option>
-                                                                {% endfor %}
-                                                            </select>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="cantresiduo">Cantidad</label>
-                                                            <input type="number" step="0.01" class="form-control"
-                                                                id="cantresiduo" name="cantresiduo" required>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="pesopromres">Peso Promedio</label>
-                                                            <input type="number" step="0.01" class="form-control"
-                                                                id="pesopromres" name="pesopromres" required>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="segregares">Segregación</label>
-                                                            <input type="text" class="form-control" id="segregares"
-                                                                name="segregares">
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="numbolsas">Número de Bolsas</label>
-                                                            <input type="number" class="form-control" id="numbolsas"
-                                                                name="numbolsas">
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="observaciones">Observaciones</label>
-                                                            <textarea class="form-control" id="observaciones"
-                                                                name="observaciones"></textarea>
-                                                        </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+<div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable" role="document">
+  <div class="modal-content">
+    <form id="frecuenciaForm">
+      <div class="modal-header">
+        <h5 class="modal-title" id="MdlFrecuenciaCliente">Administración de Residuos del Cliente</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body p-3 p-md-4">
+        <!-- ID del cliente -->
+        <input type="hidden" name="cliente_id" id="cliente_id" value="{{ cliente_id }}"/>
+
+        <div class="container-fluid">
+          <div class="row clearfix">
+            <div class="col-lg-12">
+              <h5 class="mb-2">Frecuencia de recolección</h5>
             </div>
+
+            <!-- tipo_nombre -->
+            <div class="col-lg-4 col-md-12">
+              <label>Tipo de frecuencia</label>
+              <div class="form-group">
+                <div class="custom-controls-stacked">
+                  <label class="custom-control custom-radio">
+                    <input type="radio" name="tipo_nombre" value="diaria" class="custom-control-input" checked>
+                    <span class="custom-control-label">Diaria</span>
+                  </label>
+                  <label class="custom-control custom-radio">
+                    <input type="radio" name="tipo_nombre" value="semanal" class="custom-control-input">
+                    <span class="custom-control-label">Semanal</span>
+                  </label>
+                  <label class="custom-control custom-radio">
+                    <input type="radio" name="tipo_nombre" value="mensual" class="custom-control-input">
+                    <span class="custom-control-label">Mensual</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- semanal -->
+            <div class="col-lg-4 col-md-12 freq-semanal d-none">
+              <label>Días de la semana</label>
+              <div class="form-group">
+                <div class="custom-controls-stacked">
+                  <label class="custom-control custom-checkbox"><input type="checkbox" value="1" class="custom-control-input dow"><span class="custom-control-label">Lunes</span></label>
+                  <label class="custom-control custom-checkbox"><input type="checkbox" value="2" class="custom-control-input dow"><span class="custom-control-label">Martes</span></label>
+                  <label class="custom-control custom-checkbox"><input type="checkbox" value="3" class="custom-control-input dow"><span class="custom-control-label">Miércoles</span></label>
+                  <label class="custom-control custom-checkbox"><input type="checkbox" value="4" class="custom-control-input dow"><span class="custom-control-label">Jueves</span></label>
+                  <label class="custom-control custom-checkbox"><input type="checkbox" value="5" class="custom-control-input dow"><span class="custom-control-label">Viernes</span></label>
+                  <label class="custom-control custom-checkbox"><input type="checkbox" value="6" class="custom-control-input dow"><span class="custom-control-label">Sábado</span></label>
+                  <!-- En tu HTML tenías Domingo=0; lo dejo igual y lo mapeo a 7 en JS -->
+                  <label class="custom-control custom-checkbox"><input type="checkbox" value="0" class="custom-control-input dow"><span class="custom-control-label">Domingo</span></label>
+                </div>
+                <small class="text-muted">Selecciona los días en que pasas.</small>
+              </div>
+            </div>
+
+            <!-- mensual -->
+            <div class="col-lg-4 col-md-12 freq-mensual d-none">
+              <label>Días del mes</label>
+              <input type="text" id="dom_list" class="form-control" placeholder="Ej: 1, 10, 20, 30">
+              <small class="text-muted">Lista separada por comas (1-31).</small>
+            </div>
+
+            <!-- horas -->
+            <div class="col-lg-4 col-md-12">
+              <label>Hora preferida</label>
+              <input type="time" id="hora_pref" class="form-control" step="60" value="08:00">
+
+              <div class="mt-2 font-weight-bold">Horario opcional (rango)</div>
+              <small class="text-muted d-block">Si no defines un rango, se usará solo la hora preferida.</small>
+
+              <div class="form-row mt-1">
+                <div class="col">
+                  <input type="time" id="ventana_ini" class="form-control" placeholder="Desde (HH:MM)">
+                  <div class="invalid-feedback" id="err_ini"></div>
+                </div>
+                <div class="col">
+                  <input type="time" id="ventana_fin" class="form-control" placeholder="Hasta (HH:MM)">
+                  <div class="invalid-feedback" id="err_fin"></div>
+                </div>
+              </div>
+              <small class="text-muted">Ejemplo: 08:00 a 10:00</small>
+            </div>
+
+            <div class="col-lg-4 col-md-12">
+              <label>Veces por semana/mes</label>
+              <input type="number" id="veces" class="form-control" min="1" max="30" value="1">
+              <small class="text-muted">Interpreta según el tipo (semanal/mensual).</small>
+            </div>
+
+            <div class="col-lg-4 col-md-12">
+              <label>Capacidad estimada por visita (Kg)</label>
+              <input type="number" id="cap_estimada" class="form-control" min="1" max="100000" step="1" required>
+            </div>
+
+            <div class="col-lg-8 col-md-12">
+              <label>Observaciones</label>
+              <textarea id="observ" class="form-control" rows="2" placeholder="Opcional"></textarea>
+            </div><br><br><br><br>
+
+            <div class="col-lg-4 col-md-12 d-flex align-items-end" style="margin-left: 40px;">
+              <div class="form-group">
+                <div class="custom-control custom-switch">
+                  <input type="checkbox" class="custom-control-input" id="activo" checked>
+                  <label class="custom-control-label" for="activo">Activo</label>
+                </div>
+              </div>
+            </div>
+
+          </div>
         </div>
-        <div class="modal-footer">
-            <button id="btnDismiss" type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-            <button id="btnSaveResiduos" type="button" class="btn btn-primary" onclick="">Guardar</button>
-        </div>
-    </div>
+      </div>
+
+      <div class="modal-footer">
+        <small class="text-muted mr-auto">Se guardará un resumen en <b>Frecuencia</b>.</small>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button id="btnSaveResiduos" type="submit" class="btn btn-primary">Guardar</button>
+      </div>
+    </form>
+  </div>
 </div>
 
 <script>
+  function valById(id) {
+  // funciona si hay jQuery o no
+  const el = document.getElementById(id);
+  if (!el) return '';
+  // si jQuery está presente y el elemento también es alcanzable por él:
+  if (window.jQuery) {
+    const $el = window.jQuery('#' + id);
+    if ($el.length) return ($el.val() ?? '').toString();
+  }
+  return (el.value ?? '').toString();
+}
+
 async function cargarTiposResiduo(selectedId) {
   try {
     const res = await fetch('/tiposresid/options');
@@ -117,10 +164,10 @@ async function cargarTiposResiduo(selectedId) {
     $(document).ready(function() {
         $('#btnSaveResiduos').on('click', function() {
             // Validar el formulario antes de enviar
-            if ($('#residuoForm')[0].checkValidity()) {
+            if ($('#frecuenciaForm')[0].checkValidity()) {
                 // Si es válido, enviar el formulario
                 
-                send_form('residuoForm');
+                //send_form('frecuenciaForm');
                 $('#btnDismiss').click(); // Cerrar el modal después de enviar
                 
             } else {
@@ -129,4 +176,340 @@ async function cargarTiposResiduo(selectedId) {
             }
         });
     });
+</script>
+
+<script>
+(function(){
+  const $ = (sel) => document.querySelector(sel);
+  const $$ = (sel) => Array.from(document.querySelectorAll(sel));
+
+  function tipoSeleccionado(){
+    return document.querySelector('input[name="tipo_nombre"]:checked')?.value || 'diaria';
+  }
+
+  function togglePanels(){
+    const t = tipoSeleccionado();
+    $('.freq-semanal')?.classList.toggle('d-none', t !== 'semanal');
+    $('.freq-mensual')?.classList.toggle('d-none', t !== 'mensual');
+  }
+
+  // Eventos de cambio para radios
+  $$('#frecuenciaForm input[name="tipo_nombre"]').forEach(r => {
+    r.addEventListener('change', togglePanels);
+  });
+  // Inicial
+  togglePanels();
+
+  function parseDiasMesToString(txt){
+    // Convierte "1, 10, 20" -> "1,10,20" validando 1..31
+    if(!txt) return null;
+    const arr = txt.split(',')
+      .map(s => parseInt(s.trim(),10))
+      .filter(n => !isNaN(n) && n>=1 && n<=31);
+    return arr.length ? arr.join(',') : null;
+  }
+
+  function getDiasSemana(){
+    // Tus checkboxes tienen valores 1..6 y 0 (domingo). El backend espera 1..7 (L..D)
+    const vals = $$('.dow:checked').map(cb => parseInt(cb.value,10));
+    return vals.map(v => v === 0 ? 7 : v); // 0 -> 7
+  }
+
+  async function onSubmitFrecuencia(e){
+    e.preventDefault();
+
+    const API_BASE = ''; // sin prefijo /app
+
+    const cliente_id = parseInt(valById('cliente_id') || '0', 10);
+    if(!cliente_id){
+      alert('Cliente no válido (cliente_id vacío).');
+      console.error('cliente_id no encontrado. ¿Existe <input type="hidden" id="cliente_id" value="..."> en el modal?');
+      return;
+    }
+
+    const tipo_nombre = tipoSeleccionado();
+    const veces = parseInt(valById('veces') || '1', 10);
+    const capacidad_kg = (valById('cap_estimada') || '').trim();
+    const observ = (valById('observ') || '').trim();
+    const activo = document.getElementById('activo')?.checked ?? true;
+
+    // Validación y decisión de horario opcional
+    const rango = validarHorarioOpcional();
+    if (!rango.ok) return;
+
+    const hora_pref = valById('hora_pref') || null;
+    const hora_desde = rango.ini || hora_pref || null;
+    const hora_hasta = rango.fin || null;
+
+    // Validaciones por tipo
+    let dias_semana = null;
+    let dias_mes = null;
+    if (tipo_nombre === 'semanal'){
+      const ds = getDiasSemana();
+      if (!ds.length){ alert('Selecciona al menos un día de la semana.'); return; }
+      dias_semana = ds;
+    } else if (tipo_nombre === 'mensual'){
+      dias_mes = parseDiasMesToString(valById('dom_list') || '');
+      if (!dias_mes){ alert('Indica al menos un día del mes (1-31).'); return; }
+    }
+
+    const capInt = capacidad_kg ? parseInt(capacidad_kg, 10) : null;
+
+    const payload = {
+      cliente_id,
+      tipo_nombre,
+      dias_semana,
+      dias_mes,
+      hora_desde,
+      hora_hasta,
+      veces: isNaN(veces) ? null : veces,
+      capacidad_kg: capInt,
+      observ: observ || null,
+      activo
+    };
+
+    console.log('POST payload /app/frecuencias/:', payload); // <-- LOG ÚTIL
+
+    try{
+      const res = await fetch(`${API_BASE}/frecuencias/`, {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify(payload)
+      });
+
+      // Muestra el status real (si fuera 422, 400, etc.)
+      console.log('Respuesta create frecuencia:', res.status, res.statusText);
+
+      const maybeJson = await res.json().catch(() => null);
+      if(!res.ok){
+        throw new Error((maybeJson && (maybeJson.detail || JSON.stringify(maybeJson))) || res.statusText || 'Error al guardar');
+      }
+
+      const data = maybeJson; // FrecuenciaOut
+      alert('Frecuencia guardada con éxito (ID: ' + data.id + ').');
+
+      // si quieres: cerrar modal y refrescar tabla
+      // $('#MdlFrecuenciaCliente').modal('hide');
+      // cargarFrecuencias(cliente_id);
+
+    }catch(err){
+      console.error('Error POST /app/frecuencias/:', err);
+      alert('No se pudo guardar: ' + err.message);
+    }
+  }
+
+  // Enganchar submit del form
+  const form = $('#frecuenciaForm');
+  if (form){
+    form.addEventListener('submit', onSubmitFrecuencia);
+  }
+})();
+</script>
+
+<script>
+(function(){
+  // Helpers para setear valores
+  function setVal(sel, val){
+    const el = document.querySelector(sel);
+    if(!el) return;
+    el.value = (val ?? '').toString();
+    el.dispatchEvent(new Event('input', {bubbles:true}));
+  }
+  function setRadio(name, value){
+    const els = document.querySelectorAll(`input[name="${name}"]`);
+    els.forEach(r => { r.checked = (r.value === value); });
+  }
+  function setChecks(selector, values){
+    const set = new Set((values||[]).map(v => String(v)));
+    document.querySelectorAll(selector).forEach(cb => {
+      cb.checked = set.has(String(cb.value));
+    });
+  }
+
+  // Esta función precarga desde el backend
+  window.precargarFrecuencia = async function(clienteId){
+    try{
+      const r = await fetch(`/logistica/cliente/${clienteId}`, { headers: {'Accept':'application/json'} });
+      if(!r.ok) throw new Error('No se pudo obtener configuración');
+      const j = await r.json();
+      const cfg = j.configuracion || {};
+
+      // tipo: diaria|semanal|mensual
+      setRadio('freq_tipo', cfg.tipo || 'diaria');
+
+      // Mostrar/ocultar paneles según tipo (reusa tu función)
+      if (typeof window.togglePanels === 'function') {
+        window.togglePanels();
+      } else {
+        // fallback sencillo:
+        const $semanal = document.querySelector('.freq-semanal');
+        const $mensual = document.querySelector('.freq-mensual');
+        const t = cfg.tipo || 'diaria';
+        if ($semanal) $semanal.classList.toggle('d-none', t !== 'semanal');
+        if ($mensual) $mensual.classList.toggle('d-none', t !== 'mensual');
+      }
+
+      // Semanal
+      setChecks('.dow', cfg.dias_semana || []);
+
+      // Mensual (muestra texto separado por comas)
+      setVal('#dom_list', (cfg.dias_mes||[]).join(', '));
+
+      // Horas / ventana
+      setVal('#hora_pref', cfg.hora_pref || '08:00');
+      setVal('#ventana_ini', cfg.ventana_ini || '');
+      setVal('#ventana_fin', cfg.ventana_fin || '');
+
+      // Veces / capacidad
+      setVal('#veces', cfg.veces ?? 1);
+      setVal('#cap_estimada', cfg.cap_estimada ?? '');
+
+    }catch(err){
+      console.error(err);
+      // Si falla, deja defaults
+      setRadio('freq_tipo', 'diaria');
+      if (typeof window.togglePanels === 'function') window.togglePanels();
+    }
+  };
+
+})();
+</script>
+
+<script>
+/* ==== Helpers de tiempo ==== */
+function toMinutes(hhmm) {
+  // "HH:MM" -> total minutos desde 00:00. Devuelve NaN si inválido.
+  if (!hhmm || !/^\d{2}:\d{2}$/.test(hhmm)) return NaN;
+  const [h, m] = hhmm.split(':').map(Number);
+  if (h < 0 || h > 23 || m < 0 || m > 59) return NaN;
+  return h * 60 + m;
+}
+
+function setInvalid(inputEl, msg) {
+  if (!inputEl) return;
+  inputEl.classList.add('is-invalid');
+  const fb = inputEl.parentElement?.querySelector('.invalid-feedback');
+  if (fb) fb.textContent = msg || '';
+}
+
+function clearInvalid(inputEl) {
+  if (!inputEl) return;
+  inputEl.classList.remove('is-invalid');
+  const fb = inputEl.parentElement?.querySelector('.invalid-feedback');
+  if (fb) fb.textContent = '';
+}
+
+/* ==== Validación del rango opcional ==== */
+/**
+ * Valida el "Horario opcional (rango)".
+ * Reglas:
+ *  - Si uno está lleno, el otro también.
+ *  - fin > ini.
+ *  - (Opcional) hora_pref dentro del rango (solo warning en consola).
+ * Devuelve: { ok:boolean, ini:string|null, fin:string|null }
+ */
+function validarHorarioOpcional() {
+  const iniEl = document.getElementById('ventana_ini');
+  const finEl = document.getElementById('ventana_fin');
+  const prefEl = document.getElementById('hora_pref');
+
+  const ini = (iniEl?.value || '').trim();
+  const fin = (finEl?.value || '').trim();
+  const pref = (prefEl?.value || '').trim();
+
+  // Limpia estados
+  clearInvalid(iniEl);
+  clearInvalid(finEl);
+
+  // Caso: ninguno -> válido, sin rango
+  if (!ini && !fin) {
+    return { ok: true, ini: null, fin: null };
+  }
+
+  // Caso: uno sí y otro no -> error
+  if (!ini || !fin) {
+    if (!ini) setInvalid(iniEl, 'Falta la hora de inicio');
+    if (!fin) setInvalid(finEl, 'Falta la hora de fin');
+    return { ok: false, ini: null, fin: null };
+  }
+
+  // Formato válido
+  const mi = toMinutes(ini);
+  const mf = toMinutes(fin);
+  if (Number.isNaN(mi)) {
+    setInvalid(iniEl, 'Formato inválido (usa HH:MM)');
+    return { ok: false, ini: null, fin: null };
+  }
+  if (Number.isNaN(mf)) {
+    setInvalid(finEl, 'Formato inválido (usa HH:MM)');
+    return { ok: false, ini: null, fin: null };
+  }
+
+  // Orden: fin > ini
+  if (mf <= mi) {
+    setInvalid(finEl, 'La hora de fin debe ser mayor que la de inicio');
+    return { ok: false, ini: null, fin: null };
+  }
+
+  // (Opcional) advertencia si hora preferida está fuera del rango
+  const mp = toMinutes(pref);
+  if (!Number.isNaN(mp) && (mp < mi || mp > mf)) {
+    // Solo aviso en consola; si quieres, muestra un toast/alert.
+    console.warn('Hora preferida fuera del rango opcional');
+  }
+
+  return { ok: true, ini, fin };
+}
+</script>
+
+<script>
+function activarModal2(id) {
+  const $modal = $('#MdlGestRescli');
+
+  // Opcional: loader rápido
+  $modal.html(
+    '<div class="modal-dialog" role="document">' +
+      '<div class="modal-content">' +
+        '<div class="modal-body text-center p-5">' +
+          '<div class="spinner-border" role="status"></div>' +
+          '<div class="mt-2">Cargando…</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>'
+  );
+
+  // Cargar contenido del modal desde tu endpoint
+  fetch('/residuoscli/cliente/' + id)
+    .then(r => {
+      if (!r.ok) throw new Error('Error al cargar el modal');
+      return r.text();
+    })
+    .then(html => {
+      // Insertar el HTML del modal
+      $modal.html(html);
+
+      // ⚠️ Si tu modal NUEVO no tiene #residuoForm, NO intentes engancharlo.
+      const rform = document.getElementById('residuoForm');
+      if (rform && typeof send_json === 'function') {
+        rform.addEventListener('submit', send_json);
+      }
+
+      // SUGERENCIA: pasa el cliente_id como data-atributo para tu JS de frecuencia
+      // <div id="MdlGestRescli" class="modal fade" data-cliente-id="{{ id }}">
+      $modal.attr('data-cliente-id', id);
+
+      // Mostrar modal
+      $modal.modal('show');
+
+      // Si tienes precarga de frecuencia:
+      if (typeof precargarFrecuencia === 'function') {
+        precargarFrecuencia(id);
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      alert('No se pudo abrir el modal');
+    });
+}
+
 </script>

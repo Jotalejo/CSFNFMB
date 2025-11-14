@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
+from sqlalchemy import DECIMAL, Boolean, Column, Float, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 from .base import Base
 
@@ -16,6 +16,10 @@ class Cliente(Base):
     contacto = Column("contacto_cli", String(50))
     telefonoContacto = Column("telcont_cli", String(15))
     estadocarta = Column("estadocartera_cli", Integer)
+    latrecolec = Column("latrecolec_cli", Float, nullable=True)
+    lngrecolec = Column("lngrecolec_cli", Float, nullable=True)
+    linkmaps   = Column("linkmaps_cli", String(255), nullable=True)
     observaciones = Column("observ_cli", String(200))
     recolecciones = relationship("Recoleccion", back_populates="cliente_rel")
     residuos = relationship("ResiduosCli", back_populates="cliente")
+ #   cliente = relationship("Cliente", back_populates="frecuencias")

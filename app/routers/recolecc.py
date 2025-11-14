@@ -29,7 +29,6 @@ async def get_recolecc(request: Request, db: Session = Depends(get_db)):
     clientes = clientService.get_clientes()
     return templates.TemplateResponse("/recolecci/recolecc.html", {"request": request, "recolecciones": recolecciones, "clientes": clientes})
 
-
 @router.get("/detalle/{rec_id}", response_class=HTMLResponse)
 def detalle_recoleccion(rec_id: int, request: Request, db: Session = Depends(get_db)):
     service = RecoleccService(db)
@@ -46,13 +45,11 @@ def detalle_recoleccion(rec_id: int, request: Request, db: Session = Depends(get
 # async  def add_recolecc():
 #    return "Grabando una recolección"
 
-
 @router.get("/tiposresiduo/{cliente_id}", response_model=List[TipoResidOut])
 def tipos_por_cliente(cliente_id: int, db: Session = Depends(get_db)):
     return TipoResidService(db).list_by_cliente(cliente_id)
 
 # routers/recolecc.py (fragmento del POST)
-
 
 @router.post("/", response_class=RedirectResponse)
 async def crear_recolecc(

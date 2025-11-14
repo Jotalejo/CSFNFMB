@@ -1,6 +1,17 @@
 {% extends "layout.html" %}
 {% block content %}
 
+<style>
+.bh_income,
+.bh_traffic,
+.bh_stocks,
+.bh_analytics,
+.peity,
+.sparkline {
+  display: none !important;
+}
+</style>
+
 <!-- start main body part-->            
 <div class="row clearfix">
     <div class="col-lg-12">
@@ -8,7 +19,7 @@
             <div class="card-header">
                 <div class="left">
                     <h1 class="page-title">Recolecciones</h1><br>
-                    <h3 class="card-title" style="margin-left: 20px">Organizar las recolecciones para cada Cliente y sacar el manifiesto</h3>
+                    <h3 class="card-title" style="margin-left: 20px">Organizar las recolecciones como insumo para planear las rutas</h3>
                 </div>
             </div>
             <div class="card-body">
@@ -16,6 +27,7 @@
                     <ul class="nav nav-tabs b-none">
                         <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#prog-recolec">Programar Recolección</a></li>
                         <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#list-recolec">Lista de Recolecciones</a></li>
+                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#plan-transp">Planilla de Transporte</a></li>
                     </ul>
                     <div class="d-flex align-items-center sort_stat">
                         <div class="d-flex">
@@ -192,7 +204,6 @@
                             <button type="button"
                                     class="btn btn-sm btn-outline-primary btn-ver-detalle"
                                     data-id="{{ recoleccion.id }}"
-                                    onclick='ver_manifiesto({{ recoleccion.id }})'
                                     >
                             <i class="fa fa-eye"></i>
                             </button>
@@ -202,6 +213,46 @@
                 </tbody>
             </table>
         </div>
+    </div>
+    <div class="tab-pane fade" id="plan-transp" role="tabpanel">
+      <div class="card">
+        <div class="card-body">
+          <h3 class="card-title">Planilla de Transporte</h3>
+
+          <!-- Filtros/controles -->
+          <div class="row">
+            <div class="col-sm-6 col-md-3">
+              <label>Fecha</label>
+              <input id="pt_fecha" type="date" class="form-control" required>
+            </div>
+            <div class="col-sm-6 col-md-3">
+              <label>Vehículo (opcional)</label>
+              <select id="pt_vehiculo" class="form-control custom-select">
+                <option value="">Todos</option>
+                <!-- se llena por JS desde /vehiculos/options -->
+              </select>
+            </div>
+            <div class="col-md-6 d-flex align-items-end">
+              <div class="btn-group">
+                <button id="pt_btn_generar" class="btn btn-primary" type="button">
+                  Generar plan del día
+                </button>
+                <button id="pt_btn_guardar" class="btn btn-success" type="button" disabled>
+                  Guardar planilla
+                </button>
+                <button id="pt_btn_exportar" class="btn btn-outline-secondary" type="button" disabled>
+                  Exportar CSV
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <hr>
+
+          <!-- Contenedor donde se pintan las tablas por vehículo -->
+          <div id="pt_contenedor"></div>
+        </div>
+      </div>
     </div>
 </div>
 
@@ -565,6 +616,251 @@ document.addEventListener('DOMContentLoaded', function(){
   }
 });
 </script>
+
+<script>
+(function(){
+  const $fecha     = document.getElementById('pt_fecha');
+  const $vehiculo  = document.getElementById('pt_vehiculo');
+  const $btnGen    = document.getElementById('pt_btn_generar');
+  const $btnSave   = document.getElementById('pt_btn_guardar');
+  const $btnCSV    = document.getElementById('pt_btn_exportar');
+  const $contenedor= document.getElementById('pt_contenedor');
+
+  // Estado local (lo usamos para guardar/exportar)
+  let planActual = []; // [{vehiculo:{id,placa,capacidad}, paradas:[{...}]}]
+
+  // Util
+  function fmtHora(h){ return h ? String(h).slice(0,5) : '—'; }
+  function esc(s){ return (s ?? '').toString().replace(/[&<>"]/g, m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[m])); }
+  function qs(sel,root=document){ return root.querySelector(sel); }
+  function qsa(sel,root=document){ return Array.from(root.querySelectorAll(sel)); }
+
+  // 3.1 Cargar vehículos para el select
+  async function cargarVehiculos(){
+    try{
+      const r = await fetch('/vehiculos/options', {headers:{'Accept':'application/json'}});
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      const data = await r.json(); // [{id, placa, capacidad}]
+      data.forEach(v=>{
+        const opt = document.createElement('option');
+        opt.value = v.id;
+        opt.textContent = `${v.placa} (${v.capacidad || '—'} kg)`;
+        $vehiculo.appendChild(opt);
+      });
+    }catch(e){
+      console.warn('No se pudieron cargar vehículos', e);
+    }
+  }
+
+  // 3.2 Pintar plan por vehículo
+  function renderPlan(plan){
+    // Limpiar
+    $contenedor.innerHTML = '';
+    if(!plan || plan.length===0){
+      $contenedor.innerHTML = '<div class="alert alert-info">No hay paradas para los filtros seleccionados.</div>';
+      $btnSave.disabled = true;
+      $btnCSV.disabled  = true;
+      return;
+    }
+    $btnSave.disabled = false;
+    $btnCSV.disabled  = false;
+
+    plan.forEach(grupo=>{
+      const veh = grupo.vehiculo || {};
+      const paradas = grupo.paradas || [];
+      const card = document.createElement('div');
+      card.className = 'card mb-3';
+
+      const head = document.createElement('div');
+      head.className = 'card-header d-flex justify-content-between align-items-center';
+      head.innerHTML = `
+        <div>
+          <strong>Vehículo:</strong> ${esc(veh.placa||'Sin asignar')}
+          <span class="ml-2 text-muted">Cap: ${esc(veh.capacidad || '—')} kg</span>
+          <span class="ml-2 badge badge-secondary">${paradas.length} paradas</span>
+        </div>
+        <div>
+          <button class="btn btn-sm btn-outline-primary btn-ver-mapa">Ver en Google Maps</button>
+        </div>
+      `;
+
+      const body = document.createElement('div');
+      body.className = 'card-body';
+      const table = document.createElement('table');
+      table.className = 'table table-sm table-bordered mb-0';
+      table.innerHTML = `
+        <thead class="thead-light">
+          <tr>
+            <th style="width:60px;">Orden</th>
+            <th>Cliente</th>
+            <th>Dirección</th>
+            <th style="width:120px;">Hora pref.</th>
+            <th style="width:140px;">Ventana</th>
+            <th style="width:100px;">Kg estim.</th>
+            <th style="width:120px;">Acciones</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      `;
+      const tb = table.querySelector('tbody');
+
+      paradas.forEach((p,idx)=>{
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="text-center">
+            <input type="number" class="form-control form-control-sm inp-orden" value="${esc(p.orden ?? (idx+1))}" min="1">
+          </td>
+          <td>${esc(p.cliente_nombre || '')}</td>
+          <td>${esc(p.direccion || '')}</td>
+          <td class="text-center">${fmtHora(p.hora_pref)}</td>
+          <td class="text-center">${fmtHora(p.ventana_ini)} – ${fmtHora(p.ventana_fin)}</td>
+          <td class="text-right">${esc(p.capacidad_kg ?? '')}</td>
+          <td class="text-center">
+            <button type="button" class="btn btn-sm btn-outline-danger btn-quitar">Quitar</button>
+          </td>
+        `;
+        // Quitar fila
+        tr.querySelector('.btn-quitar').addEventListener('click', ()=>{
+          const i = grupo.paradas.indexOf(p);
+          if(i>=0){ grupo.paradas.splice(i,1); renderPlan(plan); }
+        });
+        // Cambiar orden
+        tr.querySelector('.inp-orden').addEventListener('change', (ev)=>{
+          p.orden = parseInt(ev.target.value||'0',10) || (idx+1);
+          // reordenar por orden asc
+          grupo.paradas.sort((a,b)=>(a.orden||999)-(b.orden||999));
+          renderPlan(plan);
+        });
+        tb.appendChild(tr);
+      });
+
+      body.appendChild(table);
+      card.appendChild(head);
+      card.appendChild(body);
+      $contenedor.appendChild(card);
+
+      // Ver en Google Maps (usa lat/lng si vienen, si no, mejor backend geocodifica y devuelve lat/lng)
+      head.querySelector('.btn-ver-mapa').addEventListener('click', ()=>{
+        if(paradas.length===0) return;
+        // Construimos la ruta con waypoints
+        const pts = paradas
+          .filter(p => p.lat && p.lng)
+          .map(p => `${p.lat},${p.lng}`);
+        if(pts.length === 0){
+          alert('No hay coordenadas geográficas para estas paradas.');
+          return;
+        }
+        const origin = encodeURIComponent(pts[0]);
+        const destination = encodeURIComponent(pts[pts.length-1]);
+        const waypoints = pts.slice(1, -1).map(encodeURIComponent).join('|');
+        const url = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}` + (waypoints ? `&waypoints=${waypoints}` : '');
+        window.open(url, '_blank');
+      });
+    });
+  }
+
+  // 3.3 Generar plan (consulta al backend)
+  async function generarPlan(){
+    const f = $fecha.value;
+    if(!f){ alert('Selecciona una fecha'); return; }
+
+    const vehId = $vehiculo.value || '';
+    const params = new URLSearchParams({ fecha: f });
+    if(vehId) params.append('vehiculo_id', vehId);
+
+    $contenedor.innerHTML = '<div class="text-center py-5">Generando plan…</div>';
+
+    try{
+      const r = await fetch(`/transporte/plan?${params.toString()}`, { headers:{'Accept':'application/json'} });
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      const data = await r.json();
+      // Estructura esperada:
+      // data = [{ vehiculo:{id,placa,capacidad}, paradas:[
+      //   { recoleccion_id, cliente_id, cliente_nombre, direccion, lat, lng,
+      //     hora_pref, ventana_ini, ventana_fin, capacidad_kg, orden } ] }, ...]
+      planActual = data || [];
+      renderPlan(planActual);
+    }catch(e){
+      console.error(e);
+      $contenedor.innerHTML = '<div class="alert alert-danger">No se pudo generar el plan.</div>';
+      planActual = [];
+    }
+  }
+
+  // 3.4 Guardar planilla (persistencia)
+  async function guardarPlanilla(){
+    if(!planActual || planActual.length===0){
+      alert('No hay plan para guardar'); return;
+    }
+    const f = $fecha.value;
+    if(!f){ alert('Selecciona una fecha'); return; }
+
+    try{
+      const r = await fetch('/transporte/guardar', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ fecha: f, plan: planActual })
+      });
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      alert('Planilla guardada correctamente');
+    }catch(e){
+      console.error(e);
+      alert('No se pudo guardar la planilla');
+    }
+  }
+
+  // 3.5 Exportar CSV
+  function exportarCSV(){
+    if(!planActual || planActual.length===0){
+      alert('No hay datos para exportar'); return;
+    }
+    const rows = [
+      ['Vehículo','Orden','Cliente','Dirección','Hora pref','Ventana','Kg']
+    ];
+    planActual.forEach(g=>{
+      const v = g.vehiculo || {};
+      (g.paradas||[]).forEach(p=>{
+        rows.push([
+          v.placa || 'Sin asignar',
+          (p.orden ?? ''),
+          p.cliente_nombre ?? '',
+          p.direccion ?? '',
+          fmtHora(p.hora_pref),
+          `${fmtHora(p.ventana_ini)}-${fmtHora(p.ventana_fin)}`,
+          (p.capacidad_kg ?? '')
+        ]);
+      });
+    });
+    const csv = rows.map(r=>r.map(x=>{
+      const s = (x ?? '').toString().replace(/"/g,'""');
+      return `"${s}"`;
+    }).join(',')).join('\n');
+
+    const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+    const url  = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = `planilla_transporte_${$fecha.value||'fecha'}.csv`;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  // Eventos
+  $btnGen?.addEventListener('click', generarPlan);
+  $btnSave?.addEventListener('click', guardarPlanilla);
+  $btnCSV?.addEventListener('click', exportarCSV);
+
+  // Setea fecha por defecto = hoy
+  const hoy = new Date();
+  const yyyy = hoy.getFullYear();
+  const mm = String(hoy.getMonth()+1).padStart(2,'0');
+  const dd = String(hoy.getDate()).padStart(2,'0');
+  $fecha.value = `${yyyy}-${mm}-${dd}`;
+
+  // Arranque
+  cargarVehiculos();
+})();
+</script>
+
 
 {% endblock %}
 {% block scripts %}

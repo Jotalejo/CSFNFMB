@@ -1,6 +1,5 @@
-from fastapi import APIRouter, Depends, HTTPException, Request, Form
-from dependencies import templates
-from dependencies import get_db
+from fastapi import APIRouter, Depends, HTTPException, Request, Form, status
+from dependencies import templates, get_db
 from schemas import ClienteCreate, Cliente
 from services import ClienteService, CiudadService, TipoResidService
 from sqlalchemy.orm import Session
@@ -24,11 +23,33 @@ async def get_clients(request: Request, db:Session=Depends(get_db)):
     clientes = service.get_clientes()
     return templates.TemplateResponse("/clientes/search.html", {"request": request, "clientes": clientes} )
 
-@router.get("/json")
+@router.get("/json1")
 async def get_clients_json(db:Session=Depends(get_db)):
     service = ClienteService(db)
     clientes = service.get_clientes()
     return {"data":clientes}
+
+@router.get("/json")
+async def get_clients_json(db: Session = Depends(get_db)):
+    service = ClienteService(db)
+    clientes = service.get_clientes()
+
+    data = [
+        {
+            "id": c.id,
+            "razonSocial": c.razonSocial,
+            "nit": c.nit,
+            "contacto": c.contacto,
+            "telefono": c.telefono,
+            "observaciones": getattr(c, "observaciones", None),
+            "latrecolec": getattr(c, "latrecolec", None),
+            "lngrecolec": getattr(c, "lngrecolec", None),
+            "linkmaps": getattr(c, "linkmaps", None),
+        }
+        for c in clientes
+    ]
+    return {"data": data}
+
 
 # Boton que había de buscar cliente
 @router.post("/search")
@@ -116,6 +137,34 @@ def cliente_json(cliente_id: int, db: Session = Depends(get_db)):
         "contacto": c.contacto,
         "telefonoContacto": c.telefonoContacto,
         "email": c.email,
-        "observaciones": c.observaciones,  # 👈 añadir
+        "observaciones": c.observaciones,
+        "latrecolec": getattr(c, "latrecolec", None),
+        "lngrecolec": getattr(c, "lngrecolec", None),
+        "linkmaps": getattr(c, "linkmaps", None),
     }
+
+@router.post("/{cliente_id}/linkmaps/refresh", status_code=status.HTTP_200_OK)
+def refresh_linkmaps(cliente_id: int, db: Session = Depends(get_db)):
+    """
+    Genera/actualiza el linkmaps para un cliente específico usando lat/lng.
+    """
+    service = ClienteService(db)
+    c = service.refresh_linkmaps(cliente_id)
+    return {
+        "id": c.id,
+        "razonSocial": c.razonSocial,
+        "latrecolec": c.latrecolec,
+        "lngrecolec": c.lngrecolec,
+        "linkmaps": c.linkmaps,
+    }
+
+@router.post("/linkmaps/backfill", status_code=status.HTTP_200_OK)
+def backfill_linkmaps(db: Session = Depends(get_db)):
+    """
+    Recorre todos los clientes y genera linkmaps donde falte
+    (solo si tienen lat/lng). Útil para migraciones.
+    """
+    service = ClienteService(db)
+    updated = service.backfill_linkmaps()
+    return {"updated": updated}
 

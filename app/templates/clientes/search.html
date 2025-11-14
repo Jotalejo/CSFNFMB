@@ -17,7 +17,7 @@
                                     <h3 class="card-title">Manejar de datos del Cliente y datos iniciales de los residuos de cada cliente</h3>
                                 </div>
                                 <div class="card-body">
-                                    <button id="addToTable" class="btn btn-primary mb-15" type="button" onclick="creacliente">
+                                    <button id="addToTable" class="btn btn-primary mb-15" type="button" onclick="creacliente()">
                                         <i class="icon wb-plus" aria-hidden="true"></i>Agregar Cliente
                                     </button>
                                     <div class="table-responsive">
@@ -45,8 +45,12 @@
                                         </table>
                                     </div>
                                     <!-- Modal -->
-                                    <div class="modal fade" id="MdlGestRescli" tabindex="-1" role="dialog" aria-labelledby="ModalResiduos" aria-hidden="true">
+                                     <!-- Modal contenedor VACÍO (no metas otro <div id="..."> adentro) -->
+                                    <div class="modal fade" id="MdlFrecuenciaCliente" tabindex="-1" role="dialog" aria-hidden="true"></div>
                                     </div>
+                                   <!--  <script>
+                                        document.getElementById('frecuenciaForm')?.addEventListener('submit', onSubmitFrecuencia);
+                                    </script>   -->       
                                     <!-- End Modal -->
                                 </div>                        
                             </div>
@@ -137,7 +141,7 @@
                     "className":      'details-control',
                     "orderable":      false,
                     "data":           null,
-                    "defaultContent": '<button class="btn btn-sm btn-icon on-editing button-discard data-toggle="tooltip" data-original-title="Discard" hidden><i class="icon-close" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon on-default m-r-5 button-edit data-toggle="tooltip" data-original-title="Editar"><i class="icon-pencil" aria-hidden="true"></i></button><button class="btn button-remove btn-sm btn-icon" data-original-title="Residuos"><i class="icon-trash" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon on-default m-r-5 button-view data-toggle="tooltip" data-original-title="Visualizar"><i class="icon-eye" aria-hidden="true"></i></button>'
+                    "defaultContent": '<button class="btn btn-sm btn-icon on-editing button-discard" data-toggle="tooltip" data-original-title="Discard" hidden><i class="icon-close" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon on-default m-r-5 button-edit" data-toggle="tooltip" data-original-title="Editar"><i class="icon-pencil" aria-hidden="true"></i></button><button class="btn button-remove btn-sm btn-icon" data-original-title="Residuos"><i class="icon-trash" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon on-default m-r-5 button-view" data-toggle="tooltip" data-original-title="Visualizar"><i class="icon-eye" aria-hidden="true"></i></button>'
                 },
             ],
             rowId: 'id',            
@@ -159,15 +163,15 @@
         fetch('/residuoscli/cliente/' + id)
             .then(response => response.text())
             .then(data => {
-                $('#MdlGestRescli').html(data);
-                const rform = document.getElementById("residuoForm");
-                rform.addEventListener("submit", send_json);
-                $('#MdlGestRescli').modal('show');
+                $('#MdlFrecuenciaCliente').html(data);
+           //     const rform = document.getElementById("residuoForm");    ESTE ES EL IMPORTANTE
+             //   rform.addEventListener("submit", send_json);
+                $('#MdlFrecuenciaCliente').modal('show');
             })
             .catch(error => {
                 console.error("Error al cargar los datos del residuo:", error);
             });
-    }
+    }   
 
     function activarModal(id){
         $('#MdlGestRescli').modal('show');

@@ -61,30 +61,102 @@
                                                 <label for="observaciones">Observaciones</label>
                                                 <textarea id="observaciones" name="observaciones" class="form-control" rows="4">{{ cliente.observaciones or '' }}</textarea>
                                             </div>
+
+                                            <!-- Lat / Lng (solo lectura, se llenan desde el mapa) -->
+                                            <div class="form-row">
+                                                <div class="form-group col-md-6">
+                                                    <label>Latitud</label>
+                                                    <input id="latrecolec_cli" name="latrecolec_cli" value="{{cliente.latrecolec_cli if cliente is not none else ''}}">
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                    <label>Longitud</label>
+                                                    <input id="lngrecolec_cli" name="lngrecolec_cli" value="{{cliente.lngrecolec_cli if cliente is not none else ''}}">
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="form-row">
+                                                <div class="form-group col-md-12">
+                                                    <label>Vínculo</label>
+                                                    <textarea id="linkmaps" name="linkmaps" class="form-control" rows="1">{{cliente.linkmaps if cliente is not none else ''}}</textarea>                                                
+                                                </div>
+                                            </div>
+
                                             <br>
                                             <button id="btnguardc" name="btnguardc" type="submit" class="btn btn-primary">{{ "Crear" if cliente is none or cliente.id is none else "Guardar" }}</button>
                                         </div>
                                     </form>
                                 </div>
+
+                                <!-- Columna derecha: mapa + geocodificación -->
                                 <div class="col-md-12 col-lg-5">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h3 class="card-title">Validaciones</h3>
+                                            <h3 class="card-title">Ubicación en mapa</h3>
                                         </div>
                                         <div class="card-body">
                                             <div class="form-group">
-                                                <label class="form-label">Nombre del Usuario</label>
-                                                <div class="input-icon">
-                                                    <span class="input-icon-addon"><i class="fe fe-user"></i></span>
-                                                    <input type="text" class="form-control" id = "nuser" name="nuser" placeholder="Usuario..">
-                                                </div>
+                                                <button type="button"
+                                                        class="btn btn-sm btn-outline-primary mb-2"
+                                                        id="btnGeocode">
+                                                    Buscar por dirección
+                                                </button>
+                                                <small class="form-text text-muted">
+                                                    Usa la dirección y ciudad para ubicar al cliente.
+                                                    También puedes arrastrar el marcador en el mapa.
+                                                </small>
                                             </div>
-                                            <div class="form-group">
-                                                <label class="form-label">Password</label>
-                                                <input type="password" class="form-control" id = "passusr" name="passusr" placeholder="Password..">
-                                            </div>                                
+                                            
+                                            <div id="map" style="width: 100%; height: 300px; margin-top: 10px;"></div>
                                         </div>
-                                    </div>                                                
+                                    </div>
+
+                                    <button type="button" id="btnRefreshLink" class="btn btn-outline-secondary btn-sm">
+                                        Generar/Actualizar enlace de Maps
+                                    </button>
+                                    <small class="form-text text-muted">
+                                        Requiere que Lat/Lng ya estén definidos (arrastrando el marcador o geocodificando).
+                                    </small>
+
+                                    <script>
+                                        document.getElementById('btnRefreshLink')?.addEventListener('click', async function(){
+                                        const id = document.getElementById('id')?.value;
+                                        if(!id){ return alert('Primero guarda el cliente para obtener un ID.'); }
+
+                                        try{
+                                            const r = await fetch(`/clientes/${id}/linkmaps/refresh`, { method: 'POST' });
+                                            if(!r.ok){
+                                            const j = await r.json().catch(()=>({detail:'Error'}));
+                                            throw new Error(j.detail || r.statusText);
+                                            }
+                                            const j = await r.json();
+                                            document.getElementById('linkmaps').value = j.linkmaps || '';
+                                            alert('Enlace de Maps actualizado ✅');
+                                        }catch(err){
+                                            alert('No se pudo actualizar linkmaps: ' + err.message);
+                                        }
+                                        });
+                                    </script>
+
+                                    <div class="card mt-3">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h3 class="card-title">Validaciones</h3>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="form-group">
+                                                    <label class="form-label">Nombre del Usuario</label>
+                                                    <div class="input-icon">
+                                                        <span class="input-icon-addon"><i class="fe fe-user"></i></span>
+                                                        <input type="text" class="form-control" id = "nuser" name="nuser" placeholder="Usuario..">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="form-label">Password</label>
+                                                    <input type="password" class="form-control" id = "passusr" name="passusr" placeholder="Password..">
+                                                </div>                                
+                                            </div>
+                                        </div>                                                
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -93,6 +165,124 @@
             </div>                    
         </div>
     </div>
+
+<script>
+  let map, marker, geocoder;
+
+  function initMap() {
+    // Usa los nuevos IDs si cambiaste a *_cli
+    const latInput = document.getElementById('latrecolec_cli') || document.getElementById('latrecolec');
+    const lngInput = document.getElementById('lngrecolec_cli') || document.getElementById('lngrecolec');
+
+    const lat = parseFloat(latInput?.value) || 7.0653;   // Barrancabermeja aprox
+    const lng = parseFloat(lngInput?.value) || -73.8540;
+    const center = { lat, lng };
+
+    console.log('initMap center:', center);
+
+    geocoder = new google.maps.Geocoder();
+    map = new google.maps.Map(document.getElementById("map"), { zoom: 15, center });
+
+    marker = new google.maps.Marker({ map, position: center, draggable: true });
+
+    marker.addListener('dragend', (e) => {
+      const lat = e.latLng.lat();
+      const lng = e.latLng.lng();
+      if (latInput) latInput.value = lat;
+      if (lngInput) lngInput.value = lng;
+      actualizarLinkMaps(lat, lng);
+      console.log("Marcador movido:", lat, lng);
+    });
+  }
+
+  // IMPORTANTE: expón la función para el callback del script
+  window.initMap = initMap;
+
+  function actualizarLinkMaps(lat, lng) {
+    const link = `https://www.google.com/maps?q=${lat},${lng}`;
+    const lm = document.getElementById('linkmaps');
+    if (lm) lm.value = link;
+    console.log("Enlace Maps generado:", link);
+  }
+
+  function aplicarResultado(loc){
+  const la = loc.lat(), ln = loc.lng();
+  document.getElementById('latrecolec').value = la;
+  document.getElementById('lngrecolec').value = ln;
+  actualizarLinkMaps(la, ln);
+
+  map.setCenter(loc);
+  map.setZoom(17);
+  marker.setPosition(loc);
+
+  // (Opcional) mostrar dirección bonita:
+  geocoder.geocode({ location: loc }, (res, status) => {
+    if(status === 'OK' && res && res.length){
+      const dirBonita = res[0].formatted_address || '';
+      console.log('Dirección formateada:', dirBonita);
+    }
+  });
+
+  // aviso rápido al usuario
+  // toast/alert ya lo tienes
+}
+
+  function geocodeAddress() {
+    const latInput = document.getElementById('latrecolec_cli') || document.getElementById('latrecolec');
+    const lngInput = document.getElementById('lngrecolec_cli') || document.getElementById('lngrecolec');
+
+    const dir = (document.getElementById('direccion')?.value || '').trim();
+    if (!dir) {
+      alert('Ingresa una dirección primero.');
+      return;
+    }
+    // Usa la ciudad seleccionada si existe
+    const selCiu = document.getElementById('ciudad');
+    const ciudadTxt = selCiu && selCiu.options[selCiu.selectedIndex]
+                      ? selCiu.options[selCiu.selectedIndex].text
+                      : 'Barrancabermeja';
+
+    const fullDir = `${dir}, ${ciudadTxt}, Santander, Colombia`;
+    console.log('Geocodificando:', fullDir);
+
+    geocoder.geocode({ address: fullDir }, (results, status) => {
+      console.log("Geocoder status:", status, results);
+      if (status === 'OK' && results && results.length > 0) {
+        const loc = results[0].geometry.location;
+        map.setCenter(loc);
+        marker.setPosition(loc);
+
+        const lat = loc.lat();
+        const lng = loc.lng();
+        if (latInput) latInput.value = lat;
+        if (lngInput) lngInput.value = lng;
+        actualizarLinkMaps(lat, lng);
+
+        alert("📍 Ubicación encontrada y actualizada.");
+      } else {
+        alert("No se puede encontrar la ubicación. Verifica la dirección.");
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // ⬇️ ESTE era el bug: el botón se llama btnGeocode, no btnBuscarDir
+    const btn = document.getElementById('btnGeocode');
+    if (btn) {
+      btn.addEventListener('click', geocodeAddress);
+      console.log('Listener de geocodificación conectado');
+    } else {
+      console.warn('No se encontró #btnGeocode');
+    }
+  });
+</script>
+
+<!-- Carga de Google Maps -->
+<script
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDt8B5ZsZH9ViddbzyC8CsMke_xD2MswlA&callback=initMap&loading=async"
+  async defer>
+</script>
+
 </div>
 
 <script>
@@ -101,4 +291,5 @@
         form.addEventListener("submit", send_json);
     })
 </script>
+
 {% endblock %}

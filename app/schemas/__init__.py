@@ -8,3 +8,4 @@ from .Citas import *
 from .Resclipot import *
 from .Tiporesid import *
 from .Frecuencia import *
+from .transporte import *

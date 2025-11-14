@@ -35,6 +35,21 @@
     }
 </style>
 
+<style>
+  /* Si tu bloque tiene clases tipo .steps, .step-item */
+  .steps .step-item::before,
+  .steps .step-item::after {
+      content: none !important;
+  }
+
+  /* Si además quieres quitar cualquier “bolita” de lista */
+  .steps,
+  .steps li {
+      list-style: none !important;
+  }
+</style>
+
+
 <!-- Core css -->
 <link rel="stylesheet" href="/static/assets/css/main.css"/>
 <link rel="stylesheet" href="/static/assets/css/theme4.css" id="stylesheet"/>
@@ -358,6 +373,16 @@
     </div>
 </div>
 
+<style>
+.bh_income,
+.bh_traffic,
+.bh_stocks,
+.bh_analytics,
+.peity,
+.sparkline {
+  display: none !important;
+}
+</style>
 
 <!-- jQuery and bootstrtap js -->
 <script src="/static/assets/bundles/lib.vendor.bundle.js"></script>

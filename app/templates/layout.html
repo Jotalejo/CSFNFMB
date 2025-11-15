@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"> -->
 <meta name="description" content="Crush it Able The most popular Admin Dashboard template and ui kit">
-<meta name="author" content="PuffinTheme the theme designer">
 
 <link rel="icon" href="/static/assets/favicon.ico" type="image/x-icon"/>
 
@@ -53,9 +53,39 @@
 <!-- Core css -->
 <link rel="stylesheet" href="/static/assets/css/main.css"/>
 <link rel="stylesheet" href="/static/assets/css/theme4.css" id="stylesheet"/>
+
+<!-- <link rel="stylesheet" href="/static/assets/css/classic.css"/>    <- agrega esto -->
+
 </head>
 
 <body class="font-opensans">
+
+<style>
+/* El sidebar ocupa todo el alto de la ventana y tiene scroll propio */
+#left-sidebar {
+    height: 100vh;
+    overflow-y: auto;
+}
+
+/* Ajustes específicos para celulares */
+@media (max-width: 768px) {
+
+    /* Hacemos el sidebar flotante, por encima del contenido */
+    #left-sidebar.sidebar {
+        position: fixed;
+        top: 56px;            /* altura aproximada del header_top */
+        left: 0;
+        width: 260px;         /* ancho cómodo para menú lateral */
+        z-index: 1040;        /* por encima del contenido */
+        background: #1f2d3d;  /* o el color de tu menú */
+    }
+
+    /* Que la página principal no quede desplazada a la derecha */
+    .page {
+        margin-left: 0 !important;
+    }
+}
+</style>
 
 <!-- Page Loader -->
 <div class="page-loader-wrapper">

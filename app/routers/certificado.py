@@ -17,8 +17,8 @@ router = APIRouter(
 # Inicio de la ruta para la recolección
 
 
-@router.get("/")
-async def get_certificado(request: Request, db: Session = Depends(get_db)):
+@router.get("/{recoleccion_id}")
+async def get_certificado(request: Request, recoleccion_id: int, db: Session = Depends(get_db)):
     options = {
         'page-size': 'Letter',
         'margin-top': '0.75in',

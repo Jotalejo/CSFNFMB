@@ -1,12 +1,10 @@
 # services/recolecc_service.py
 from typing import Optional, List
-from sqlalchemy.orm import Session, joinedload
+from sqlalchemy.orm import Session, joinedload, selectinload
+from sqlalchemy import select
 
 # ✅ Importa SIEMPRE la clase con alias claro
-from models import Recoleccion
-from models.Cliente import Cliente as ClienteModel
-from models.Estado import Estado as EstadoModel
-from models.TipoResiduo import TipoResiduo as TipoResiduoModel
+from models import Recoleccion, Cliente, TipoResiduo, Estado, DetalleRecoleccion
 
 from schemas.Recolecc import RecolectCreate, Recolecc
 
@@ -25,53 +23,89 @@ class RecoleccService:
             .options(
                 joinedload(Recoleccion.cliente_rel),
                 joinedload(Recoleccion.estado),
-                joinedload(Recoleccion.tipo_residuo),
+                joinedload(Recoleccion.detalles),
                 # joinedload(Recoleccion.vehiculo_rel),  # si luego habilitas la relación
             )
             .all()
         )
 
     def get_recolecc_by_id(self, rec_id: int) -> Optional[Recoleccion]:
-        # Si usas SQLAlchemy 1.4/2.0, .get está OK; en 1.3 usa query.get(rec_id)
-        return self.db.get(Recoleccion, rec_id)
+        stmt = select(Recoleccion).where(Recoleccion.id == rec_id).options(
+            selectinload(Recoleccion.cliente_rel),
+            selectinload(Recoleccion.estado),
+            selectinload(Recoleccion.detalles)
+        )
+        result = self.db.execute(stmt).scalars().first()
+        return result
 
     def create_recolecc(self, data: RecolectCreate) -> Recoleccion:
         # ❗ NO uses Recoleccion.Recoleccion(...) — Recoleccion YA es la clase
+        # Crea la recolección principal
+        # Faltan:
+
         rec = Recoleccion(
-            cliente=data.cliente,
+            cliente=data.cliente_id,
             fecha=data.fecha,
             # hora=data.hora,  # si lo usas
-            tresiduo=data.tresiduo,
-            cantresiduo=data.cantresiduo,
             peso=data.peso,
             estado_id=data.estado or 1,     # estado inicial = 1
+            tresiduo=data.tresiduo,
+            cantresiduo=data.cantresiduo,
             vehiculo=data.vehiculo,
             codigobar=data.codigobar,
-            firmarecolec=data.firmarecolec,
+            firma_entrega=data.firma_entrega,
             lafirmaderecibo=data.lafirmaderecibo,
             observaciones=data.observaciones,
+            # data.ciudad
+            # data.contacto
+            # data.direccion
+            # data.email
+            # data.telefono
+            # data.telefono_contacto
+            # data.firmarecolec
         )
         self.db.add(rec)
+
+        for detalle in data.residuos or []:
+            detalle_rec = DetalleRecoleccion(
+                recoleccion_id=rec.id,
+                tipo_residuo_id=detalle.tresiduo,
+                cantidad=detalle.cantidad,
+                peso=detalle.peso,
+                peso_total=detalle.peso_total,
+                fecha=detalle.fecha,
+                hora=detalle.hora
+            )
+            self.db.add(detalle_rec)
+        self.db.commit()
 
     def get_recoleccion_detallada(self, recoleccion_id: int):
         return self.db.query(Recoleccion).join(Recoleccion.cliente_rel).join(Recoleccion.estado).join(Recoleccion.tipo_residuo).where(Recoleccion.id == recoleccion_id).first()
 
     def create_recolecc(self, recoleccion: RecolectCreate):
-        db_recoleccion = Recoleccion(cliente=recoleccion.cliente,
+        db_recoleccion = Recoleccion(cliente=recoleccion.cliente_id,
                                      fecha=recoleccion.fecha,
                                      hora=recoleccion.hora,
-                                     tiporesiduo=recoleccion.tiporesiduo,
-                                     cantibolsas=recoleccion.cantibolsas,
-                                     pesotot=recoleccion.pesotot,
-                                     estado=recoleccion.estado,
+                                     estado_id=recoleccion.estado,
                                      vehiculo=recoleccion.vehiculo,
-                                     barras=recoleccion.barras,
-                                     firmaentrega=recoleccion.firmaentrega,
-                                     observaciones=recoleccion.observaciones
+                                     codigobar=recoleccion.codigobar,
+                                     firma_entrega=recoleccion.firmarecolec,
+                                     observaciones=recoleccion.observaciones,
+                                     lafirmaderecibo=recoleccion.lafirmaderecibo
                                      )
         self.db.add(db_recoleccion)
         self.db.commit()
-        self.db.refresh(recoleccion)
+
+        for detalle in recoleccion.residuos or []:
+            db_detalle = DetalleRecoleccion(
+                recoleccion_id=db_recoleccion.id,
+                tipo_residuo_id=detalle.tresiduo,
+                cantidad=detalle.cantidad,
+                peso=detalle.peso,
+                peso_total=detalle.peso_total
+            )
+            self.db.add(db_detalle)
+        self.db.commit()
         return recoleccion
 
     def update_recolecc(self, rec_id: int, data: RecolectCreate) -> Recoleccion:
@@ -107,11 +141,11 @@ class RecoleccService:
         self.db.commit()
 
     # ------- Helpers de clientes -------
-    def get_clientes(self, skip: int = 0, limit: int = 100) -> List[ClienteModel]:
+    def get_clientes(self, skip: int = 0, limit: int = 100) -> List[Cliente]:
         return (
-            self.db.query(ClienteModel)
+            self.db.query(Cliente)
             # ⚠️ Ajusta al nombre EXACTO del atributo en tu modelo
-            .order_by(ClienteModel.razonSocial)
+            .order_by(Cliente.razonSocial)
             .offset(skip).limit(limit).all()
         )
 #    def get_clientes(self, skip:int=0, limit:int=100):
@@ -127,14 +161,14 @@ class RecoleccService:
     def get_clixlet(self, letra: str = None, skip: int = 0, limit: int = 100):
         query = self.db.query(Cliente)
 
-    def get_clixlet(self, letra: Optional[str] = None, skip: int = 0, limit: int = 100) -> List[ClienteModel]:
-        q = self.db.query(ClienteModel)
+    def get_clixlet(self, letra: Optional[str] = None, skip: int = 0, limit: int = 100) -> List[Cliente]:
+        q = self.db.query(Cliente)
         if letra:
-            q = q.filter(ClienteModel.razonSocial.like(f"{letra}%"))
-        return q.order_by(ClienteModel.razonSocial).offset(skip).limit(limit).all()
+            q = q.filter(Cliente.razonSocial.like(f"{letra}%"))
+        return q.order_by(Cliente.razonSocial).offset(skip).limit(limit).all()
 
-    def get_cliporID(self, id: int) -> Optional[ClienteModel]:
-        return self.db.query(ClienteModel).filter(ClienteModel.id == id).first()
+    def get_cliporID(self, id: int) -> Optional[Cliente]:
+        return self.db.query(Cliente).filter(Cliente.id == id).first()
         return (query
                 .order_by(Cliente.razonSocial)
                 .offset(skip)

@@ -54,7 +54,7 @@
     <div class="tab-pane fade show active" id="prog-recolec" role="tabpanel">
       <div class="row clearfix">
         <div class="col-12">
-          <form class="card" method="post" action="/recolecciones/">
+          <form class="card" method="post" action="/recolecciones/" onsubmit="send_json(event);">
             <div class="card-body">
               <h3 class="card-title">Datos de Recolección</h3>
 
@@ -107,7 +107,7 @@
                     </button>
                   </label>
                   <div class="table-responsive">
-                    <table class="table table-bordered mb-2" id="tablaResiduos">
+                    <table class="table table-bordered mb-2 data-array" id="residuos">
                       <thead>
                         <tr>
                           <th style="width: 38%">Tipo de Residuo</th>
@@ -133,19 +133,19 @@
                 <div class="col-sm-6 col-md-8">
                   <div class="form-group">
                     <label>Dirección</label>
-                    <input id="direc" type="text" class="form-control" disabled>
+                    <input id="direccion" type="text" class="form-control" disabled>
                   </div>
                 </div>
                 <div class="col-sm-6 col-md-4">
                   <div class="form-group">
                     <label>Teléfono</label>
-                    <input id="telc" type="text" class="form-control" disabled>
+                    <input id="telefono" type="text" class="form-control" disabled>
                   </div>
                 </div>
                 <div class="col-sm-6 col-md-4">
                   <div class="form-group">
                     <label>Ciudad</label>
-                    <input id="ciud" type="text" class="form-control" disabled>
+                    <input id="ciudad" type="text" class="form-control" disabled>
                   </div>
                 </div>
                 <div class="col-sm-6 col-md-6">
@@ -163,13 +163,13 @@
                 <div class="col-sm-6 col-md-6">
                   <div class="form-group">
                     <label>Teléfono (Contacto)</label>
-                    <input id="teldco" name="teldco" type="text" class="form-control" placeholder="Teléfono del Contacto" required>
+                    <input id="telefono_contacto" name="telefono_contacto" type="text" class="form-control" placeholder="Teléfono del Contacto" required>
                   </div>
                 </div>
                 <div class="col-md-12">
                   <div class="form-group mb-0">
                     <label class="form-label">Acerca de la Recolección - Observaciones</label>
-                    <textarea id="observ" name="observ" rows="5" class="form-control" placeholder="Acá puede colocar una descripción"></textarea>
+                    <textarea id="observaciones" name="observaciones" rows="5" class="form-control" placeholder="Acá puede colocar una descripción"></textarea>
                   </div>
                 </div>
               </div>
@@ -197,7 +197,7 @@
                         <th>Tipo de Residuo</th>
                         <th>Estatus</th>
                         <th>Peso</th>
-                        <th>Acciones</th>  <!-- 👈 -->
+                        <th>Acciones</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -208,7 +208,6 @@
                         <td>{{ recoleccion.cliente_rel.razonSocial }}</td>
                         <td>{{ recoleccion.fecha }}</td>
                         <td>{{ recoleccion.hora }}</td>
-                        <td>{{ recoleccion.tipo_residuo.nombre }}</td>
                         <td><span class="{{ recoleccion.estado.clase }}"></span> {{ recoleccion.estado.nombre }}</td>
                         <td>{{ recoleccion.peso }} Kg.</td>
                         <td>
@@ -268,29 +267,29 @@
 </div>
 
 <!-- Template de fila -->
-    <template id="tplResiduo">
-      <tr>
-        <td>
-          <select name="tipo_residuo_id[]" class="form-control selTipo" required>
-            <option value="" selected disabled>Seleccione…</option>
-          </select>
-        </td>
-        <td>
-          <input type="number" name="cantbol[]" class="form-control cant" min="1" max="10000" step="any" required>
-          <div class="invalid-feedback"></div>
-        </td>
-        <td>
-          <input type="number" name="pesobol[]" class="form-control peso" min="1" max="10000" step="any" required>
-          <div class="invalid-feedback"></div>
-        </td>
-        <td>
-          <input type="number" name="totpeso[]" class="form-control total" readonly>
-        </td>
-        <td class="text-center">
-          <button type="button" class="btn btn-sm btn-danger btnDel" title="Eliminar fila">&times;</button>
-        </td>
-      </tr>
-    </template>
+<template id="tplResiduo">
+  <tr>
+    <td>
+      <select name="tresiduo" class="form-control selTipo" required>
+        <option value="" selected disabled>Seleccione…</option>
+      </select>
+    </td>
+    <td>
+      <input type="number" name="cantidad" class="form-control cant" min="1" max="10000" step="any" required>
+      <div class="invalid-feedback"></div>
+    </td>
+    <td>
+      <input type="number" name="peso" class="form-control peso" min="1" max="10000" step="any" required>
+      <div class="invalid-feedback"></div>
+    </td>
+    <td>
+      <input type="number" name="peso_total" class="form-control total" readonly>
+    </td>
+    <td class="text-center">
+      <button type="button" class="btn btn-sm btn-danger btnDel" title="Eliminar fila">&times;</button>
+    </td>
+  </tr>
+</template>
 
 <div class="modal fade" id="detalleModal" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
@@ -306,23 +305,30 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-success" id="btnDescargarCertificado">Descargar Certificado</button>
         <button type="button" class="btn btn-primary" onclick="window.print()">Imprimir</button>
       </div>
     </div>
   </div>
 </div>
 
-<script>
+{% endblock %}
 
-    ver_manifiesto = function(id){
-        window.open('/recolecciones/manifiesto/'+id, '_blank');
-    }
+{% block scripts %}
+<script>
+ver_manifiesto = function(id){
+    window.open('/recolecciones/manifiesto/'+id, '_blank');
+}
 
 document.addEventListener('DOMContentLoaded', () => {
   const selCliente = document.getElementById('selCliente');
-  const selTipo    = document.getElementById('selTipoResiduo');
+  
 
   async function cargarTipos(clienteId) {
+    const selTipo    = document.getElementById('selTipoResiduo');
+
+    if (selTipo == null) return;
+    
     selTipo.innerHTML = '<option value="" disabled selected>Cargando…</option>';
     try {
       const r = await fetch(`/recolecciones/tiposresiduo/${clienteId}`);
@@ -330,8 +336,8 @@ document.addEventListener('DOMContentLoaded', () => {
       selTipo.innerHTML = '<option value="" disabled selected>Seleccione tipo de residuo…</option>';
       data.forEach(tr => {
         const opt = document.createElement('option');
-        opt.value = tr.id;        // guarda el código
-        opt.textContent = tr.nombre; // muestra el nombre
+        opt.value = tr.id;
+        opt.textContent = tr.nombre;
         selTipo.appendChild(opt);
       });
     } catch (e) {
@@ -344,11 +350,12 @@ document.addEventListener('DOMContentLoaded', () => {
   selCliente?.addEventListener('change', e => cargarTipos(e.target.value));
 });
 </script>
+
 <script>
 (function () {
-  const $cant  = document.getElementById('cantbol');
-  const $peso  = document.getElementById('pesobol');
-  const $total = document.getElementById('totpeso');
+  const $cant  = document.getElementById('cantidad');
+  const $peso  = document.getElementById('peso');
+  const $total = document.getElementById('peso_total');
   const form   = document.querySelector('#prog-recolec form') || document.querySelector('form');
 
   function toNumber(v){ return parseFloat(String(v).replace(',', '.')); }
@@ -376,28 +383,34 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function actualizarTotal(){
-    const c = toNumber($cant.value);
-    const p = toNumber($peso.value);
+    const c = toNumber($cant?.value ?? 0);
+    const p = toNumber($peso?.value ?? 0);
 
-    setValidity($cant, isValid(c), 'Debe ser > 0 y ≤ 10.000');
-    setValidity($peso, isValid(p), 'Debe ser > 0 y ≤ 10.000');
+    if ($cant) {
+      setValidity($cant, isValid(c), 'Debe ser > 0 y ≤ 10.000');
+    }
 
-    if(isValid(c) && isValid(p)){
-      $total.value = (c * p).toFixed(2);
-    }else{
-      $total.value = '';
+    if ($peso) {
+      setValidity($peso, isValid(p), 'Debe ser > 0 y ≤ 10.000');
+    }
+
+    if ($total){
+      if(isValid(c) && isValid(p)){
+        $total.value = (c * p).toFixed(2);
+      }else{
+        $total.value = '';
+      }
     }
   }
 
   ['input','change','blur'].forEach(evt => {
-    $cant.addEventListener(evt, actualizarTotal);
-    $peso.addEventListener(evt, actualizarTotal);
+    if ($cant) $cant.addEventListener(evt, actualizarTotal);
+    if ($peso) $peso.addEventListener(evt, actualizarTotal);
   });
 
   if(form){
     form.addEventListener('submit', function(e){
       actualizarTotal();
-      // evita enviar si hay inválidos
       if (form.querySelector('.is-invalid')){
         e.preventDefault();
         e.stopPropagation();
@@ -405,16 +418,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  actualizarTotal(); // por si hay valores cargados
+  actualizarTotal();
 })();
 </script>
+
 <script>
 (function () {
   function setVal(sel, val) {
     const el = document.querySelector(sel);
     if (!el) return;
     el.value = (val ?? '').toString();
-    // por si tienes listeners de input
     el.dispatchEvent(new Event('input', { bubbles: true }));
   }
 
@@ -426,12 +439,12 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!res.ok) throw new Error('No se pudo cargar el cliente');
       const c = await res.json();
 
-      setVal('#direc', c.direccion);
-      setVal('#telc', c.telefono);
-      setVal('#ciud', c.ciudad_nombre || c.ciudad); // muestra nombre si viene
+      setVal('#direccion', c.direccion);
+      setVal('#telefono', c.telefono);
+      setVal('#ciudad', c.ciudad_nombre || c.ciudad);
       setVal('#email', c.email);
-      setVal('#conta', c.contacto);
-      setVal('#teldco', c.telefonoContacto || c.telefono_contacto);
+      setVal('#contacto', c.contacto);
+      setVal('#telefono_contacto', c.telefonoContacto || c.telefono_contacto);
     } catch (err) {
       console.error(err);
     }
@@ -445,45 +458,56 @@ document.addEventListener('DOMContentLoaded', () => {
       const id = e.target.value;
       if (id) cargarCliente(id);
     });
-
-    // Si quieres precargar al primer cliente de la lista:
-    // if (sel.value) cargarCliente(sel.value);
   });
 })();
 </script>
+
 <script>
-  $(function () {
-    $('.datepicker').datepicker({
-      format: 'yyyy-mm-dd',     // 👈 esto hace que envíe 2025-06-10
-      language: 'es',
-      autoclose: true,
-      todayHighlight: true
-    });
+$(function () {
+  $('.datepicker').datepicker({
+    format: 'yyyy-mm-dd',
+    language: 'es',
+    autoclose: true,
+    todayHighlight: true
   });
+});
 </script>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    $(document).on('click', '.btn-ver-detalle', async function () {
-      const id = this.dataset.id;
-      const $modal = $('#detalleModal');
-      const $body  = $modal.find('.modal-body');
+document.addEventListener('DOMContentLoaded', function () {
+  $(document).on('click', '.btn-ver-detalle', async function () {
+    const id = this.dataset.id;
+    const $modal = $('#detalleModal');
+    const $body  = $modal.find('.modal-body');
+    const $btnCertificado = $('#btnDescargarCertificado');
 
-      $body.html('<div class="text-center py-5">Cargando…</div>');
-      $modal.modal('show');
+    // Guardar el ID de recolección en el botón
+    $btnCertificado.data('recoleccion-id', id);
 
-      try {
-        // Devuelve HTML parcial
-        const res  = await fetch(`/recolecciones/detalle/${id}`, { headers: { 'X-Requested-With': 'fetch' }});
-        if (!res.ok) throw new Error('Error HTTP ' + res.status);
-        const html = await res.text();
-        $body.html(html);
-      } catch (err) {
-        console.error(err);
-        $body.html('<div class="alert alert-danger">No se pudo cargar el detalle.</div>');
-      }
-    });
+    $body.html('<div class="text-center py-5">Cargando…</div>');
+    $modal.modal('show');
+
+    try {
+      const res  = await fetch(`/recolecciones/detalle/${id}`, { headers: { 'X-Requested-With': 'fetch' }});
+      if (!res.ok) throw new Error('Error HTTP ' + res.status);
+      const html = await res.text();
+      $body.html(html);
+    } catch (err) {
+      console.error(err);
+      $body.html('<div class="alert alert-danger">No se pudo cargar el detalle.</div>');
+    }
   });
+
+  // Manejar clic en botón de descargar certificado
+  $(document).on('click', '#btnDescargarCertificado', function () {
+    const recoleccionId = $(this).data('recoleccion-id');
+    if (recoleccionId) {
+      window.open(`/recolecciones/manifiesto/${recoleccionId}`, '_blank');
+    } else {
+      alert('No se pudo obtener el ID de recolección');
+    }
+  });
+});
 </script>
 
 <script>
@@ -494,7 +518,7 @@ document.addEventListener('DOMContentLoaded', function(){
   const tpl          = document.getElementById('tplResiduo');
   const lblGranTotal = document.getElementById('granTotal');
 
-  let tiposCache = []; // [{id, nombre}, ...]
+  let tiposCache = [];
 
   function toNum(v){ return parseFloat(String(v).replace(',', '.')); }
   function isValid(n){ return !isNaN(n) && n > 0 && n <= 10000; }
@@ -553,14 +577,13 @@ document.addEventListener('DOMContentLoaded', function(){
     node.querySelector('.btnDel').addEventListener('click', () => {
       node.remove();
       calcGrandTotal();
-      if (tbody.children.length === 0) addRow(); // deja al menos 1 fila
+      if (tbody.children.length === 0) addRow();
     });
 
     tbody.appendChild(node);
   }
 
   async function cargarTiposPorCliente(clienteId){
-    // reset
     tbody.innerHTML = '';
     lblGranTotal.textContent = '0.00';
     btnAdd.disabled = true;
@@ -570,10 +593,10 @@ document.addEventListener('DOMContentLoaded', function(){
     try {
       const r = await fetch(`/recolecciones/tiposresiduo/${clienteId}?_ts=${Date.now()}`);
       if (!r.ok) throw new Error('HTTP ' + r.status);
-      const data = await r.json(); // [{id, nombre}]
+      const data = await r.json();
       tiposCache = data.map(d => ({id: d.id, nombre: d.nombre}));
       btnAdd.disabled = (tiposCache.length === 0);
-      if (tiposCache.length > 0) addRow(); // agrega primera fila
+      if (tiposCache.length > 0) addRow();
     } catch (e) {
       console.error('Error cargando tipos:', e);
       tiposCache = [];
@@ -605,7 +628,6 @@ document.addEventListener('DOMContentLoaded', function(){
     }
   }
 
-  // ✅ AHORA SÍ: conectar el botón “Agregar residuo”
   if (btnAdd) {
     btnAdd.addEventListener('click', function(e){
       e.preventDefault();
@@ -613,14 +635,12 @@ document.addEventListener('DOMContentLoaded', function(){
     });
   }
 
-  // Cuando cambia el cliente
   selCliente?.addEventListener('change', (e) => {
     const id = e.target.value;
     cargarTiposPorCliente(id);
     cargarDatosCliente(id);
   });
 
-  // Si ya hay cliente seleccionado al cargar
   if (selCliente && selCliente.value) {
     cargarTiposPorCliente(selCliente.value);
     cargarDatosCliente(selCliente.value);
@@ -637,21 +657,18 @@ document.addEventListener('DOMContentLoaded', function(){
   const $btnCSV    = document.getElementById('pt_btn_exportar');
   const $contenedor= document.getElementById('pt_contenedor');
 
-  // Estado local (lo usamos para guardar/exportar)
-  let planActual = []; // [{vehiculo:{id,placa,capacidad}, paradas:[{...}]}]
+  let planActual = [];
 
-  // Util
   function fmtHora(h){ return h ? String(h).slice(0,5) : '—'; }
   function esc(s){ return (s ?? '').toString().replace(/[&<>"]/g, m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[m])); }
   function qs(sel,root=document){ return root.querySelector(sel); }
   function qsa(sel,root=document){ return Array.from(root.querySelectorAll(sel)); }
 
-  // 3.1 Cargar vehículos para el select
   async function cargarVehiculos(){
     try{
       const r = await fetch('/vehiculos/options', {headers:{'Accept':'application/json'}});
       if(!r.ok) throw new Error('HTTP '+r.status);
-      const data = await r.json(); // [{id, placa, capacidad}]
+      const data = await r.json();
       data.forEach(v=>{
         const opt = document.createElement('option');
         opt.value = v.id;
@@ -663,9 +680,7 @@ document.addEventListener('DOMContentLoaded', function(){
     }
   }
 
-  // 3.2 Pintar plan por vehículo
   function renderPlan(plan){
-    // Limpiar
     $contenedor.innerHTML = '';
     if(!plan || plan.length===0){
       $contenedor.innerHTML = '<div class="alert alert-info">No hay paradas para los filtros seleccionados.</div>';
@@ -730,15 +745,12 @@ document.addEventListener('DOMContentLoaded', function(){
             <button type="button" class="btn btn-sm btn-outline-danger btn-quitar">Quitar</button>
           </td>
         `;
-        // Quitar fila
         tr.querySelector('.btn-quitar').addEventListener('click', ()=>{
           const i = grupo.paradas.indexOf(p);
           if(i>=0){ grupo.paradas.splice(i,1); renderPlan(plan); }
         });
-        // Cambiar orden
         tr.querySelector('.inp-orden').addEventListener('change', (ev)=>{
           p.orden = parseInt(ev.target.value||'0',10) || (idx+1);
-          // reordenar por orden asc
           grupo.paradas.sort((a,b)=>(a.orden||999)-(b.orden||999));
           renderPlan(plan);
         });
@@ -750,10 +762,8 @@ document.addEventListener('DOMContentLoaded', function(){
       card.appendChild(body);
       $contenedor.appendChild(card);
 
-      // Ver en Google Maps (usa lat/lng si vienen, si no, mejor backend geocodifica y devuelve lat/lng)
       head.querySelector('.btn-ver-mapa').addEventListener('click', ()=>{
         if(paradas.length===0) return;
-        // Construimos la ruta con waypoints
         const pts = paradas
           .filter(p => p.lat && p.lng)
           .map(p => `${p.lat},${p.lng}`);
@@ -770,7 +780,6 @@ document.addEventListener('DOMContentLoaded', function(){
     });
   }
 
-  // 3.3 Generar plan (consulta al backend)
   async function generarPlan(){
     const f = $fecha.value;
     if(!f){ alert('Selecciona una fecha'); return; }
@@ -785,10 +794,6 @@ document.addEventListener('DOMContentLoaded', function(){
       const r = await fetch(`/transporte/plan?${params.toString()}`, { headers:{'Accept':'application/json'} });
       if(!r.ok) throw new Error('HTTP '+r.status);
       const data = await r.json();
-      // Estructura esperada:
-      // data = [{ vehiculo:{id,placa,capacidad}, paradas:[
-      //   { recoleccion_id, cliente_id, cliente_nombre, direccion, lat, lng,
-      //     hora_pref, ventana_ini, ventana_fin, capacidad_kg, orden } ] }, ...]
       planActual = data || [];
       renderPlan(planActual);
     }catch(e){
@@ -798,7 +803,6 @@ document.addEventListener('DOMContentLoaded', function(){
     }
   }
 
-  // 3.4 Guardar planilla (persistencia)
   async function guardarPlanilla(){
     if(!planActual || planActual.length===0){
       alert('No hay plan para guardar'); return;
@@ -820,7 +824,6 @@ document.addEventListener('DOMContentLoaded', function(){
     }
   }
 
-  // 3.5 Exportar CSV
   function exportarCSV(){
     if(!planActual || planActual.length===0){
       alert('No hay datos para exportar'); return;
@@ -855,25 +858,17 @@ document.addEventListener('DOMContentLoaded', function(){
     URL.revokeObjectURL(url);
   }
 
-  // Eventos
   $btnGen?.addEventListener('click', generarPlan);
   $btnSave?.addEventListener('click', guardarPlanilla);
   $btnCSV?.addEventListener('click', exportarCSV);
 
-  // Setea fecha por defecto = hoy
   const hoy = new Date();
   const yyyy = hoy.getFullYear();
   const mm = String(hoy.getMonth()+1).padStart(2,'0');
   const dd = String(hoy.getDate()).padStart(2,'0');
   $fecha.value = `${yyyy}-${mm}-${dd}`;
 
-  // Arranque
   cargarVehiculos();
 })();
 </script>
-
-
-{% endblock %}
-{% block scripts %}
-
 {% endblock %}

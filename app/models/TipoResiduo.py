@@ -12,4 +12,5 @@ class TipoResiduo(Base):
     observaciones = Column("observ_tipores", String(200), nullable=True)
     residuos_cliente = relationship(
         "ResiduosCli", back_populates="tipo_residuo")
-    recolecciones = relationship("Recoleccion", back_populates="tipo_residuo")
+    recolecciones = relationship(
+        "DetalleRecoleccion", back_populates="tipo_residuo")

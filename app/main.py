@@ -2,7 +2,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse, RedirectResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 from dependencies import get_db
-from routers import clients, residuoscli, recolecc, usuarios, crm, tiposresid, certificado, clienpot, frecuencia
+from routers import clients, residuoscli, recolecc, usuarios, crm, tiposresid, certificado, clienpot, frecuencia, vehiculos
 
 
 from dependencies import templates
@@ -35,6 +35,7 @@ app.include_router(usuarios.router)
 app.include_router(crm.router)
 app.include_router(tiposresid.router)
 app.include_router(certificado.router)
+app.include_router(vehiculos.router)
 
 # Clientes potenciales
 app.include_router(clienpot.router)
@@ -78,6 +79,7 @@ async def jwt_middleware(request: Request, call_next):
 async def landing(request: Request):
     # Si esto falla, es la plantilla. Debajo te dejo un endpoint de diagnóstico.
     return templates.TemplateResponse("index1.html", {"request": request, "name": "Gresab"})
+
 
 @app.get("/dash1", response_class=HTMLResponse)
 async def landing(request: Request):

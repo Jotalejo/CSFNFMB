@@ -25,9 +25,11 @@
     </div>
     <div class="col-sm-6 text-sm-right">
       <p class="h6">Detalle</p>
+      {% for r in r.detalles %}
       <div>Tipo residuo: <strong>{{ r.tipo_residuo.nombre }}</strong></div>
-      <div>Cant. bolsas: <strong>{{ r.cantresiduo }}</strong></div>
-      <div>Peso total: <strong>{{ r.peso }} kg</strong></div>
+      <div>Cant. bolsas: <strong>{{ r.cantidad }}</strong></div>
+      <div>Peso total: <strong>{{ r.peso_total }} kg</strong></div>
+      {% endfor %}
       {% if r.codigobar %}<div>Código barras: {{ r.codigobar }}</div>{% endif %}
       {% if r.firmarecolec %}<div>Firma entrega: {{ r.firmarecolec }}</div>{% endif %}
       {% if r.lafirmaderecibo %}<div>Firma recibo: {{ r.lafirmaderecibo }}</div>{% endif %}

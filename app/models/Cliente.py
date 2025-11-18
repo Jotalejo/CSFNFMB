@@ -1,4 +1,4 @@
-from sqlalchemy import DECIMAL, Boolean, Column, Float, ForeignKey, Integer, String
+from sqlalchemy import Column, Float, Integer, String
 from sqlalchemy.orm import relationship
 from .base import Base
 
@@ -18,7 +18,7 @@ class Cliente(Base):
     estadocarta = Column("estadocartera_cli", Integer)
     latrecolec = Column("latrecolec_cli", Float, nullable=True)
     lngrecolec = Column("lngrecolec_cli", Float, nullable=True)
-    linkmaps   = Column("linkmaps_cli", String(255), nullable=True)
+    linkmaps = Column("linkmaps_cli", String(255), nullable=True)
     observaciones = Column("observ_cli", String(200))
     recolecciones = relationship("Recoleccion", back_populates="cliente_rel")
     residuos = relationship("ResiduosCli", back_populates="cliente")

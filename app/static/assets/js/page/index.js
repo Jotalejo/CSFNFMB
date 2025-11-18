@@ -130,6 +130,10 @@ $(function() {
     });
 
     // Sales Reports
+
+    if ($('#flotChart').length > 0 ) {
+
+
     var plot = $.plot('#flotChart', [{
         data: flotSampleData1,
         color: '#5CB65F',
@@ -165,6 +169,7 @@ $(function() {
             ticks: [[25,'JAN 12'],[50,'FAB 24'],[75,'MARCH 18'],[100,'APR 31']],
         }
     });
+    }
 
     $(function() {
         "use strict";
@@ -327,8 +332,11 @@ $(document).ready(function() {
         }],
         colors: ['#45aaf2'],
     }
-    var spark1 = new ApexCharts(document.querySelector("#apexspark1"), spark1);
-    spark1.render();    
+
+    if ($('#apexspark1').length > 0 ) {
+        var spark1 = new ApexCharts(document.querySelector("#apexspark1"), spark1);
+        spark1.render();    
+    }
 });
 
 

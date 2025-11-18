@@ -1,5 +1,5 @@
 from datetime import date
-from fastapi import APIRouter, Depends, HTTPException, Request, Form
+from fastapi import APIRouter, Depends, HTTPException, Request, Form, Response
 from schemas.Recolecc import RecolectCreate
 from dependencies import templates
 from dependencies import get_db
@@ -10,6 +10,8 @@ from services import RecoleccService, ClienteService
 from services.tiposresid import TipoResidService
 from schemas.Tiporesid import TipoResidOut
 from models.Recoleccion import Recoleccion as RecoleccionModel
+import pdfkit
+import os
 
 router = APIRouter(
     prefix="/recolecciones",
@@ -29,6 +31,7 @@ async def get_recolecc(request: Request, db: Session = Depends(get_db)):
     clientes = clientService.get_clientes()
     return templates.TemplateResponse("/recolecci/recolecc.html", {"request": request, "recolecciones": recolecciones, "clientes": clientes})
 
+
 @router.get("/detalle/{rec_id}", response_class=HTMLResponse)
 def detalle_recoleccion(rec_id: int, request: Request, db: Session = Depends(get_db)):
     service = RecoleccService(db)
@@ -45,61 +48,104 @@ def detalle_recoleccion(rec_id: int, request: Request, db: Session = Depends(get
 # async  def add_recolecc():
 #    return "Grabando una recolección"
 
+
 @router.get("/tiposresiduo/{cliente_id}", response_model=List[TipoResidOut])
 def tipos_por_cliente(cliente_id: int, db: Session = Depends(get_db)):
     return TipoResidService(db).list_by_cliente(cliente_id)
 
 # routers/recolecc.py (fragmento del POST)
 
+
 @router.post("/", response_class=RedirectResponse)
+# async def crear_recolecc(
+#    request: Request,
+#    db: Session = Depends(get_db),
+#
+#    cliente_id: int = Form(...),
+#    fecha: Optional[date] = Form(None),
+#    hora: Optional[str] = Form(None),
+#    tipo_residuo_id: int = Form(...),
+#
+#    cantbol: Optional[int] = Form(None),
+#    pesobol: Optional[float] = Form(None),
+#    totpeso: Optional[float] = Form(None),
+#
+#    estado_id: Optional[int] = Form(None),
+#    vehiculo_id: Optional[int] = Form(None),
+#    codigo_bar: Optional[str] = Form(None),
+#    firma_entrega: Optional[str] = Form(None),
+#    lafirmaderecibo: Optional[str] = Form(None),   # ⬅️ nuevo en el form
+#    observ: Optional[str] = Form(None),
+# ):
 async def crear_recolecc(
     request: Request,
-    db: Session = Depends(get_db),
-
-    cliente_id: int = Form(...),
-    fecha: Optional[date] = Form(None),
-    hora: Optional[str] = Form(None),
-    tipo_residuo_id: int = Form(...),
-
-    cantbol: Optional[int] = Form(None),
-    pesobol: Optional[float] = Form(None),
-    totpeso: Optional[float] = Form(None),
-
-    estado_id: Optional[int] = Form(None),
-    vehiculo_id: Optional[int] = Form(None),
-    codigo_bar: Optional[str] = Form(None),
-    firma_entrega: Optional[str] = Form(None),
-    lafirmaderecibo: Optional[str] = Form(None),   # ⬅️ nuevo en el form
-    observ: Optional[str] = Form(None),
+    createData: RecolectCreate,
+    db: Session = Depends(get_db)
 ):
+
     # ... validaciones y parsing hora ...
 
-    payload = RecolectCreate(
-        cliente=cliente_id,
-        fecha=fecha,
-        # hora=hora_obj, # type: ignore
-        tresiduo=tipo_residuo_id,
-        cantresiduo=cantbol,
-        peso=totpeso,
-        estado_id=estado_id,
-        vehiculo=vehiculo_id,
-        codigobar=codigo_bar,
-        firmarecolec=firma_entrega,
-        lafirmaderecibo=lafirmaderecibo,   # ⬅️ aquí viaja al schema/model
-        observaciones=observ,
-    )
-
-    RecoleccService(db).create_recolecc(payload)
+    #    payload = RecolectCreate(
+    #        cliente=cliente_id,
+    #        fecha=fecha,
+    #        # hora=hora_obj, # type: ignore
+    #        tresiduo=tipo_residuo_id,
+    #        cantresiduo=cantbol,
+    #        peso=totpeso,
+    #        estado_id=estado_id,
+    #        vehiculo=vehiculo_id,
+    #        codigobar=codigo_bar,
+    #        firmarecolec=firma_entrega,
+    #        lafirmaderecibo=lafirmaderecibo,   # ⬅️ aquí viaja al schema/model
+    #        observaciones=observ,
+    #    ){"cliente_id":"9","fecha":"2025-11-15","email":"hseq@unidadclinicasannicolas.com","conta":"DR.TAZO","teldco":"3202605856","observ":"test","btnguardc":"","tablaResiduos":[{"tipo_residuo_id":"11","cantbol":"12","pesobol":"1","totpeso":"12.00"},{"tipo_residuo_id":"1","cantbol":"2","pesobol":"21","totpeso":"42.00"}]}
+    #
+    RecoleccService(db).create_recolecc(createData)
     return RedirectResponse(url="/recolecciones/", status_code=303)
 
 
 @router.get("/manifiesto/{recoleccion_id}")
 def get_manifiesto(recoleccion_id: int, request: Request, db: Session = Depends(get_db)):
     service = RecoleccService(db)
-    recoleccion = service.get_recoleccion_detallada(recoleccion_id)
+    recoleccion = service.get_recolecc_by_id(recoleccion_id)
     cliente = recoleccion.cliente_rel
 
-    logo_url = "/static/assets/images/logo_gresab.png"
+    options = {
+        'page-size': 'Letter',
+        'margin-top': '0.75in',
+        'margin-right': '0.75in',
+        'margin-bottom': '0.75in',
+        'margin-left': '0.75in',
+        'enable-local-file-access': None,
+        'no-stop-slow-scripts': None,
+        'debug-javascript': None,
+        'javascript-delay': 1000,
+        'encoding': 'UTF-8',
+        'quiet': ''
+    }
+
+    if not recoleccion:
+        raise HTTPException(
+            status_code=404, detail="Recolección no encontrada")
+
+    # Usar ruta absoluta del sistema de archivos para wkhtmltopdf
+    logo_path = os.path.join(os.path.dirname(os.path.dirname(
+        __file__)), 'static', 'assets', 'images', 'logo_gresab.png')
+    logo_url = f"file://{logo_path}" if os.path.exists(logo_path) else ""
+
+    residuos = []
+    cantidad_total = 0
+    peso_total = 0.0
+    for detalle in recoleccion.detalles:
+        residuos.append({
+            "tipo": detalle.tipo_residuo.nombre,
+            "cantidad": detalle.cantidad,
+            "kilos": detalle.peso
+        })
+        cantidad_total += detalle.cantidad
+        peso_total += detalle.peso
+
+    placa = recoleccion.vehiculo.placa if recoleccion.vehiculo else ""
 
     data = {
         "request": request,
@@ -119,28 +165,33 @@ def get_manifiesto(recoleccion_id: int, request: Request, db: Session = Depends(
             "fecha": "2019-12-06 13:04:26",
             "numero": "3323618"
         },
-        "cliente": cliente,
+        "cliente": cliente.razonSocial,
         "operario": {
-            "nombre": "Marlon Cardona Angarita",
-            "cc": "1098657224"
+            "nombre": "",
+            "cc": ""
         },
         "auxiliar": {
-            "nombre": "Jhon Jairo Mejía Manozalba",
-            "cc": "91539436"
+            "nombre": "",
+            "cc": ""
         },
         "vehiculo": {
-            "placa": "TAY 112"
+            "placa": placa,
         },
-        "residuos": [
-            {"tipo": "Biosanitarios", "cantidad": 1, "kilos": 56.00}
-        ],
+        "residuos": residuos,
         "totales": {
-            "cantidad": recoleccion.cantresiduo,
-            "kilos": recoleccion.peso
+            "cantidad": cantidad_total,
+            "kilos": peso_total
         }
     }
 
-    return templates.TemplateResponse("/recolecci/manifiesto.html", data)
+    template = templates.env.get_template("/recolecci/manifiesto.html")
+    html = template.render(data)
+    pdf = pdfkit.from_string(html, False, options=options)
+    headers = {'Content-Disposition': 'attachment; filename="certificado.pdf"'}
+    return Response(pdf, headers=headers, media_type='application/pdf')
+
+    # return templates.TemplateResponse("/recolecci/manifiesto.html", data)
+
 
 @router.post("/")
 def crear_recoleccion(
@@ -161,7 +212,8 @@ def crear_recoleccion(
             fecha=fecha,
             tresiduo=tipo_residuo_id[i],
             cantresiduo=cantbol[i],
-            peso=totpeso[i] if totpeso and i < len(totpeso) and totpeso[i] is not None else (cantbol[i]*pesobol[i]),
+            peso=totpeso[i] if totpeso and i < len(
+                totpeso) and totpeso[i] is not None else (cantbol[i]*pesobol[i]),
             estado_id=1,
             observaciones=observ
         )

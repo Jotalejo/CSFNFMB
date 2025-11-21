@@ -6,7 +6,7 @@ from dependencies import get_db
 from sqlalchemy.orm import Session
 from typing import Annotated, List, Optional
 from fastapi.responses import HTMLResponse, RedirectResponse
-from services import RecoleccService, ClienteService
+from services import RecoleccService, ClienteService, VehiculoService
 from services.tiposresid import TipoResidService
 from schemas.Tiporesid import TipoResidOut
 from models.Recoleccion import Recoleccion as RecoleccionModel
@@ -27,9 +27,11 @@ router = APIRouter(
 async def get_recolecc(request: Request, db: Session = Depends(get_db)):
     service = RecoleccService(db)
     clientService = ClienteService(db)
+    vehiculoService = VehiculoService(db)
     recolecciones = service.get_recolecc()
     clientes = clientService.get_clientes()
-    return templates.TemplateResponse("/recolecci/recolecc.html", {"request": request, "recolecciones": recolecciones, "clientes": clientes})
+    vehiculos = vehiculoService.options()
+    return templates.TemplateResponse("/recolecci/recolecc.html", {"request": request, "recolecciones": recolecciones, "clientes": clientes, "vehiculos": vehiculos})
 
 
 @router.get("/detalle/{rec_id}", response_class=HTMLResponse)

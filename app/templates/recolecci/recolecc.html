@@ -93,6 +93,17 @@
                         </div>
                       </div>
                     </div>
+                    <div class="col-sm-6 col-md-4">
+                      <div class="form-group">
+                        <label>Vehículo</label>
+                        <select id="selVehiculo" name="vehiculo_id" class="form-control custom-select" required>
+                        <option value="" selected disabled hidden>Escoja el Vehículo…</option>
+                          {% for d in vehiculos %}
+                            <option value="{{ d.id }}">{{ d.placa }}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

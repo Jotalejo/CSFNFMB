@@ -43,6 +43,10 @@ class Recoleccion(Base):
         50), nullable=True)  # ⬅️ nuevo campo
     observaciones = Column("observ_recolec", String(200))
 
+    nombre_entrega = Column("nombre_qentrega_recolec", String(100), nullable=True)  # ⬅️ nuevo campo
+    email_entrega = Column("email_qentrega_recolec", String(50), nullable=True)  # ⬅️ nuevo campo
+    telefono_entrega = Column("cel_qentrega_recolec", String(15), nullable=True)  # ⬅️ nuevo campo
+
     # Relaciones
     cliente_rel = relationship("Cliente", back_populates="recolecciones")
     # tresiduo = Column("codtipores_recolec", Integer,                       ForeignKey("tiposresid.cod_tipores"))

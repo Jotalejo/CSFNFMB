@@ -148,6 +148,8 @@ def get_manifiesto(recoleccion_id: int, request: Request, db: Session = Depends(
         peso_total += detalle.peso
 
     placa = recoleccion.vehiculo.placa if recoleccion.vehiculo else ""
+    fecha_recoleccion = recoleccion.fecha.strftime("%Y-%m-%d") if recoleccion.fecha else ""
+    fecha_recoleccion = fecha_recoleccion + recoleccion.hora.strftime("%H:%M:%S") if recoleccion.hora else ""
 
     data = {
         "request": request,
@@ -164,8 +166,8 @@ def get_manifiesto(recoleccion_id: int, request: Request, db: Session = Depends(
             "logo_url": logo_url
         },
         "manifiesto": {
-            "fecha": "2019-12-06 13:04:26",
-            "numero": "3323618"
+            "fecha": fecha_recoleccion,
+            "numero": recoleccion.id
         },
         "cliente": cliente.razonSocial,
         "operario": {

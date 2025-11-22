@@ -33,7 +33,8 @@ class RecoleccService:
         stmt = select(Recoleccion).where(Recoleccion.id == rec_id).options(
             selectinload(Recoleccion.cliente_rel),
             selectinload(Recoleccion.estado),
-            selectinload(Recoleccion.detalles)
+            selectinload(Recoleccion.detalles),
+            selectinload(Recoleccion.vehiculo_rel)
         )
         result = self.db.execute(stmt).scalars().first()
         return result
@@ -91,7 +92,10 @@ class RecoleccService:
                                      codigobar=recoleccion.codigobar,
                                      firma_entrega=recoleccion.firmarecolec,
                                      observaciones=recoleccion.observaciones,
-                                     lafirmaderecibo=recoleccion.lafirmaderecibo
+                                     lafirmaderecibo=recoleccion.lafirmaderecibo,
+                                     email_entrega=recoleccion.email,
+                                     telefono_entrega=recoleccion.telefono_contacto,
+                                     nombre_entrega=recoleccion.contacto
                                      )
         self.db.add(db_recoleccion)
         self.db.commit()

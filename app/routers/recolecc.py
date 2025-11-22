@@ -147,14 +147,14 @@ def get_manifiesto(recoleccion_id: int, request: Request, db: Session = Depends(
         cantidad_total += detalle.cantidad
         peso_total += detalle.peso
 
-    placa = recoleccion.vehiculo.placa if recoleccion.vehiculo else ""
+    placa = recoleccion.vehiculo_rel.placa if recoleccion.vehiculo_rel else ""
     fecha_recoleccion = recoleccion.fecha.strftime("%Y-%m-%d") if recoleccion.fecha else ""
     fecha_recoleccion = fecha_recoleccion + recoleccion.hora.strftime("%H:%M:%S") if recoleccion.hora else ""
 
     data = {
         "request": request,
         "empresa": {
-            "nombre": "DESCONT SAS ESP R-152-01",
+            "nombre": "GRESAB SAS ESP R-152-01",
             "direccion1": "Cr. 38A No. 48a-71",
             "pbx1": "(7) 643 9999",
             "ciudad1": "Bucaramanga - Colombia",

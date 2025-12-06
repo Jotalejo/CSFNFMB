@@ -1,9 +1,11 @@
 from fastapi import FastAPI, Request
+from fastapi.params import Depends
 from fastapi.responses import HTMLResponse, RedirectResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 from dependencies import get_db
+from sqlalchemy.orm import Session
 from routers import clients, residuoscli, recolecc, usuarios, crm, tiposresid, certificado, clienpot, frecuencia, vehiculos
-
+from services import AuthService
 
 from dependencies import templates
 from jose import jwt, JWTError
@@ -45,7 +47,8 @@ app.include_router(frecuencia.router)
 
 # Rutas públicas (exactas) y prefijos (estáticos)
 PUBLIC_EXACT = {"/", "/usuarios/login",
-                "/usuarios/reset-password", "/usuarios/logout", "/favicon.ico"}
+                "/usuarios/reset-password", "/usuarios/logout", "/favicon.ico",
+                "/usuarios/otp/verify-page", "/usuarios/otp/verify-login"}
 PUBLIC_PREFIXES = ("/static",)  # agrega otros prefijos si hace falta
 
 
@@ -63,7 +66,42 @@ async def jwt_middleware(request: Request, call_next):
             logging.info("No token found, redirecting to /usuarios/login")
             return RedirectResponse(url="/usuarios/login", status_code=303)
 
-        jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        email = payload.get("sub")
+
+        # Verificar si el usuario tiene OTP habilitado
+        # Rutas que no requieren verificación OTP adicional
+        OTP_EXEMPT_PATHS = {"/usuarios/otp/setup", "/usuarios/otp/verify",
+                            "/usuarios/otp/enable", "/usuarios/otp/disable", "/usuarios/logout",
+                            "usuarios/otp/setup-page"}
+
+        if not any(path.startswith(exempt) for exempt in OTP_EXEMPT_PATHS):
+            # Verificar si hay un flag de OTP verificado en el token
+            otp_verified = payload.get("otp_verified", False)
+
+            # Obtener la sesión de DB manualmente
+            db = next(get_db())
+            try:
+                authService = AuthService(db)
+                user = authService.get_user_by_email(email)
+                if not user:
+                    logging.info(
+                        f"User {email} not found in DB, redirecting to /usuarios/login")
+                    return RedirectResponse(url="/usuarios/login", status_code=303)
+
+                if not user.otp_enabled:
+                    logging.info(
+                        f"OTP not enabled for user {email}, proceeding to setup OTP check")
+                    request.state.email = email
+                    return RedirectResponse(url="/usuarios/otp/setup-page", status_code=303)
+
+                if user.otp_enabled and not otp_verified:
+                    logging.info(
+                        f"OTP required for user {email}, redirecting to OTP verification")
+                    return RedirectResponse(url="/usuarios/otp/verify-page", status_code=303)
+            finally:
+                db.close()
+
         return await call_next(request)
 
     except JWTError:

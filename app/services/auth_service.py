@@ -9,6 +9,10 @@ from jose import jwt, JWTError
 from config import get_settings, Settings
 import random
 import string
+import pyotp
+import qrcode
+import io
+import base64
 
 
 user_oauth2 = OAuth2PasswordBearer(
@@ -75,3 +79,88 @@ class AuthService:
         self.db.commit()
         self.db.refresh(user)
         return user
+
+    # ============= MÉTODOS OTP =============
+    
+    def generate_otp_secret(self) -> str:
+        """Genera un secret aleatorio para OTP"""
+        return pyotp.random_base32()
+    
+    def get_totp_uri(self, email: str, secret: str, issuer: str = "GRESAB") -> str:
+        """Genera el URI para el código QR de Google Authenticator"""
+        return pyotp.totp.TOTP(secret).provisioning_uri(
+            name=email,
+            issuer_name=issuer
+        )
+    
+    def generate_qr_code(self, uri: str) -> str:
+        """Genera un código QR en formato base64"""
+        qr = qrcode.QRCode(version=1, box_size=10, border=5)
+        qr.add_data(uri)
+        qr.make(fit=True)
+        
+        img = qr.make_image(fill_color="black", back_color="white")
+        buffer = io.BytesIO()
+        img.save(buffer)
+        buffer.seek(0)
+        
+        img_base64 = base64.b64encode(buffer.getvalue()).decode()
+        return f"data:image/png;base64,{img_base64}"
+    
+    def setup_otp_for_user(self, email: str):
+        """Configura OTP para un usuario"""
+        user = self.get_user_by_email(email)
+        if not user:
+            return None
+        
+        # Generar nuevo secret
+        secret = self.generate_otp_secret()
+        
+        # Guardar en la base de datos
+        user.otp_secret = secret
+        user.otp_enabled = False  # Se activará después de verificar
+        self.db.commit()
+        self.db.refresh(user)
+        
+        # Generar URI y QR
+        uri = self.get_totp_uri(email, secret)
+        qr_code = self.generate_qr_code(uri)
+        
+        return {
+            "secret": secret,
+            "qr_code_url": qr_code,
+            "uri": uri
+        }
+    
+    def verify_otp(self, email: str, otp_code: str) -> bool:
+        """Verifica un código OTP"""
+        user = self.get_user_by_email(email)
+        if not user or not user.otp_secret:
+            return False
+        
+        totp = pyotp.TOTP(user.otp_secret)
+        return totp.verify(otp_code, valid_window=1)  # valid_window=1 permite un margen de 30s
+    
+    def enable_otp_for_user(self, email: str, otp_code: str) -> bool:
+        """Habilita OTP después de verificar el código"""
+        user = self.get_user_by_email(email)
+        if not user or not user.otp_secret:
+            return False
+        
+        if self.verify_otp(email, otp_code):
+            user.otp_enabled = True
+            self.db.commit()
+            return True
+        
+        return False
+    
+    def disable_otp_for_user(self, email: str) -> bool:
+        """Deshabilita OTP para un usuario"""
+        user = self.get_user_by_email(email)
+        if not user:
+            return False
+        
+        user.otp_enabled = False
+        user.otp_secret = None
+        self.db.commit()
+        return True

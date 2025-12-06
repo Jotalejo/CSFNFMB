@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Verificación de Dos Factores</h3>
+                </div>
+                <div class="card-body">
+                    {% if error %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </div>
+                    {% endif %}
+                    
+                    <p>Ingresa el código de 6 dígitos de tu aplicación Google Authenticator:</p>
+                    
+                    <form method="post" action="/usuarios/otp/verify-login">
+                        <div class="form-group mb-3">
+                            <label for="otp_code">Código OTP</label>
+                            <input 
+                                type="text" 
+                                class="form-control" 
+                                id="otp_code" 
+                                name="otp_code" 
+                                pattern="[0-9]{6}" 
+                                maxlength="6"
+                                required 
+                                autofocus
+                                placeholder="000000">
+                            <small class="form-text text-muted">
+                                Ingresa el código de 6 dígitos que aparece en tu aplicación.
+                            </small>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-block">
+                            Verificar
+                        </button>
+                    </form>
+                    
+                    <hr>
+                    
+                    <div class="text-center">
+                        <a href="/usuarios/login" class="btn btn-link">Volver al inicio de sesión</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    #otp_code {
+        font-size: 24px;
+        text-align: center;
+        letter-spacing: 10px;
+    }
+</style>
+{% endblock %}

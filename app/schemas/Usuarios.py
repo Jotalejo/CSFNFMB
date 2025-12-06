@@ -28,3 +28,16 @@ class CambiarPassword(BaseModel):
     email: str
     old_password: str
     new_password: str
+
+class OTPSetupResponse(BaseModel):
+    secret: str
+    qr_code_url: str
+
+class OTPVerifyRequest(BaseModel):
+    email: str
+    otp_code: str
+
+class LoginWithOTP(BaseModel):
+    email: str
+    password: str
+    otp_code: str | None = None

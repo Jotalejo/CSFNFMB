@@ -1,0 +1,141 @@
+{% extends "layout2.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Configurar Autenticación de Dos Factores</h3>
+                </div>
+                <div class="card-body">
+                    <div id="setup-content">
+                        <p>Para activar la autenticación de dos factores, sigue estos pasos:</p>
+                        
+                        <ol>
+                            <li>Descarga Google Authenticator en tu dispositivo móvil:
+                                <ul>
+                                    <li><a href="https://apps.apple.com/app/google-authenticator/id388497605" target="_blank">iOS</a></li>
+                                    <li><a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2" target="_blank">Android</a></li>
+                                </ul>
+                            </li>
+                            <li>Haz clic en "Generar código QR" abajo</li>
+                            <li>Escanea el código QR con la aplicación Google Authenticator</li>
+                            <li>Ingresa el código de 6 dígitos que aparece en la app para confirmar</li>
+                        </ol>
+                        
+                        <div class="text-center mb-3">
+                            <button id="generate-qr" class="btn btn-primary">Generar Código QR</button>
+                        </div>
+                        
+                        <div id="qr-container" class="text-center" style="display: none;">
+                            <h4>Escanea este código QR:</h4>
+                            <img id="qr-code" src="" alt="QR Code" class="img-fluid mb-3" style="max-width: 300px;">
+                            
+                            <div>
+                                <p><strong>Clave secreta (manual):</strong></p>
+                                <code id="secret-key" class="bg-light p-2 d-inline-block"></code>
+                            </div>
+                            
+                            <form id="verify-form" class="mt-4">
+                                <div class="form-group">
+                                    <label for="otp_code">Código de verificación:</label>
+                                    <input 
+                                        type="text" 
+                                        class="form-control text-center" 
+                                        id="otp_code" 
+                                        name="otp_code" 
+                                        pattern="[0-9]{6}" 
+                                        maxlength="6"
+                                        required 
+                                        placeholder="000000"
+                                        style="font-size: 24px; letter-spacing: 10px;">
+                                </div>
+                                
+                                <button type="submit" class="btn btn-success">Activar 2FA</button>
+                            </form>
+                        </div>
+                        
+                        <div id="success-message" class="alert alert-success mt-3" style="display: none;">
+                            ¡Autenticación de dos factores activada exitosamente!
+                        </div>
+                        
+                        <div id="error-message" class="alert alert-danger mt-3" style="display: none;"></div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="text-center">
+                        <a href="/dashboard" class="btn btn-link">Volver al Dashboard</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('generate-qr').addEventListener('click', async function() {
+    try {
+        const response = await fetch('/usuarios/otp/setup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            document.getElementById('qr-code').src = data.qr_code_url;
+            document.getElementById('secret-key').textContent = data.secret;
+            document.getElementById('qr-container').style.display = 'block';
+            this.style.display = 'none';
+        } else {
+            document.getElementById('error-message').textContent = 'Error al generar el código QR';
+            document.getElementById('error-message').style.display = 'block';
+        }
+    } catch (error) {
+        document.getElementById('error-message').textContent = 'Error de conexión';
+        document.getElementById('error-message').style.display = 'block';
+    }
+});
+
+document.getElementById('verify-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const otpCode = document.getElementById('otp_code').value;
+    
+    // Obtener el email del usuario actual (deberías tenerlo disponible)
+    const email = "{{ request.state.email if request.state.email else '' }}";
+    
+    try {
+        const response = await fetch('/usuarios/otp/enable', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: email,
+                otp_code: otpCode
+            })
+        });
+        
+        if (response.ok) {
+            document.getElementById('success-message').style.display = 'block';
+            document.getElementById('verify-form').style.display = 'none';
+            document.getElementById('error-message').style.display = 'none';
+            
+            setTimeout(() => {
+                window.location.href = '/dashboard';
+            }, 2000);
+        } else {
+            document.getElementById('error-message').textContent = 'Código OTP inválido. Por favor intenta de nuevo.';
+            document.getElementById('error-message').style.display = 'block';
+        }
+    } catch (error) {
+        document.getElementById('error-message').textContent = 'Error de conexión';
+        document.getElementById('error-message').style.display = 'block';
+    }
+});
+</script>
+{% endblock %}

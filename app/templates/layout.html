@@ -324,15 +324,14 @@
                             <a href="javascript:void(0)" class="has-arrow arrow-b"><i class="icon-home"></i><span data-hover="Menú Principal">Menú Principal</span></a>
                             <ul>
                                 {% if is_user_in_role("admin") %}
-                                <li class="active"><a href="/clientes/"><span data-hover="Fuente Generadora">Fuente Generadora</span></a></li>
-                                <li><a href="/recolecciones/"><span data-hover="Transporte">Transporte</span></a></li>
+                                    <li class="active"><a href="/clientes/"><span data-hover="Fuente Generadora">Fuente Generadora</span></a></li>
+                                    <li><a href="/recolecciones/"><span data-hover="Transporte">Transporte</span></a></li>
+                                    <li><a href="index4.html"><span data-hover="Pesaje">Pesaje y Clasificación</span></a></li>
+                                    <li><a href=""><span data-hover="Tratamiento">Tratamiento - Incineración</span></a></li>
                                 {% endif %}
-                                
                                 {% if is_user_in_role("transportador") %}
-                                <li><a href="/recolecciones/"><span data-hover="Transporte">Transporte</span></a></li>
+                                    <li><a href="/recolecciones/"><span data-hover="Transporte">Transporte</span></a></li>
                                 {% endif %}
-                                <li><a href="index4.html"><span data-hover="Pesaje">Pesaje y Clasificación</span></a></li>
-                                <li><a href=""><span data-hover="Tratamiento">Tratamiento - Incineración</span></a></li>
                             </ul>
                         </li>
                         <li><a href="/clienpot/"><i class="icon-users"></i><span data-hover="CRM">CRM - Gestión de Clientes</span></a></li>

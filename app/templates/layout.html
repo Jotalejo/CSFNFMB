@@ -329,6 +329,14 @@
                                     <li><a href="index4.html"><span data-hover="Pesaje">Pesaje y Clasificación</span></a></li>
                                     <li><a href=""><span data-hover="Tratamiento">Tratamiento - Incineración</span></a></li>
                                 {% endif %}
+                                {% if is_user_in_role("operativo") %}
+                                    <li><a href="/recolecciones/"><span data-hover="Transporte">Transporte</span></a></li>
+                                    <li><a href="index4.html"><span data-hover="Pesaje">Pesaje y Clasificación</span></a></li>
+                                    <li><a href=""><span data-hover="Tratamiento">Tratamiento - Incineración</span></a></li>
+                                {% endif %}
+                                {% if is_user_in_role("clientes") %}
+                                    <li class="active"><a href="/clientes/"><span data-hover="Fuente Generadora">Fuente Generadora</span></a></li>
+                                {% endif %}
                                 {% if is_user_in_role("transportador") %}
                                     <li><a href="/recolecciones/"><span data-hover="Transporte">Transporte</span></a></li>
                                 {% endif %}
@@ -382,7 +390,7 @@
                 <div class="row clearfix">
                     <div class="col-lg-12">
                         <div class="mb-4">
-                            <h2>Bienvenido Administrador !</h2>                            
+                            <h2>Bienvenido Administrador !</h2>
                             <small>Acá puedes revisar la evolución de la recolección por clases de residuos <a href="#">Saber más</a></small>
                         </div>                        
                     </div>

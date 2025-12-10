@@ -43,7 +43,8 @@ def is_user_in_role(context, role_name: str):
         return False
     except Exception:
         return False
-
+    
+@pass_context
 def role_name(context):
     try:
         request = context.get('request')
@@ -67,7 +68,8 @@ def role_name(context):
         try:
             user = db.query(Usuario).filter(Usuario.email == email).first()
             if user and user.roles:
-                return [role.name for role in user.roles]
+                #return [role.description for role in user.roles]
+                return user.roles[0].description
         finally:
             db.close()
 

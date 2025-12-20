@@ -19,15 +19,15 @@
             <div class="card-header">
                 <div class="left">
                     <h1 class="page-title">Recolecciones</h1><br>
-                    <h3 class="card-title" style="margin-left: 20px">Organizar las recolecciones como insumo para planear las rutas</h3>
+                    <h3 class="card-title" style="margin-left: 20px">Creación y manejo de las Recolecciones</h3>
                 </div>
             </div>
             <div class="card-body">
                 <div class="d-md-flex justify-content-between">
                     <ul class="nav nav-tabs b-none">
-                        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#prog-recolec">Programar Recolección</a></li>
+                        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#plan-transp">Planilla de Transporte</a></li>
+                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#prog-recolec">Crear Recolección</a></li>
                         <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#list-recolec">Lista de Recolecciones</a></li>
-                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#plan-transp">Planilla de Transporte</a></li>
                     </ul>
                     <div class="d-flex align-items-center sort_stat">
                         <div class="d-flex">
@@ -51,7 +51,7 @@
     </div>
 </div>    
 <div class="tab-content px-0">
-    <div class="tab-pane fade show active" id="prog-recolec" role="tabpanel">
+    <div class="tab-pane fade" id="prog-recolec" role="tabpanel">
       <div class="row clearfix">
         <div class="col-12">
           <form class="card" method="post" action="/recolecciones/" onsubmit="send_json(event);">
@@ -193,6 +193,7 @@
         </div>
       </div>
     </div>
+
     <div class="tab-pane fade" id="list-recolec" role="tabpanel">
         <div class="table-responsive">
             <div class="input-group mt-2">
@@ -235,7 +236,7 @@
             </table>
         </div>
     </div>
-    <div class="tab-pane fade" id="plan-transp" role="tabpanel">
+    <div class="tab-pane fade show active" id="plan-transp" role="tabpanel">
       <div class="card">
         <div class="card-body">
           <h3 class="card-title">Planilla de Transporte</h3>

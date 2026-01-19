@@ -1,14 +1,13 @@
 # routers/tiposresid.py
 from fastapi import APIRouter, Depends, HTTPException, Request, Form
-from dependencies import templates
+from dependencies import templates, get_db
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 from typing import List
 
-from dependencies import get_db
-from services.tiposresid import TipoResidService
-from schemas.Tiporesid import TipoResidCreate, TipoResidOut
+from services import TipoResidService, ResiduosCliService
+from schemas import TipoResidCreate, TipoResidOut
 
 router = APIRouter(
     prefix="/tiposresid",
@@ -26,12 +25,17 @@ async def list_tiposresid(db: Session = Depends(get_db)):
 @router.get("/tipoxcliente/{cliente_id}", response_model=List[TipoResidOut])
 async def list_tiposrescli(cliente_id: int, request: Request, db: Session = Depends(get_db)):
     data = TipoResidService(db).list_tiporescli(cliente_id)
-    return templates.TemplateResponse("/residuos/tiporesid.html", {"request": request, "data": data, "cliente_id": cliente_id})
+    tipos_residuo = TipoResidService(db).list_all()
+    return templates.TemplateResponse("/residuos/tiporesid.html", {"request": request, "data": data, "cliente_id": cliente_id, "tipos_residuo": tipos_residuo})
+
+
+                      
                                                               
 # DataTables-like
-@router.get("/json")
-async def list_tiposresid_json(db: Session = Depends(get_db)):
-    data = TipoResidService(db).list_all()
+@router.get("/clientes/{cliente_id}/tipos_residuo/json")
+async def list_tiposresid_json(cliente_id: int, db: Session = Depends(get_db)):
+    service = ResiduosCliService(db)
+    data = service.get_all_by_cliente(cliente_id)
     return {"data": data}
 
 # Para selects (id, nombre)

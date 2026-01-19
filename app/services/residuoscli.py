@@ -7,6 +7,10 @@ class ResiduosCliService:
     def __init__(self, db: Session):
         self.db = db
 
+    def get_all_by_cliente(self, cliente_id: int) -> List[Dict[str, Any]]:
+        q = self.db.query(ResidModel).filter(ResidModel.codcli == cliente_id).order_by(ResidModel.id.desc())
+        return [self._to_dict(x) for x in q.all()]
+
     def list_by_clipot(self, clipot_id: int) -> List[Dict[str, Any]]:
         q = self.db.query(ResidModel).filter(ResidModel.codcli == clipot_id).order_by(ResidModel.id.desc())
         return [self._to_dict(x) for x in q.all()]

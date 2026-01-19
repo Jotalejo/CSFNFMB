@@ -10,61 +10,89 @@
                             <h1 class="page-title">Tabla de Tipos de Residuo por Cliente</h1>
                         </div>
                     </div>
-                    <div class="row clearfix">
-                        <div class="col-md-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h3 class="card-title">Resúmen de residuos</h3>
-                                </div>
-                                <div class="card-body">
-                                    <div class="table-responsive">
-                                        <table class="table table-vcenter text-nowrap mb-0">
-                                            <thead>
-                                                <tr>
-                                                    <th>Tipo de residuo</th>
-                                                    <th>Cantidad</th>
-                                                    <th>Peso promedio</th>
-                                                    <th>Segregación</th>
-                                                    <th>Número de bolsas</th>
-                                                    <th>Observaciones</th>
-                                                    <th>Aprobado?</th>
-                                                    <th>Ver Orden</th>
-                                                    <th>Acciones</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                {% for rdc in data %}
-                                                <tr>
-                                                    <td>{{rdc.tipo_residuo.nombre}}</td>
-                                                    <td>{{rdc.cantresiduo}}</td>
-                                                    <td>{{rdc.pesopromres}}</td>
-                                                    <td>{{rdc.segregares}}</td>
-                                                    <td><label class="{{rdc.colorbolsa}}">{{rdc.numbolsas}}</label></td>
-                                                    <td>{{rdc.observaciones}}</td>
-                                                    <td><label class="badge badge-success">Aprobado</label></td>
-                                                    <td><a href="javascript:void(0);" class="btn btn-success btn-sm">View Order</a></td>
-                                                    <td><button class="btn btn-danger btn-sm"><i class="icon-trash"></i></button></td>
-                                                </tr>    
-                                                {% endfor %}                                                
-                                            </tbody>
-                                        </table>
-                                    </div>
+                    <div class="card-body">
+                        <button id="addToTable" class="btn btn-primary mb-15" type="button">
+                            <i class="icon wb-plus" aria-hidden="true"></i>Agregar
+                        </button>                        
+                        <div class="row clearfix">
+                            <div class="col-md-12">
+                                <div class="table-responsive">
+                                    <table id="tipoResiduosTable" class="table table-vcenter text-nowrap mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Tipo de residuo</th>
+                                                <th>Cantidad</th>
+                                                <th>Peso promedio</th>
+                                                <th>Segregación</th>
+                                                <th>Número de bolsas</th>
+                                                <th>Observaciones</th>
+                                                <th>Acciones</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for rdc in data %}
+                                            <tr id="{{ rdc.id }}">
+                                                <td>
+                                                    {{rdc.tipo_residuo.nombre}}</td>
+                                                <td>{{rdc.cantresiduo}}</td>
+                                                <td>{{rdc.pesopromres}}</td>
+                                                <td>{{rdc.segregares}}</td>
+                                                <td><label class="{{rdc.colorbolsa}}">{{rdc.numbolsas}}</label></td>
+                                                <td>{{rdc.observaciones}}</td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-icon button-edit" data-toggle="tooltip" data-original-title="Editar">
+                                                        <i class="icon-pencil" aria-hidden="true"></i>
+                                                    </button>
+                                                    <button class="btn btn-danger btn-sm button-remove" data-toggle="tooltip" data-original-title="Eliminar">
+                                                        <i class="icon-trash"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>    
+                                            {% endfor %}                                                
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
-                        </div>
                     </div>
+                </div>
                 </div>
             </div>                    
         </div>
     </div>
 </div>
 
+<template id="tipoResiduoEditableRow">
+    <tr class="editable-row">
+        <td>
+            <input type="hidden" name="cliente_id" value="{{ cliente_id }}" />
+            <select class="form-control" name="tipo_residuo">
+                {% for tipo in tipos_residuo %}
+                    <option value="{{ tipo.id }}">{{ tipo.nombre }}</option>
+                {% endfor %}
+            </select>
+        </td>
+        <td><input type="number" class="form-control" name="cantresiduo" placeholder="Cantidad" /></td>
+        <td><input type="number" class="form-control" name="pesopromres" placeholder="Peso" step="0.01" /></td>
+        <td><input type="text" class="form-control" name="segregares" placeholder="Segregación" /></td>
+        <td><input type="number" class="form-control" name="numbolsas" placeholder="Bolsas" /></td>
+        <td><input type="text" class="form-control" name="observaciones" placeholder="Observaciones" /></td>
+        <td>
+            <button class="btn btn-success btn-sm button-save-new" data-toggle="tooltip" data-original-title="Guardar">
+                <i class="icon-check" aria-hidden="true"></i> Guardar
+            </button>
+            <button class="btn btn-danger btn-sm button-cancel-new" data-toggle="tooltip" data-original-title="Cancelar">
+                <i class="icon-close" aria-hidden="true"></i>
+            </button>
+        </td>
+    </tr>    
+</template>
+
 {% endblock %}
 {% block scripts %}
 <script>
-    var clientRowTable = {
+    var tipoResiduosTable = {
         options : {
-            table: "#addrowExample", addButton: "#addToTable",
+            table: "#tipoResiduosTable", addButton: "#addToTable",
         },
         initialize: function () {
             this.setVars().events();
@@ -75,150 +103,174 @@
                    this.dialog = {}, 
                    this
         },
+        addRow: function() {
+            let tpl = document.getElementById('tipoResiduoEditableRow');
+            let clon = tpl.content.cloneNode(true);
+            
+            // Agregar la fila al tbody de la tabla
+            this.$table.find('tbody')[0].appendChild(clon);
+            
+            // Enfocar el primer campo
+            this.$table.find('tbody tr:last input:first').focus();
+        },
+        editRow: function(row) {
+            // Lógica para editar una fila existente
+
+            var id = row.id;
+            let tpl = document.getElementById('tipoResiduoEditableRow');
+            let clon = tpl.content.cloneNode(true);
+
+            fetch('/residuoscli/' + id)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al obtener el tipo de residuo');
+                }
+                return response.json();
+            })
+            .then(data => {
+                let $clon = $(clon);
+                $clon.find('tr').attr('id', data.id);  // Establecer el ID en el elemento tr
+                $clon.find('select[name="tipo_residuo"]').val(data.tresiduo);
+                $clon.find('input[name="cantresiduo"]').val(data.cantresiduo);
+                $clon.find('input[name="pesopromres"]').val(data.pesopromres);
+                $clon.find('input[name="segregares"]').val(data.segregares);
+                $clon.find('input[name="numbolsas"]').val(data.numbolsas);
+                $clon.find('input[name="observaciones"]').val(data.observaciones);
+                $clon.find('.button-save-new').removeClass('button-save-new').addClass('button-save-edit');
+                $clon.find('.button-cancel-new').removeClass('button-cancel-new').addClass('button-cancel-edit');
+
+                // Reemplazar la fila existente con la fila editable
+                $(row).replaceWith($clon);  
+
+            })
+            .catch(error => {
+                console.error("Error al obtener el tipo de residuo:", error);
+            });
+
+            
+        },
+
         events: function() {
             var self = this;
             this.$addButton.on("click", function(e) {
                 e.preventDefault();
-                //self.addRow();
-                creacliente();
-                console.log("addRow");
+                self.addRow();
             });
             this.$table.on("click", ".button-edit", function(e) {
                 e.preventDefault();
-                var id = e.target.closest("tr").id
-                window.location.href = "/clientes/" + id;
+                var row = e.target.closest("tr");
+                self.editRow(row);
             });
+            
+            // Evento para guardar nueva fila
+            this.$table.on("click", ".button-save-new", function(e) {
+                e.preventDefault();
+                var $row = $(this).closest('tr');
+                var data = {
+                    codcli : $row.find('input[name="cliente_id"]').val(),
+                    tresiduo: $row.find('select[name="tipo_residuo"]').val(),
+                    cantresiduo: $row.find('input[name="cantresiduo"]').val(),
+                    pesopromres: $row.find('input[name="pesopromres"]').val(),
+                    segregares: $row.find('input[name="segregares"]').val(),
+                    numbolsas: $row.find('input[name="numbolsas"]').val(),
+                    observaciones: $row.find('input[name="observaciones"]').val()
+                };
+                
+                console.log("Guardando nuevo tipo de residuo:", data);
+
+                fetch('/residuoscli/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error al guardar el tipo de residuo');
+                    }
+                    window.location.reload();
+                })
+            });
+
+            this.$table.on("click", ".button-save-edit", function(e) {
+                e.preventDefault();
+                var $row = $(this).closest('tr');
+                var id = $row.attr('id');
+                var data = {
+                    id: id,
+                    codcli : $row.find('input[name="cliente_id"]').val(),
+                    tresiduo: $row.find('select[name="tipo_residuo"]').val(),
+                    cantresiduo: $row.find('input[name="cantresiduo"]').val(),
+                    pesopromres: $row.find('input[name="pesopromres"]').val(),
+                    segregares: $row.find('input[name="segregares"]').val(),
+                    numbolsas: $row.find('input[name="numbolsas"]').val(),
+                    observaciones: $row.find('input[name="observaciones"]').val()
+                };
+
+                console.log("Guardando tipo de residuo editado:", data);
+    
+
+                fetch('/residuoscli/', {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error al guardar el tipo de residuo');
+                    }
+                    window.location.reload();
+                })
+            });  
+                    
+                
+                // Aquí puedes hacer un fetch/ajax para guardar en el servidor
+                // Por ahora solo eliminamos la fila editable
+                //$row.remove();
+                // Recargar la tabla
+            
+            
+            // Evento para cancelar nueva fila
+            this.$table.on("click", ".button-cancel-new", function(e) {
+                e.preventDefault();
+                $(this).closest('tr').remove();
+            });
+
+            this.$table.on("click", ".button-cancel-edit", function(e) {
+                e.preventDefault();
+                window.location.reload();
+            });            
+
             this.$table.on("click", ".button-remove", function(e) {
                 e.preventDefault();
-                console.log("Boton de canequita")
                 var id = e.target.closest("tr").id;
-                console.log("ID: " + id);
-                activarModal2(id);
+
+                fetch(`/residuoscli/` + id, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error al eliminar el tipo de residuo');
+                    }
+                    window.location.reload();
+                })
             });
         },
 
     }
 
     $(document).ready(function() {
-        var table = $('#addrowExample').DataTable({
-            "ajax": {
-                "url": "/clientes/json",
-                "type": "GET",
-                "data": function ( d ) {
-                    d.nit = $('#nit').val();
-                }
-            },
-            "language": {
-                "lengthMenu": "Mostrar _MENU_ registros por página",
-                "zeroRecords": "No se encontraron resultados",
-                "info": "Página _PAGE_ de _PAGES_",
-                "infoEmpty": "No hay registros disponibles",
-                "infoFiltered": "(filtrado de _MAX_ total de registros)",
-                "search": "Buscar:",
-                "paginate": {
-                    "first":      "Primero",
-                    "last":       "Último",
-                    "next":       "Siguiente",
-                    "previous":   "Anterior"
-                }
-            },
-            responsive: true,
-            autoWidth: false,
-            "columns": [
-                { "data": "razonSocial" },
-                { "data": "nit" },
-                { "data": "contacto" },
-                { "data": "telefono" },
-                {
-                    "className":      'details-control',
-                    "orderable":      false,
-                    "data":           null,
-                    "defaultContent": '<button class="btn btn-sm btn-icon on-editing button-discard data-toggle="tooltip" data-original-title="Discard" hidden><i class="icon-close" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon on-default m-r-5 button-edit data-toggle="tooltip" data-original-title="Editar"><i class="icon-pencil" aria-hidden="true"></i></button><button class="btn button-remove btn-sm btn-icon" data-original-title="Residuos"><i class="icon-trash" aria-hidden="true"></i></button>'
-                },
-            ],
-            rowId: 'id',            
-            columnDefs: [
-                { orderable: false, targets: [4] }
-            ]
-        });
-        clientRowTable.initialize();
+
+        tipoResiduosTable.initialize();
+
     });
 
-    //$(document).on('submit', 'form', send_json);
-
-    function creacliente (){
-        window.location.href = "/clientes/nuevo";
-    }
-
-    function activarModal2(id) {
-    const $modal = $('#MdlGestRescli');
-
-    // Opcional: loader rápido
-    $modal.html(
-        '<div class="modal-dialog" role="document">' +
-        '<div class="modal-content">' +
-            '<div class="modal-body text-center p-5">' +
-            '<div class="spinner-border" role="status"></div>' +
-            '<div class="mt-2">Cargando…</div>' +
-            '</div>' +
-        '</div>' +
-        '</div>'
-    );
-
-    // Cargar contenido del modal desde tu endpoint
-    fetch('/residuoscli/cliente/' + id)
-        .then(r => {
-        if (!r.ok) throw new Error('Error al cargar el modal');
-        return r.text();
-        })
-        .then(html => {
-        // Insertar el HTML del modal
-        $modal.html(html);
-
-        // ⚠️ Si tu modal NUEVO no tiene #residuoForm, NO intentes engancharlo.
-        const rform = document.getElementById('residuoForm');
-        if (rform && typeof send_json === 'function') {
-            rform.addEventListener('submit', send_json);
-        }
-
-        // SUGERENCIA: pasa el cliente_id como data-atributo para tu JS de frecuencia
-        // <div id="MdlGestRescli" class="modal fade" data-cliente-id="{{ id }}">
-        $modal.attr('data-cliente-id', id);
-
-        // Mostrar modal
-        $modal.modal('show');
-
-        // Si tienes precarga de frecuencia:
-        if (typeof precargarFrecuencia === 'function') {
-            precargarFrecuencia(id);
-        }
-        })
-        .catch(err => {
-        console.error(err);
-        alert('No se pudo abrir el modal');
-        });
-    }
-
-    function activarModal(id){
-        $('#MdlGestRescli').modal('show');
-        ajax({
-            url: "/residuoscli/cliente/" + id,
-            type: "GET",
-            dataType: "json",
-            success: function(data) {
-                $('#tresiduo').val(data.tresiduo);
-                $('#cantresiduo').val(data.cantresiduo);
-                $('#pesopromres').val(data.pesopromres);
-                $('#segregares').val(data.segregares);
-                $('#numbolsas').val(data.numbolsas);
-                $('#observaciones').val(data.observaciones);
-            },
-            error: function(xhr, status, error) {
-                console.error("Error al cargar los datos del residuo:", error);
-            }
-        });
-        $('#tresiduo').val(tresiduo);
-
-    }
 </script>
 {% endblock %}

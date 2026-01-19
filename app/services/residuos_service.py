@@ -16,6 +16,9 @@ class ResiduosCliService:
         self.db.commit()
         self.db.refresh(db_residuo)
         return db_residuo
+    
+    def get_residuo_by_id(self, id: int):
+        return self.db.query(ResiduosCli).filter(ResiduosCli.id == id).first()
 
     def get_residuos_by_cliente(self, cliente_id: int):
         return self.db.query(ResiduosCli).filter(ResiduosCli.codcli == cliente_id).all()

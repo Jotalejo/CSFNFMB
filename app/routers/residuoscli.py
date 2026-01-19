@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 from dependencies import get_db, templates
 from services import ResiduosCliService, TipoResidService, ClienteService
@@ -16,6 +16,14 @@ router = APIRouter(
 async def create_residuo(residuo: ResiduosCliCreate, db: Session = Depends(get_db)):
     service = ResiduosCliService(db)
     return service.create_residuo(residuo)
+
+@router.get("/{id}", response_model=ResiduosCliOut)
+def get_residuo(id: int, db: Session = Depends(get_db)):
+    service = ResiduosCliService(db)
+    residuo = service.get_residuo_by_id(id)
+    if not residuo:
+        raise HTTPException(status_code=404, detail="Residuo no encontrado")
+    return residuo
 
 @router.get("/cliente/{cliente_id}", response_model=List[ResiduosCliOut])
 def get_residuos(cliente_id: int, request: Request, db: Session = Depends(get_db)):

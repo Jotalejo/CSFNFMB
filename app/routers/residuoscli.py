@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 from dependencies import get_db, templates
-from services import ResiduosCliService, TipoResidService, ClienteService
+from services import ResiduosCliService, TipoResidService, ClienteService, FrecuenciaService
 from schemas import ResiduosCliCreate, ResiduosCliUpdate, ResiduosCliOut
 from typing import List
 
@@ -27,6 +27,7 @@ def get_residuo(id: int, db: Session = Depends(get_db)):
 
 @router.get("/cliente/{cliente_id}", response_model=List[ResiduosCliOut])
 def get_residuos(cliente_id: int, request: Request, db: Session = Depends(get_db)):
+    frecuenciaService = FrecuenciaService(db)
     service = ResiduosCliService(db)
     clienteService = ClienteService(db)
     residuos = service.get_residuos_by_cliente(cliente_id)
@@ -35,9 +36,21 @@ def get_residuos(cliente_id: int, request: Request, db: Session = Depends(get_db
     cliente = clienteService.get_cliente(cliente_id)
     url_redirect = "/residuoscli"
     action = "/residuoscli"
-    method = "post"
+    frecuencias = frecuenciaService.list_by_cliente(cliente_id)
+    dias_semana = [False] * 7
+    if frecuencias:
+        for dia in range(7):
+            mask = frecuencias[0].diasem_mask
+            dias_semana[dia] = ((mask & (2**dia)) == (2**dia))
 
-    return templates.TemplateResponse("/residuos/cliente.html", {"request": request, "url_redirect": url_redirect, "action": action, "method": method, "residuos": residuos, "cliente_id": cliente_id, "tresiduos": tresiduos, "cliente": cliente} )
+    frecuencia = frecuencias[0] if frecuencias else None
+  
+
+
+    action = f"/residuoscli/"
+    method = "post" 
+
+    return templates.TemplateResponse("/residuos/cliente.html", {"request": request, "url_redirect": url_redirect, "action": action, "method": method, "residuos": residuos, "cliente_id": cliente_id, "tresiduos": tresiduos, "cliente": cliente, "frecuencia": frecuencia, "dias_semana": dias_semana } )
                                                                  
 
 @router.patch("/")

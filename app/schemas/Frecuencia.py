@@ -20,6 +20,9 @@ class FrecuenciaBase(BaseModel):
 class FrecuenciaCreate(FrecuenciaBase):
     pass
 
+class FrecuenciaUpdate(FrecuenciaBase):
+    frecuencia_id: int
+
 class FrecuenciaOut(FrecuenciaBase):
     id: int
     tipo_id: int

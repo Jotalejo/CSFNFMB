@@ -249,11 +249,10 @@
                 var id = e.target.closest("tr").id;
 
                 fetch(`/residuoscli/` + id, {
-                    method: 'POST',
+                    method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(data)
                 })
                 .then(response => {
                     if (!response.ok) {

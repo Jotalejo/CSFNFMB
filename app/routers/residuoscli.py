@@ -41,6 +41,8 @@ def get_residuos(cliente_id: int, request: Request, db: Session = Depends(get_db
     if frecuencias:
         for dia in range(7):
             mask = frecuencias[0].diasem_mask
+            if mask == None:
+                mask = 0
             dias_semana[dia] = ((mask & (2**dia)) == (2**dia))
 
     frecuencia = frecuencias[0] if frecuencias else None

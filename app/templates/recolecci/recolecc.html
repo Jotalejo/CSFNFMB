@@ -793,24 +793,63 @@ document.addEventListener('DOMContentLoaded', function(){
   }
 
   async function generarPlan(){
-    const f = $fecha.value;
+    const f = $fecha?.value;
     if(!f){ alert('Selecciona una fecha'); return; }
 
-    const vehId = $vehiculo.value || '';
+    const vehId = $vehiculo?.value || '';
     const params = new URLSearchParams({ fecha: f });
     if(vehId) params.append('vehiculo_id', vehId);
 
     $contenedor.innerHTML = '<div class="text-center py-5">Generando plan…</div>';
 
     try{
-      const r = await fetch(`/transporte/plan?${params.toString()}`, { headers:{'Accept':'application/json'} });
-      if(!r.ok) throw new Error('HTTP '+r.status);
-      const data = await r.json();
-      planActual = data || [];
+      const url = `/transporte/plan?${params.toString()}`;
+      const r = await fetch(url, {
+        headers: { 'Accept':'application/json' },
+        credentials: 'same-origin'
+      });
+
+      const ct  = (r.headers.get('content-type') || '').toLowerCase();
+      const raw = await r.text();
+
+      if(!r.ok){
+        console.error('HTTP ERROR', r.status, raw);
+        $contenedor.innerHTML =
+          `<div class="alert alert-danger">
+            No se pudo generar el plan.<br>
+            <strong>HTTP ${r.status}</strong><br>
+            <small style="white-space:pre-wrap">${raw.slice(0,1200)}</small>
+          </div>`;
+        planActual = [];
+        return;
+      }
+
+      // Si te devolvió HTML (login/OTP), aquí lo verás
+      if(!ct.includes('application/json')){
+        console.error('NO JSON', ct, raw);
+        $contenedor.innerHTML =
+          `<div class="alert alert-danger">
+            El servidor no devolvió JSON (seguro te redirigió a login/OTP).<br>
+            <strong>Content-Type:</strong> ${ct}<br>
+            <small style="white-space:pre-wrap">${raw.slice(0,1200)}</small>
+          </div>`;
+        planActual = [];
+        return;
+      }
+
+      const data = JSON.parse(raw);
+
+      // OJO: tu backend devuelve {"plan":[...]}
+      planActual = data.plan || [];
       renderPlan(planActual);
+
     }catch(e){
-      console.error(e);
-      $contenedor.innerHTML = '<div class="alert alert-danger">No se pudo generar el plan.</div>';
+      console.error('FETCH EXCEPTION', e);
+      $contenedor.innerHTML =
+        `<div class="alert alert-danger">
+          No se pudo generar el plan (excepción JS).<br>
+          <small>${(e && e.message) ? e.message : e}</small>
+        </div>`;
       planActual = [];
     }
   }

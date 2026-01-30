@@ -83,12 +83,13 @@ class PlanTransporteService:
                 c = self.db.query(Cliente).get(f.cliente_id)
                 if not c: 
                     continue
+                
                 candidatos.append({
                     "cliente_id": c.id,  # ajustar si tu PK es cod_cli
                     "cliente_nombre": getattr(c, "razonSocial", None),
                     "direccion": getattr(c, "direccion", None),
-                    "lat": getattr(c, "lat", None),  # si tienes columnas
-                    "lng": getattr(c, "lng", None),
+                    "lat": getattr(c, "latrecolec_cli", None),
+                    "lng": getattr(c, "lngrecolec_cli", None),
                     "hora_pref": f.hora_desde,
                     "ventana_ini": f.hora_desde,
                     "ventana_fin": f.hora_hasta,

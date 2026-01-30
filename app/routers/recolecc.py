@@ -157,12 +157,12 @@ def get_manifiesto(recoleccion_id: int, request: Request, db: Session = Depends(
             "nombre": "GRESAB SAS ESP R-152-01",
             "direccion1": "Cr. 38A No. 48a-71",
             "pbx1": "(7) 643 9999",
-            "ciudad1": "Bucaramanga - Colombia",
+            "ciudad1": "Barrancabermeja - Colombia",
             "direccion2": "Cl. 17b No. 39-75",
             "pbx2": "(1) 244 4000",
-            "ciudad2": "Bogotá - Colombia",
+            "ciudad2": "Pereira - Colombia",
             "nit": "804002433-1",
-            "web": "www.descont.com.co",
+            "web": "www.selectiva.net.co",
             "logo_url": logo_url
         },
         "manifiesto": {

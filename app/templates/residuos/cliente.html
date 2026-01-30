@@ -1,128 +1,127 @@
-<div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable" role="document">
-  <div class="modal-content">
-    <form id="frecuenciaForm" method="{{ "PATCH" if (frecuencia and frecuencia.id > 0) else "POST" }}" action="/frecuencia/">
-      <div class="modal-header">
-        <h5 class="modal-title" id="MdlFrecuenciaCliente">Administración de Residuos del Cliente</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
+{% extends "layout.html" %}
+{% block content %}
+<div class="section-body">
+    <div class="container-fluid">
+        <div class="row clearfix">
+            <div class="col-md-12">
+                <div class="card">
+                    <!-- start body header -->
+                    <div class="section-body">
+                        <div class="container-fluid">
+                            <div class="page-header">
+                                <div class="left">
+                                    <h1 class="page-title">Administración de Residuos del Cliente</h1>
+                                </div>                    
+                            </div></br>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <form class="card" id="frecuenciaForm" method="{{ "PATCH" if (frecuencia and frecuencia.id > 0) else "POST" }}" action="/frecuencia/">
+                                        <div class="card-body">
+                                            <h3 class="card-title">Frecuencia de recolección</h3>
+                                            
+                                            <!-- ID del cliente -->
+                                            <input type="hidden" name="cliente_id" id="cliente_id" value="{{ cliente_id }}"/>
+                                            <input type="hidden" name="frecuencia_id" id="frecuencia_id" value="{{ frecuencia.id if frecuencia else '' }}"/>
 
-      <div class="modal-body p-3 p-md-4">
-        <!-- ID del cliente -->
-        <input type="hidden" name="cliente_id" id="cliente_id" value="{{ cliente_id }}"/>
-        <input type="hidden" name="frecuencia_id" id="frecuencia_id" value="{{ frecuencia.id if frecuencia else '' }}"/>
+                                            <!-- tipo_nombre -->
+                                            <div class="form-group col-lg-4 col-md-12">
+                                                <label>Tipo de frecuencia</label>
+                                                <div class="custom-controls-stacked">
+                                                    <label class="custom-control custom-radio">
+                                                        <input type="radio" name="tipo_nombre" value="diaria" class="custom-control-input" {{ 'checked' if frecuencia and frecuencia.tipo_id == 1 else '' }}>
+                                                        <span class="custom-control-label">Diaria</span>
+                                                    </label>
+                                                    <label class="custom-control custom-radio">
+                                                        <input type="radio" name="tipo_nombre" value="semanal" class="custom-control-input" {{ 'checked' if frecuencia and frecuencia.tipo_id == 2 else '' }}>
+                                                        <span class="custom-control-label">Semanal</span>
+                                                    </label>
+                                                    <label class="custom-control custom-radio">
+                                                        <input type="radio" name="tipo_nombre" value="mensual" class="custom-control-input" {{ 'checked' if frecuencia and frecuencia.tipo_id == 3 else '' }}>
+                                                        <span class="custom-control-label">Mensual</span>
+                                                    </label>
+                                                </div>
+                                            </div>
 
+                                            <!-- semanal -->
+                                            <div class="form-group col-lg-4 col-md-12 freq-semanal d-none">
+                                                <label>Días de la semana</label>
+                                                <div class="custom-controls-stacked">
+                                                    <label class="custom-control custom-checkbox"><input type="checkbox" value="1" class="custom-control-input dow" {{ 'checked' if (dias_semana and dias_semana[1]) else '' }} ><span class="custom-control-label">Lunes</span></label>
+                                                    <label class="custom-control custom-checkbox"><input type="checkbox" value="2" class="custom-control-input dow" {{ 'checked' if (dias_semana and dias_semana[2]) else '' }} ><span class="custom-control-label">Martes</span></label>
+                                                    <label class="custom-control custom-checkbox"><input type="checkbox" value="3" class="custom-control-input dow" {{ 'checked' if (dias_semana and dias_semana[3]) else '' }} ><span class="custom-control-label">Miércoles</span></label>
+                                                    <label class="custom-control custom-checkbox"><input type="checkbox" value="4" class="custom-control-input dow" {{ 'checked' if (dias_semana and dias_semana[4]) else '' }} ><span class="custom-control-label">Jueves</span></label>
+                                                    <label class="custom-control custom-checkbox"><input type="checkbox" value="5" class="custom-control-input dow" {{ 'checked' if (dias_semana and dias_semana[5]) else '' }} ><span class="custom-control-label">Viernes</span></label>
+                                                    <label class="custom-control custom-checkbox"><input type="checkbox" value="6" class="custom-control-input dow" {{ 'checked' if (dias_semana and dias_semana[6]) else '' }} ><span class="custom-control-label">Sábado</span></label>
+                                                    <label class="custom-control custom-checkbox"><input type="checkbox" value="0" class="custom-control-input dow" {{ 'checked' if (dias_semana and dias_semana[0]) else '' }} ><span class="custom-control-label">Domingo</span></label>
+                                                </div>
+                                                <small class="text-muted">Selecciona los días en que pasas.</small>
+                                            </div>
 
-        <div class="container-fluid">
-          <div class="row clearfix">
-            <div class="col-lg-12">
-              <h5 class="mb-2">Frecuencia de recolección</h5>
-            </div>
+                                            <!-- mensual -->
+                                            <div class="form-group col-lg-4 col-md-12 freq-mensual d-none">
+                                                <label>Días del mes</label>
+                                                <input type="text" id="dom_list" class="form-control" placeholder="Ej: 1, 10, 20, 30" value="{{ frecuencia.dias_mes if frecuencia and frecuencia.dias_mes else '' }}">
+                                                <small class="text-muted">Lista separada por comas (1-31).</small>
+                                            </div>
 
-            <!-- tipo_nombre -->
-            <div class="col-lg-4 col-md-12">
-              <label>Tipo de frecuencia</label>
-              <div class="form-group">
-                <div class="custom-controls-stacked">
-                  <label class="custom-control custom-radio">
-                    <input type="radio" name="tipo_nombre" value="diaria" class="custom-control-input" {{ 'checked' if frecuencia and frecuencia.tipo_id == 1 else '' }}>
-                    <span class="custom-control-label">Diaria</span>
-                  </label>
-                  <label class="custom-control custom-radio">
-                    <input type="radio" name="tipo_nombre" value="semanal" class="custom-control-input" {{ 'checked' if frecuencia and frecuencia.tipo_id == 2 else '' }}>
-                    <span class="custom-control-label">Semanal</span>
-                  </label>
-                  <label class="custom-control custom-radio">
-                    <input type="radio" name="tipo_nombre" value="mensual" class="custom-control-input" {{ 'checked' if frecuencia and frecuencia.tipo_id == 3 else '' }}>
-                    <span class="custom-control-label">Mensual</span>
-                  </label>
+                                            <!-- horas -->
+                                            <div class="form-group col-lg-4 col-md-12">
+                                                <label>Hora preferida</label>
+                                                <input type="time" id="hora_pref" class="form-control" step="60" value="{{ (frecuencia.hora_desde if frecuencia and frecuencia.hora_desde else '08:00') }}">
+
+                                                <div class="mt-2 font-weight-bold">Horario opcional (rango)</div>
+                                                <small class="text-muted d-block">Si no defines un rango, se usará solo la hora preferida.</small>
+
+                                                <div class="form-row mt-1">
+                                                    <div class="col">
+                                                        <input type="time" id="ventana_ini" class="form-control" placeholder="Desde (HH:MM)" value="{{ (frecuencia.hora_desde|string)[:5] if frecuencia and frecuencia.hora_desde else '' }}">
+                                                        <div class="invalid-feedback" id="err_ini"></div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <input type="time" id="ventana_fin" class="form-control" placeholder="Hasta (HH:MM)" value="{{ (frecuencia.hora_hasta|string)[:5] if frecuencia and frecuencia.hora_hasta else '' }}">
+                                                        <div class="invalid-feedback" id="err_fin"></div>
+                                                    </div>
+                                                </div>
+                                                <small class="text-muted">Ejemplo: 08:00 a 10:00</small>
+                                            </div>
+
+                                            <div class="form-group col-lg-4 col-md-12">
+                                                <label>Veces por semana/mes</label>
+                                                <input type="number" id="veces" class="form-control" min="1" max="30" value="{{frecuencia.veces or 1}}">
+                                                <small class="text-muted">Interpreta según el tipo (semanal/mensual).</small>
+                                            </div>
+
+                                            <div class="form-group col-lg-4 col-md-12">
+                                                <label>Capacidad estimada por visita (Kg)</label>
+                                                <input type="number" id="cap_estimada" class="form-control" min="1" max="100000" step="1" required value="{{frecuencia.capacidad_kg or ''}}">
+                                            </div>
+
+                                            <div class="form-group col-lg-8 col-md-12">
+                                                <label>Observaciones</label>
+                                                <textarea id="observ" class="form-control" rows="2" placeholder="Opcional">{{ frecuencia.observ if frecuencia and frecuencia.observ else '' }}</textarea>
+                                            </div>
+
+                                            <input type="hidden" class="custom-control-input" id="activo" checked>
+                                            <div class="form-group col-12">
+                                                <button id="btnSaveResiduos" type="submit" class="btn btn-primary">Guardar</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                            </div></br>
+                        </div>
+                    </div>  
                 </div>
-              </div>
             </div>
-
-            <!-- semanal -->
-            <div class="col-lg-4 col-md-12 freq-semanal d-none">
-              <label>Días de la semana</label>
-              <div class="form-group">
-                <div class="custom-controls-stacked">
-                  <label class="custom-control custom-checkbox"><input type="checkbox" value="1" class="custom-control-input dow" {{ 'checked' if (dias_semana and dias_semana[1]) else '' }} ><span class="custom-control-label">Lunes</span></label>
-                  <label class="custom-control custom-checkbox"><input type="checkbox" value="2" class="custom-control-input dow" {{ 'checked' if (dias_semana and dias_semana[2]) else '' }} ><span class="custom-control-label">Martes</span></label>
-                  <label class="custom-control custom-checkbox"><input type="checkbox" value="3" class="custom-control-input dow" {{ 'checked' if (dias_semana and dias_semana[3]) else '' }} ><span class="custom-control-label">Miércoles</span></label>
-                  <label class="custom-control custom-checkbox"><input type="checkbox" value="4" class="custom-control-input dow" {{ 'checked' if (dias_semana and dias_semana[4]) else '' }} ><span class="custom-control-label">Jueves</span></label>
-                  <label class="custom-control custom-checkbox"><input type="checkbox" value="5" class="custom-control-input dow" {{ 'checked' if (dias_semana and dias_semana[5]) else '' }} ><span class="custom-control-label">Viernes</span></label>
-                  <label class="custom-control custom-checkbox"><input type="checkbox" value="6" class="custom-control-input dow" {{ 'checked' if (dias_semana and dias_semana[6]) else '' }} ><span class="custom-control-label">Sábado</span></label>
-                  <label class="custom-control custom-checkbox"><input type="checkbox" value="0" class="custom-control-input dow" {{ 'checked' if (dias_semana and dias_semana[0]) else '' }} ><span class="custom-control-label">Domingo</span></label>
-                </div>
-                <small class="text-muted">Selecciona los días en que pasas.</small>
-              </div>
-            </div>
-
-            <!-- mensual -->
-            <div class="col-lg-4 col-md-12 freq-mensual d-none">
-              <label>Días del mes</label>
-              <input type="text" id="dom_list" class="form-control" placeholder="Ej: 1, 10, 20, 30" value="{{ frecuencia.dias_mes if frecuencia and frecuencia.dias_mes else '' }}">
-              <small class="text-muted">Lista separada por comas (1-31).</small>
-            </div>
-
-            <!-- horas -->
-            <div class="col-lg-4 col-md-12">
-              <label>Hora preferida</label>
-              <input type="time" id="hora_pref" class="form-control" step="60" value="{{ (frecuencia.hora_desde if frecuencia and frecuencia.hora_desde else '08:00') }}">
-
-              <div class="mt-2 font-weight-bold">Horario opcional (rango)</div>
-              <small class="text-muted d-block">Si no defines un rango, se usará solo la hora preferida.</small>
-
-              <div class="form-row mt-1">
-                <div class="col">
-                  <input type="time" id="ventana_ini" class="form-control" placeholder="Desde (HH:MM)" value="{{ (frecuencia.hora_desde|string)[:5] if frecuencia and frecuencia.hora_desde else '' }}">
-                  <div class="invalid-feedback" id="err_ini"></div>
-                </div>
-                <div class="col">
-                  <input type="time" id="ventana_fin" class="form-control" placeholder="Hasta (HH:MM)" value="{{ (frecuencia.hora_hasta|string)[:5] if frecuencia and frecuencia.hora_hasta else '' }}">
-                  <div class="invalid-feedback" id="err_fin"></div>
-                </div>
-              </div>
-              <small class="text-muted">Ejemplo: 08:00 a 10:00</small>
-            </div>
-
-            <div class="col-lg-4 col-md-12">
-              <label>Veces por semana/mes</label>
-              <input type="number" id="veces" class="form-control" min="1" max="30" value="{{frecuencia.veces or 1}}">
-              <small class="text-muted">Interpreta según el tipo (semanal/mensual).</small>
-            </div>
-
-            <div class="col-lg-4 col-md-12">
-              <label>Capacidad estimada por visita (Kg)</label>
-              <input type="number" id="cap_estimada" class="form-control" min="1" max="100000" step="1" required value="{{frecuencia.capacidad_kg or ''}}">
-            </div>
-
-            <div class="col-lg-8 col-md-12">
-              <label>Observaciones</label>
-              <textarea id="observ" class="form-control" rows="2" placeholder="Opcional">{{ frecuencia.observaciones if frecuencia and frecuencia.observaciones else '' }}</textarea>
-            </div><br><br><br><br>
-
-            <div class="col-lg-4 col-md-12 d-flex align-items-end" style="margin-left: 40px;">
-              <div class="form-group">
-                <div class="custom-control custom-switch">
-                  <input type="checkbox" class="custom-control-input" id="activo" checked>
-                  <label class="custom-control-label" for="activo">Activo</label>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-      <div class="modal-footer">
-        <small class="text-muted mr-auto">Se guardará un resumen en <b>Frecuencia</b>.</small>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-        <button id="btnSaveResiduos" type="submit" class="btn btn-primary">Guardar</button>
-      </div>
-    </form>
-  </div>
+        </div>  
+    </div>
 </div>
+
+{% endblock %}
+
+{% block scripts %}
 
 <script>
   function valById(id) {
@@ -536,3 +535,4 @@ function activarModal2(id) {
 }
 
 </script>
+{% endblock %}

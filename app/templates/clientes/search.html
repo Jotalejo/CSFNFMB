@@ -44,14 +44,6 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    <!-- Modal -->
-                                     <!-- Modal contenedor VACÍO (no metas otro <div id="..."> adentro) -->
-                                    <div class="modal fade" id="MdlFrecuenciaCliente" tabindex="-1" role="dialog" aria-hidden="true"></div>
-                                    </div>
-                                   <!--  <script>
-                                        document.getElementById('frecuenciaForm')?.addEventListener('submit', onSubmitFrecuencia);
-                                    </script>   -->       
-                                    <!-- End Modal -->
                                 </div>                        
                             </div>
                         </div>
@@ -152,25 +144,12 @@
         clientRowTable.initialize();
     });
 
-    //$(document).on('submit', 'form', send_json);
-
     function creacliente (){
         window.location.href = "/clientes/nuevo";
     }
 
     function activarModal2(id) {
-
-        fetch('/residuoscli/cliente/' + id)
-            .then(response => response.text())
-            .then(data => {
-                $('#MdlFrecuenciaCliente').html(data);
-           //     const rform = document.getElementById("residuoForm");    ESTE ES EL IMPORTANTE
-             //   rform.addEventListener("submit", send_json);
-                $('#MdlFrecuenciaCliente').modal('show');
-            })
-            .catch(error => {
-                console.error("Error al cargar los datos del residuo:", error);
-            });
+        window.location.href = "/residuoscli/cliente/" + id;
     }   
 
     function activarModal(id){

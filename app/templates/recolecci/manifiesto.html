@@ -4,63 +4,91 @@
   <meta charset="UTF-8">
   <title>Manifiesto de Recolección de Residuos</title>
   <style>
+    @page {
+      size: 72mm 297mm; /* wkhtmltopdf se lleva mejor con alto fijo */
+      margin: 5mm;
+    }
+    * { box-sizing: border-box; }
+
     body {
       font-family: "Courier New", monospace;
-      font-size: 12px;
-      margin: 10px;
-      width: 80mm;
+      font-size: 11px;
+      width: 72mm;
+      margin: 0 auto;
     }
-    h1, h2 {
+
+    .header {
       text-align: center;
-      margin: 5px 0;
+      margin-bottom: 8px;
     }
-    .section {
-      margin-bottom: 10px;
+    .header img{
+      display: block;
+      margin: 0 auto 6px auto;
+      max-width: 100%;
+      height: auto;
     }
-    .label {
-      font-weight: bold;
+    h1 {
+      text-align: center;
+      margin: 6px 0 4px 0;
+      font-size: 14px;
     }
+    h2 {
+      text-align: center;
+      margin: 6px 0 8px 0;
+      font-size: 12px;
+    }
+
+    .section { margin-bottom: 10px; }
+    .label { font-weight: bold; }
+
     table {
       width: 100%;
       border-collapse: collapse;
       margin-top: 5px;
+      font-size: 10px;
     }
     th, td {
       border: 1px solid #000;
-      padding: 4px;
+      padding: 3px;
       text-align: left;
+      vertical-align: top;
     }
+
     .footer {
       text-align: center;
       margin-top: 20px;
       font-size: 10px;
     }
-  </style>
+    tr { page-break-inside: avoid; }
+  table { page-break-inside: auto; }
+</style>
+
 </head>
 <body>
-  <div>
-    <img src="{{ empresa.logo_url }}" alt="Logo" style="max-width: 100%; height: auto;">
-  </div>
+<div class="header">
+  <img src="{{ empresa.logo_url }}" alt="Logo" style="max-width: 100%; height: auto;">
 
   <h1>{{ empresa.nombre }}</h1>
-  <div class="section">
+
+  <div>
     {{ empresa.direccion1 }}<br>
-    PBX: {{ empresa.pbx1 }}<br>
+    Cel: {{ empresa.pbx1 }}<br>
     {{ empresa.ciudad1 }}<br>
     {{ empresa.direccion2 }}<br>
-    PBX: {{ empresa.pbx2 }}<br>
+    eMail: {{ empresa.pbx2 }}<br>
     {{ empresa.ciudad2 }}<br>
     NIT: {{ empresa.nit }}<br>
     {{ empresa.web }}
   </div>
 
   <h2>MANIFIESTO DE RECOLECCIÓN DE RESIDUOS</h2>
+</div>
 
   <div class="section">
     <span class="label">Fecha:</span> {{ manifiesto.fecha }}<br>
     <span class="label">Manifiesto:</span> {{ manifiesto.numero }}<br>
     <span class="label">ID Cliente:</span> {{ cliente.id }}<br>
-    <span class="label">Cliente:</span> {{ cliente.nombre }}<br>
+    <span class="label">Cliente:</span> {{ cliente.razonSocial }}<br>
     <span class="label">Dirección:</span> {{ cliente.direccion }}<br>
     <span class="label">Ciudad:</span> {{ cliente.ciudad }}<br>
     <span class="label">Frecuencia:</span> {{ cliente.frecuencia }}<br>

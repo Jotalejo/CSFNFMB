@@ -10,6 +10,7 @@ from services import RecoleccService, ClienteService, VehiculoService
 from services.tiposresid import TipoResidService
 from schemas.Tiporesid import TipoResidOut
 from models.Recoleccion import Recoleccion as RecoleccionModel
+from models.FrecuenciaRec import FrecuenciaRec
 import pdfkit
 import os
 
@@ -44,12 +45,6 @@ def detalle_recoleccion(rec_id: int, request: Request, db: Session = Depends(get
     # Renderiza un parcial (solo el cuerpo del modal)
     return templates.TemplateResponse("recolecci/_detalle_modal.html", {"request": request, "r": r})
 
-# @router.get("/new")
-# async  def add_recolecc():
-# @router.get("/new")
-# async  def add_recolecc():
-#    return "Grabando una recolección"
-
 
 @router.get("/tiposresiduo/{cliente_id}", response_model=List[TipoResidOut])
 def tipos_por_cliente(cliente_id: int, db: Session = Depends(get_db)):
@@ -57,28 +52,8 @@ def tipos_por_cliente(cliente_id: int, db: Session = Depends(get_db)):
 
 # routers/recolecc.py (fragmento del POST)
 
-
 @router.post("/", response_class=RedirectResponse)
-# async def crear_recolecc(
-#    request: Request,
-#    db: Session = Depends(get_db),
-#
-#    cliente_id: int = Form(...),
-#    fecha: Optional[date] = Form(None),
-#    hora: Optional[str] = Form(None),
-#    tipo_residuo_id: int = Form(...),
-#
-#    cantbol: Optional[int] = Form(None),
-#    pesobol: Optional[float] = Form(None),
-#    totpeso: Optional[float] = Form(None),
-#
-#    estado_id: Optional[int] = Form(None),
-#    vehiculo_id: Optional[int] = Form(None),
-#    codigo_bar: Optional[str] = Form(None),
-#    firma_entrega: Optional[str] = Form(None),
-#    lafirmaderecibo: Optional[str] = Form(None),   # ⬅️ nuevo en el form
-#    observ: Optional[str] = Form(None),
-# ):
+
 async def crear_recolecc(
     request: Request,
     createData: RecolectCreate,
@@ -87,21 +62,6 @@ async def crear_recolecc(
 
     # ... validaciones y parsing hora ...
 
-    #    payload = RecolectCreate(
-    #        cliente=cliente_id,
-    #        fecha=fecha,
-    #        # hora=hora_obj, # type: ignore
-    #        tresiduo=tipo_residuo_id,
-    #        cantresiduo=cantbol,
-    #        peso=totpeso,
-    #        estado_id=estado_id,
-    #        vehiculo=vehiculo_id,
-    #        codigobar=codigo_bar,
-    #        firmarecolec=firma_entrega,
-    #        lafirmaderecibo=lafirmaderecibo,   # ⬅️ aquí viaja al schema/model
-    #        observaciones=observ,
-    #    ){"cliente_id":"9","fecha":"2025-11-15","email":"hseq@unidadclinicasannicolas.com","conta":"DR.TAZO","teldco":"3202605856","observ":"test","btnguardc":"","tablaResiduos":[{"tipo_residuo_id":"11","cantbol":"12","pesobol":"1","totpeso":"12.00"},{"tipo_residuo_id":"1","cantbol":"2","pesobol":"21","totpeso":"42.00"}]}
-    #
     RecoleccService(db).create_recolecc(createData)
     return RedirectResponse(url="/recolecciones/", status_code=303)
 
@@ -112,16 +72,80 @@ def get_manifiesto(recoleccion_id: int, request: Request, db: Session = Depends(
     recoleccion = service.get_recolecc_by_id(recoleccion_id)
     cliente = recoleccion.cliente_rel
 
+    from models.FrecuenciaRec import FrecuenciaRec
+    from models.TipoFrecuencia import TipoFrecuencia
+
+    def decode_diasem_mask(mask: int | None) -> str:
+        # bits: 1=Lun,2=Mar,4=Mié,8=Jue,16=Vie,32=Sáb,64=Dom
+        dias = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"]
+        if not mask:
+            return ""
+        seleccionados = [dias[i] for i in range(7) if mask & (1 << i)]
+        return "Lun–Dom" if len(seleccionados) == 7 else ", ".join(seleccionados)
+
+    def parse_dias_mes(txt: str | None) -> str:
+        if not txt:
+            return ""
+        parts = [p.strip() for p in txt.split(",") if p.strip()]
+        return ", ".join(parts)
+
+    def fmt_hora(t) -> str:
+        return t.strftime("%H:%M") if t else ""
+
+    def build_frecuencia_str(freq) -> str:
+        tipo_nombre = (freq.tipo.nombre if freq.tipo else "").strip().lower()
+
+        hd = fmt_hora(freq.hora_desde)
+        hh = fmt_hora(freq.hora_hasta)
+        ventana = f" {hd}–{hh}" if hd and hh else (f" desde {hd}" if hd else "")
+
+        veces_txt = f" x{freq.veces}" if freq.veces else ""
+
+        if tipo_nombre == "diaria":
+            dias_txt = decode_diasem_mask(freq.diasem_mask) or "Todos los días"
+            return f"Diaria ({dias_txt}){ventana}{veces_txt}"
+
+        if tipo_nombre == "semanal":
+            dias_txt = decode_diasem_mask(freq.diasem_mask) or "—"
+            return f"Semanal ({dias_txt}){ventana}{veces_txt}"
+
+        if tipo_nombre == "mensual":
+            diasmes = parse_dias_mes(freq.dias_mes)
+            dias_txt = f"Días {diasmes}" if diasmes else "—"
+            return f"Mensual ({dias_txt}){ventana}{veces_txt}"
+
+        return f"{freq.tipo.nombre if freq.tipo else 'Frecuencia'}{ventana}{veces_txt}"
+
+    # 1) Buscar frecuencia activa del cliente (si hay varias, usa la más reciente)
+    freq = (
+        db.query(FrecuenciaRec)
+        .filter(FrecuenciaRec.cliente_id == cliente.id)
+        .filter(FrecuenciaRec.activo == 1)
+        .order_by(FrecuenciaRec.id.desc())
+        .first()
+    )
+
+    frecuencia_txt = ""
+    if freq:
+        tf = db.query(TipoFrecuencia).filter(TipoFrecuencia.id == freq.tipo_id).first()        
+        tipo_nombre = (getattr(freq.tipo, "nom_tfrec", None) or getattr(freq.tipo, "nombre", None) or "").strip().lower()
+        frecuencia_txt = build_frecuencia_str(freq) if freq else ""
+    else:
+        frecuencia_txt = ""
+
     options = {
-        'page-size': 'Letter',
-        'margin-top': '0.75in',
-        'margin-right': '0.75in',
-        'margin-bottom': '0.75in',
-        'margin-left': '0.75in',
+        # ancho tipo tirilla ~ 1/3 carta
+        'page-width': '72mm',
+        # alto grande (wkhtmltopdf no maneja "auto" bien en height)
+        'page-height': '297mm',  # puedes subirlo si el manifiesto sale largo
+
+        # márgenes pequeños para tirilla
+        'margin-top': '5mm',
+        'margin-right': '5mm',
+        'margin-bottom': '5mm',
+        'margin-left': '5mm',
+
         'enable-local-file-access': None,
-        'no-stop-slow-scripts': None,
-        'debug-javascript': None,
-        'javascript-delay': 1000,
         'encoding': 'UTF-8',
         'quiet': ''
     }
@@ -148,28 +172,41 @@ def get_manifiesto(recoleccion_id: int, request: Request, db: Session = Depends(
         peso_total += detalle.peso
 
     placa = recoleccion.vehiculo_rel.placa if recoleccion.vehiculo_rel else ""
-    fecha_recoleccion = recoleccion.fecha.strftime("%Y-%m-%d") if recoleccion.fecha else ""
-    fecha_recoleccion = fecha_recoleccion + recoleccion.hora.strftime("%H:%M:%S") if recoleccion.hora else ""
+    
+    fecha_txt = recoleccion.fecha.strftime("%Y-%m-%d") if recoleccion.fecha else ""
+    hora_txt = recoleccion.hora.strftime("%H:%M:%S") if recoleccion.hora else ""
+    fecha_recoleccion = f"{fecha_txt} {hora_txt}".strip()
+
+    cliente_data = {
+    "id": getattr(cliente, "id", ""),
+    "razonSocial": getattr(cliente, "razonSocial", ""),
+    "direccion": getattr(cliente, "direccion", ""),
+    "ciudad": getattr(cliente, "ciudad", ""),        # ojo: puede ser ID
+    #"frecuencia": getattr(cliente, "frecuencia", ""),# si no existe, queda vacío
+    "frecuencia": frecuencia_txt,
+    "nit": getattr(cliente, "nit", ""),
+    "firma_nombre": getattr(cliente, "firma_nombre", ""),
+    "firma_cc": getattr(cliente, "firma_cc", ""),
+    }
 
     data = {
         "request": request,
         "empresa": {
-            "nombre": "GRESAB SAS ESP R-152-01",
-            "direccion1": "Cr. 38A No. 48a-71",
-            "pbx1": "(7) 643 9999",
-            "ciudad1": "Bucaramanga - Colombia",
-            "direccion2": "Cl. 17b No. 39-75",
-            "pbx2": "(1) 244 4000",
-            "ciudad2": "Bogotá - Colombia",
-            "nit": "804002433-1",
-            "web": "www.descont.com.co",
+            "nombre": "GRESAB SAS",
+            "direccion1": "Planta: Km 8 Vía El Centro Ecopetrol",
+            "pbx1": "320 580 31 02",
+            "ciudad1": "Barrancabermeja - Colombia",
+            "direccion2": "Oficina : Carrera 13 # 49 - 20",
+            "pbx2": "gresabgerencia@gmail.com",
+            "nit": "901.999.012-4",
+            "web": "www.gresab.com",
             "logo_url": logo_url
         },
         "manifiesto": {
             "fecha": fecha_recoleccion,
             "numero": recoleccion.id
         },
-        "cliente": cliente.razonSocial,
+        "cliente": cliente_data,
         "operario": {
             "nombre": "",
             "cc": ""
@@ -188,13 +225,21 @@ def get_manifiesto(recoleccion_id: int, request: Request, db: Session = Depends(
         }
     }
 
+    from models.Ciudad import Ciudad as CiudadModel
+
+    ciudad_nombre = ""
+    if getattr(cliente, "ciudad", None):
+        ciu = db.query(CiudadModel).filter(CiudadModel.id == cliente.ciudad).first()
+        ciudad_nombre = getattr(ciu, "nombre", "") if ciu else ""
+
+    cliente_data["ciudad"] = ciudad_nombre
+    
+
     template = templates.env.get_template("/recolecci/manifiesto.html")
     html = template.render(data)
     pdf = pdfkit.from_string(html, False, options=options)
     headers = {'Content-Disposition': 'attachment; filename="certificado.pdf"'}
     return Response(pdf, headers=headers, media_type='application/pdf')
-
-    # return templates.TemplateResponse("/recolecci/manifiesto.html", data)
 
 
 @router.post("/")

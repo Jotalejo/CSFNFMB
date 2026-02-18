@@ -288,7 +288,7 @@
       const cfg = j.configuracion || {};
 
       // tipo: diaria|semanal|mensual
-      setRadio('freq_tipo', cfg.tipo || 'diaria');
+      setRadio('freq_tipo', cfg.tipo || 'mensual');
 
       // Mostrar/ocultar paneles según tipo (reusa tu función)
       if (typeof window.togglePanels === 'function') {

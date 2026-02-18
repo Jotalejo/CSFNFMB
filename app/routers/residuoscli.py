@@ -44,8 +44,6 @@ def get_residuos(cliente_id: int, request: Request, db: Session = Depends(get_db
             dias_semana[dia] = ((mask & (2**dia)) == (2**dia))
 
     frecuencia = frecuencias[0] if frecuencias else None
-  
-
 
     action = f"/residuoscli/"
     method = "post" 

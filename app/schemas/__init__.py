@@ -9,3 +9,4 @@ from .Resclipot import *
 from .Tiporesid import *
 from .Frecuencia import *
 from .transporte import *
+from .Contrato import *

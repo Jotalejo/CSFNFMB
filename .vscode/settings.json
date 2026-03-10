@@ -1,5 +1,8 @@
 {
     "notebook.codeActionsOnSave": {
         "source.organizeImports": "explicit"
-    }
+    },
+    "python.analysis.extraPaths": [
+        "./app"
+    ]
 }

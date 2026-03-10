@@ -199,5 +199,16 @@
         $('#tresiduo').val(tresiduo);
 
     }
+    function activarModalContrato(id) {
+        fetch('/contratos/cliente/' + id)
+            .then(response => response.text())
+            .then(data => {
+                $('#MdlFrecuenciaCliente').html(data);
+                $('#MdlFrecuenciaCliente').modal('show');
+            })
+            .catch(error => {
+                console.error("Error al cargar el modal del contrato:", error);
+            });
+    }
 </script>
 {% endblock %}

@@ -9,3 +9,4 @@ from .tiposresid import TipoResidService
 from .logistica_service import LogisticaService
 from .frecuencia_service import FrecuenciaService
 from .vehiculo_service import VehiculoService
+from .contrato_service import ContratoService

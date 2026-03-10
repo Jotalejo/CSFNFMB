@@ -14,3 +14,4 @@ from .ResiduoClipot import ResiduosClientePotencial
 from .Logistica import Logistica
 from .FrecuenciaRec import FrecuenciaRec
 from .TipoFrecuencia import TipoFrecuencia
+from .ContratoCli import ContratoCli

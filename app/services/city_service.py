@@ -10,4 +10,11 @@ class CiudadService:
 
     def get_ciudades(self, skip:int=0, limit:int=200):
         return self.db.query(Ciudad).offset(skip).limit(limit).all()
+    
+    def get_ciudad(self, ciudad_id:int):
+        return (
+            self.db.query(Ciudad)
+            .filter(Ciudad.id == ciudad_id)
+            .first()
+        )
 

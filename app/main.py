@@ -4,7 +4,7 @@ from fastapi.responses import HTMLResponse, RedirectResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 from dependencies import get_db
 from sqlalchemy.orm import Session
-from routers import clients, residuoscli, recolecc, usuarios, crm, tiposresid, certificado, clienpot, frecuencia, vehiculos
+from routers import clients, residuoscli, recolecc, usuarios, crm, tiposresid, certificado, clienpot, frecuencia, vehiculos, contratos
 from services import AuthService
 
 from dependencies import templates
@@ -44,6 +44,7 @@ app.include_router(clienpot.router)
 
 # Frecuencia
 app.include_router(frecuencia.router)
+app.include_router(contratos.router)
 
 # Rutas públicas (exactas) y prefijos (estáticos)
 PUBLIC_EXACT = {"/", "/usuarios/login",

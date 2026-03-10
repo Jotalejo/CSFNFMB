@@ -123,8 +123,10 @@ def cliente_json(cliente_id: int, db: Session = Depends(get_db)):
 
     ciudad_nombre = None
     if getattr(c, "ciudad", None):
-        ciu = db.query(CiudadModel).get(c.ciudad)
+        ciu = db.query(CiudadModel).filter(CiudadModel.id == c.ciudad).first()
         ciudad_nombre = getattr(ciu, "nombre", None) if ciu else None
+        ciudad_service = CiudadService(db)
+        ciu = ciudad_service.get_ciudad(c.ciudad)
 
     return {
         "id": c.id,

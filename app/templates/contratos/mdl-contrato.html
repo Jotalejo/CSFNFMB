@@ -1,0 +1,104 @@
+<div class="modal-dialog modal-lg" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title">Generar contrato</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+    <form method="POST" action="/contratos/cliente/{{ cliente_id }}/generar">
+      <div class="modal-body">
+
+        <div class="row">
+          <div class="col-md-4">
+            <label>Fecha de iniciación</label>
+            <input type="date" class="form-control" name="fecha_inicio" required>
+          </div>
+          <div class="col-md-4">
+            <label>Fecha de terminación</label>
+            <input type="date" class="form-control" name="fecha_fin" readonly>
+            <small class="text-muted">Se calcula a 1 año</small>
+          </div>
+          <div class="col-md-4">
+            <label>Fecha firma contrato</label>
+            <input type="date" class="form-control" name="fecha_firma" required>
+          </div>
+        </div>
+
+        <hr>
+
+        <div class="form-group">
+          <label>Lugar de ejecución del contrato</label>
+          <input type="text" class="form-control" name="lugar_ejecucion" required>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <label>Nombre representante legal</label>
+            <input type="text" class="form-control" name="rep_nombre" required>
+          </div>
+          <div class="col-md-3">
+            <label>Cédula representante legal</label>
+            <input type="text" class="form-control" name="rep_cc" required>
+          </div>
+          <div class="col-md-3">
+            <label>Lugar de expedición</label>
+            <input type="text" class="form-control" name="rep_exp_lugar" required>
+          </div>
+        </div>
+
+        <input type="hidden" name="mes_actual" id="mes_actual">
+
+      </div>
+
+      <div class="modal-footer">
+        <a href="/contratos/cliente/{{ cliente_id }}/historial" class="btn btn-info">Histórico</a>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="submit" class="btn btn-primary">Generar PDF</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+(function() {
+  const fi = document.querySelector('input[name="fecha_inicio"]');
+  const ff = document.querySelector('input[name="fecha_fin"]');
+  const fechaFirma = document.querySelector('input[name="fecha_firma"]');
+  const mesActual = document.getElementById('mes_actual');
+
+  const meses = [
+    "enero", "febrero", "marzo", "abril", "mayo", "junio",
+    "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
+  ];
+
+  function addOneYear(isoDate) {
+    if (!isoDate) return '';
+    const d = new Date(isoDate + 'T00:00:00');
+    d.setFullYear(d.getFullYear() + 1);
+    return d.toISOString().slice(0, 10);
+  }
+
+  function setMesActual(isoDate) {
+    if (!isoDate) {
+      mesActual.value = '';
+      return;
+    }
+    const d = new Date(isoDate + 'T00:00:00');
+    mesActual.value = meses[d.getMonth()];
+  }
+
+  if (fi) {
+    fi.addEventListener('change', function() {
+      ff.value = addOneYear(fi.value);
+    });
+  }
+
+  if (fechaFirma) {
+    fechaFirma.addEventListener('change', function() {
+      setMesActual(fechaFirma.value);
+    });
+  }
+})();
+</script>

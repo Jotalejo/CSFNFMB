@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="section-body">
+    <div class="container-fluid">
+        <div class="row clearfix">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Histórico de contratos del cliente {{ cliente_id }}</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-vcenter table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Fecha Inicio</th>
+                                        <th>Fecha Fin</th>
+                                        <th>Fecha Firma</th>
+                                        <th>Representante</th>
+                                        <th>PDF</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for c in contratos %}
+                                    <tr>
+                                        <td>{{ c.id }}</td>
+                                        <td>{{ c.fecha_inicio }}</td>
+                                        <td>{{ c.fecha_fin }}</td>
+                                        <td>{{ c.fecha_firma }}</td>
+                                        <td>{{ c.rep_nombre }}</td>
+                                        <td>
+                                            <a href="/contratos/{{ c.id }}/descargar" class="btn btn-sm btn-primary">
+                                                Descargar
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    {% if not contratos %}
+                                    <tr>
+                                        <td colspan="6">No hay contratos generados para este cliente.</td>
+                                    </tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <a href="/clientes/" class="btn btn-secondary">Volver</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

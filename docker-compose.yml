@@ -19,6 +19,8 @@ services:
     restart: always
     ports:
       - "8000:8000"
+    volumes:
+      - ./contratos:/app/static/contratos
     labels:
       - traefik.enable=true
       - traefik.http.routers.project1-https.rule=Host(`${DOMAIN}`)

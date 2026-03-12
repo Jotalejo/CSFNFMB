@@ -83,6 +83,20 @@ async def descargar_contrato(contrato_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Contrato no encontrado")
 
     return FileResponse(
+        path=contrato.docx_path,
+        media_type="application/docx",
+        filename=f"Contrato_{contrato.id}.docx"
+    )
+
+@router.get("/{contrato_id}/descargarPDF")
+async def descargar_contrato(contrato_id: int, db: Session = Depends(get_db)):
+    service = ContratoService(db, TEMPLATE_DOCX, OUT_DIR)
+    contrato = service.get_contrato(contrato_id)
+
+    if not contrato:
+        raise HTTPException(status_code=404, detail="Contrato no encontrado")
+
+    return FileResponse(
         path=contrato.pdf_path,
         media_type="application/pdf",
         filename=f"Contrato_{contrato.id}.pdf"

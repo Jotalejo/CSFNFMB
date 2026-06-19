@@ -15,3 +15,4 @@ from .Logistica import Logistica
 from .FrecuenciaRec import FrecuenciaRec
 from .TipoFrecuencia import TipoFrecuencia
 from .ContratoCli import ContratoCli
+from .Pesaje import Pesaje, DetallePesaje

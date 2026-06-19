@@ -87,8 +87,8 @@ class PlanTransporteService:
                     "cliente_id": c.id,  # ajustar si tu PK es cod_cli
                     "cliente_nombre": getattr(c, "razonSocial", None),
                     "direccion": getattr(c, "direccion", None),
-                    "lat": getattr(c, "lat", None),  # si tienes columnas
-                    "lng": getattr(c, "lng", None),
+                    "lat": getattr(c, "latrecolec", None),
+                    "lng": getattr(c, "lngrecolec", None),
                     "hora_pref": f.hora_desde,
                     "ventana_ini": f.hora_desde,
                     "ventana_fin": f.hora_hasta,

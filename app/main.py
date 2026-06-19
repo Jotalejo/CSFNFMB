@@ -46,6 +46,14 @@ app.include_router(clienpot.router)
 app.include_router(frecuencia.router)
 app.include_router(contratos.router)
 
+# Pesaje
+from routers import pesaje
+app.include_router(pesaje.router)
+
+# Transporte
+from routers import transporte
+app.include_router(transporte.router)
+
 # Rutas públicas (exactas) y prefijos (estáticos)
 PUBLIC_EXACT = {"/", "/usuarios/login",
                 "/usuarios/reset-password", "/usuarios/logout", "/favicon.ico",

@@ -22,10 +22,6 @@ class ClienteBase(BaseModel):
     def from_dict(cls, data: dict):
         return cls(**data)
 
-    @classmethod
-    def from_dict(cls, data: dict):
-        return cls(**data)
-
     class Config:
         orm_mode = True            # Pydantic v1
         from_attributes = True   # si estás en v2

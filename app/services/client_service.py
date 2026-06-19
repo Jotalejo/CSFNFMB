@@ -77,21 +77,19 @@ class ClienteService:
         db_cliente.email             = cliente.email
 
         # actualizamos lat/lng
-        db_cliente.latrecolec        = cliente.latrecolec
-        db_cliente.lngrecolec        = cliente.lngrecolec
-        db_cliente.linkmaps          = cliente.linkmaps or db_cliente.linkmaps
+        
+        db_cliente.latrecolec = cliente.latrecolec
+        db_cliente.lngrecolec = cliente.lngrecolec
 
-        # si viene linkmaps desde el front, úsalo; si no, lo generamos si hay coords
-        # if cliente.linkmaps:
-        #    db_cliente.linkmaps = cliente.linkmaps
-        # else:
-        #    if cliente.latrecolec is not None and cliente.lngrecolec is not None:
-        #        db_cliente.linkmaps = self.generar_linkmaps(
-        #            cliente.latrecolec, cliente.lngrecolec
-        #        )
-
-        if not db_cliente.linkmaps and db_cliente.latrecolec is not None and db_cliente.lngrecolec is not None:
-            db_cliente.linkmaps = self.generar_linkmaps(db_cliente.latrecolec, db_cliente.lngrecolec)
+        if cliente.linkmaps:
+            db_cliente.linkmaps = cliente.linkmaps
+        elif cliente.latrecolec is not None and cliente.lngrecolec is not None:
+            db_cliente.linkmaps = self.generar_linkmaps(
+                cliente.latrecolec,
+                cliente.lngrecolec
+            )
+        else:
+            db_cliente.linkmaps = None
 
         self.db.commit()
         self.db.refresh(db_cliente)

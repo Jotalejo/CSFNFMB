@@ -66,11 +66,15 @@
                                             <div class="form-row">
                                                 <div class="form-group col-md-6">
                                                     <label>Latitud</label>
-                                                    <input id="latrecolec_cli" name="latrecolec_cli" value="{{cliente.latrecolec_cli if cliente is not none else ''}}">
+                                                    <input id="latrecolec" name="latrecolec" type="number" step="any"
+                                                            class="form-control"
+                                                            value="{{cliente.latrecolec if cliente is not none else ''}}">
                                                 </div>
                                                 <div class="form-group col-md-6">
                                                     <label>Longitud</label>
-                                                    <input id="lngrecolec_cli" name="lngrecolec_cli" value="{{cliente.lngrecolec_cli if cliente is not none else ''}}">
+                                                    <input id="lngrecolec" name="lngrecolec" type="number" step="any"
+                                                            class="form-control"
+                                                            value="{{cliente.lngrecolec if cliente is not none else ''}}">
                                                 </div>
                                             </div>
                                             
@@ -171,8 +175,8 @@
 
   function initMap() {
     // Usa los nuevos IDs si cambiaste a *_cli
-    const latInput = document.getElementById('latrecolec_cli') || document.getElementById('latrecolec');
-    const lngInput = document.getElementById('lngrecolec_cli') || document.getElementById('lngrecolec');
+    const latInput = document.getElementById('latrecolec');
+    const lngInput = document.getElementById('lngrecolec');
 
     const lat = parseFloat(latInput?.value) || 7.0653;   // Barrancabermeja aprox
     const lng = parseFloat(lngInput?.value) || -73.8540;
@@ -206,30 +210,33 @@
   }
 
   function aplicarResultado(loc){
-  const la = loc.lat(), ln = loc.lng();
-  document.getElementById('latrecolec').value = la;
-  document.getElementById('lngrecolec').value = ln;
-  actualizarLinkMaps(la, ln);
+    const la = loc.lat(), ln = loc.lng();
 
-  map.setCenter(loc);
-  map.setZoom(17);
-  marker.setPosition(loc);
+    document.getElementById('latrecolec').value = la;
+    document.getElementById('lngrecolec').value = ln;
+
+    actualizarLinkMaps(la, ln);
+
+    map.setCenter(loc);
+    map.setZoom(17);
+    marker.setPosition(loc);
+}
 
   // (Opcional) mostrar dirección bonita:
-  geocoder.geocode({ location: loc }, (res, status) => {
-    if(status === 'OK' && res && res.length){
-      const dirBonita = res[0].formatted_address || '';
-      console.log('Dirección formateada:', dirBonita);
-    }
-  });
+ // geocoder.geocode({ location: loc }, (res, status) => {
+ //   if(status === 'OK' && res && res.length){
+ //     const dirBonita = res[0].formatted_address || '';
+ //     console.log('Dirección formateada:', dirBonita);
+ //   }
+ //  });
 
   // aviso rápido al usuario
   // toast/alert ya lo tienes
-}
+
 
   function geocodeAddress() {
-    const latInput = document.getElementById('latrecolec_cli') || document.getElementById('latrecolec');
-    const lngInput = document.getElementById('lngrecolec_cli') || document.getElementById('lngrecolec');
+    const latInput = document.getElementById('latrecolec');
+    const lngInput = document.getElementById('lngrecolec');
 
     const dir = (document.getElementById('direccion')?.value || '').trim();
     if (!dir) {

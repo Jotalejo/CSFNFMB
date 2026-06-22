@@ -138,3 +138,65 @@ class PesajeService:
             .scalar()
             or 0
         )
+    
+    def acumulados_por_cliente(self, fecha, cliente_id=None):
+        inicio_semana = fecha - timedelta(days=fecha.weekday())
+        fin_semana = inicio_semana + timedelta(days=6)
+
+        inicio_mes = fecha.replace(day=1)
+
+        if fecha.month == 12:
+            inicio_mes_siguiente = fecha.replace(
+                year=fecha.year + 1,
+                month=1,
+                day=1
+            )
+        else:
+            inicio_mes_siguiente = fecha.replace(
+                month=fecha.month + 1,
+                day=1
+            )
+
+        base = (
+            self.db.query(
+                Cliente.id.label("cliente_id"),
+                Cliente.razonSocial.label("cliente"),
+                func.sum(DetallePesaje.peso).label("kg")
+            )
+            .join(Pesaje, Pesaje.cliente_id == Cliente.id)
+            .join(DetallePesaje, DetallePesaje.pesaje_id == Pesaje.id)
+            .filter(Pesaje.estado == "CONFIRMADO")
+        )
+
+        if cliente_id:
+            base = base.filter(Cliente.id == cliente_id)
+
+        def consultar(query, desde, hasta=None):
+            q = query.filter(Pesaje.fecha >= desde)
+            if hasta:
+                q = q.filter(Pesaje.fecha <= hasta)
+            else:
+                q = q.filter(Pesaje.fecha == desde)
+
+            return (
+                q.group_by(Cliente.id, Cliente.razonSocial)
+                .order_by(Cliente.razonSocial)
+                .all()
+            )
+
+        dia = consultar(base, fecha, None)
+        semana = consultar(base, inicio_semana, fin_semana)
+        mes = (
+            base
+            .filter(Pesaje.fecha >= inicio_mes)
+            .filter(Pesaje.fecha < inicio_mes_siguiente)
+            .group_by(Cliente.id, Cliente.razonSocial)
+            .order_by(Cliente.razonSocial)
+            .all()
+        )
+
+        return {
+            "dia": dia,
+            "semana": semana,
+            "mes": mes,
+        }

@@ -130,3 +130,28 @@ def acumulados(fecha: date, db: Session = Depends(get_db)):
         "semana": service.acumulado_semana(fecha),
         "mes": service.acumulado_mes(fecha),
     }
+
+@router.get("/reporte-acumulados")
+def reporte_acumulados(
+    fecha: date,
+    cliente_id: int | None = None,
+    db: Session = Depends(get_db)
+):
+    service = PesajeService(db)
+    data = service.acumulados_por_cliente(fecha, cliente_id)
+
+    def serializar(rows):
+        return [
+            {
+                "cliente_id": r.cliente_id,
+                "cliente": r.cliente,
+                "kg": float(r.kg or 0)
+            }
+            for r in rows
+        ]
+
+    return {
+        "dia": serializar(data["dia"]),
+        "semana": serializar(data["semana"]),
+        "mes": serializar(data["mes"]),
+    }

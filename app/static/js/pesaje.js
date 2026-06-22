@@ -26,6 +26,11 @@ $(document).ready(function () {
 
 });
 
+$(document).ready(function () {
+    $('#btnReporteAcumulados').on('click', function () {
+        cargarReporteAcumulados();
+    });
+});
 
 function limpiarTodo() {
     $('#vehiculo').html('<option value="">Seleccione...</option>');
@@ -195,7 +200,6 @@ function cargarDetalleManifiesto() {
         });
 }
 
-
 function guardarPesaje() {
     let fecha = $('#fecha').val();
     let vehiculo_id = $('#vehiculo').val();
@@ -258,3 +262,128 @@ function guardarPesaje() {
         alert('No se pudo guardar el pesaje');
     });
 }
+
+function cargarReporteAcumulados() {
+    let fecha = $('#rep_fecha').val() || $('#fecha').val();
+
+    if (!fecha) {
+        alert('Seleccione una fecha para el reporte');
+        return;
+    }
+
+    fetch(`/pesaje/reporte-acumulados?fecha=${fecha}`)
+        .then(response => response.json())
+        .then(data => {
+            renderReporteAcumulados(data);
+        })
+        .catch(error => {
+            console.error('Error cargando reporte:', error);
+            alert('No se pudo cargar el reporte');
+        });
+}
+
+
+function renderReporteAcumulados(data) {
+    let html = `
+        <div class="row">
+            ${renderBloqueAcumulado('Día', data.dia)}
+            ${renderBloqueAcumulado('Semana', data.semana)}
+            ${renderBloqueAcumulado('Mes', data.mes)}
+        </div>
+    `;
+
+    $('#reporteAcumulados').html(html);
+}
+
+
+function renderBloqueAcumulado(titulo, rows) {
+    let total = 0;
+
+    let filas = rows.map(r => {
+        total += parseFloat(r.kg || 0);
+
+        return `
+            <tr>
+                <td>${r.cliente}</td>
+                <td class="text-right">${parseFloat(r.kg || 0).toFixed(2)}</td>
+            </tr>
+        `;
+    }).join('');
+
+    if (!filas) {
+        filas = `
+            <tr>
+                <td colspan="2" class="text-center text-muted">Sin datos</td>
+            </tr>
+        `;
+    }
+
+    return `
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <strong>${titulo}</strong>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-sm table-striped mb-0">
+                        <thead>
+                            <tr>
+                                <th>Cliente</th>
+                                <th class="text-right">Kg</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${filas}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>Total</th>
+                                <th class="text-right">${total.toFixed(2)}</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+$(document).on('click', '#btnReporteAcumulados', function () {
+    console.log('Click en Generar reporte');
+    cargarReporteAcumulados();
+});
+
+$(document).on('click', '#btnImprimirReporte', function () {
+    const contenido = document.getElementById('reporteAcumulados');
+
+    if (!contenido || contenido.innerHTML.trim() === '') {
+        alert('Primero genere el reporte.');
+        return;
+    }
+
+    const ventana = window.open('', '_blank');
+
+    ventana.document.write(`
+        <html>
+        <head>
+            <title>Reporte de Pesaje y Clasificación</title>
+            <link rel="stylesheet" href="/static/assets/bundles/lib.vendor.bundle.css">
+            <link rel="stylesheet" href="/static/assets/css/main.css">
+        </head>
+        <body>
+            <div class="container mt-4">
+                <h3>Reporte de Pesaje y Clasificación</h3>
+                <p>Fecha base: ${$('#rep_fecha').val() || $('#fecha').val()}</p>
+                ${contenido.innerHTML}
+            </div>
+        </body>
+        </html>
+    `);
+
+    ventana.document.close();
+    ventana.focus();
+
+    setTimeout(function () {
+        ventana.print();
+    }, 500);
+});

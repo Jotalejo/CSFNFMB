@@ -123,6 +123,38 @@ Guardar Pesaje
 
 </button>
 
+<hr>
+
+<div class="card mt-3">
+    <div class="card-header">
+        <h3 class="card-title">Reporte de Acumulados</h3>
+    </div>
+
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-3">
+                <label>Fecha base</label>
+                <input type="date" id="rep_fecha" class="form-control">
+            </div>
+
+            <div class="col-md-3 d-flex align-items-end">
+                <button type="button" id="btnReporteAcumulados" class="btn btn-outline-primary">
+                    Generar reporte
+                </button>
+            </div>
+            <div class="col-md-3 d-flex align-items-end">
+                <button type="button" id="btnImprimirReporte" class="btn btn-outline-secondary">
+                    Imprimir reporte
+                </button>
+            </div>
+        </div>
+
+        <br>
+
+        <div id="reporteAcumulados"></div>
+    </div>
+</div>
+
 </div>
 
 </div>

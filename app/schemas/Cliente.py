@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator # type: ignore
 from typing import Optional
 
 # Todas las propiedades que tiene un cliente en la base de datos, sin el id
@@ -25,6 +25,13 @@ class ClienteBase(BaseModel):
     class Config:
         orm_mode = True            # Pydantic v1
         from_attributes = True   # si estás en v2
+
+    @field_validator("latrecolec", "lngrecolec", mode="before")
+    @classmethod
+    def empty_string_to_none(cls, v):
+        if v == "" or v is None:
+            return None
+        return v
 
 # Clase para crear un cliente 
 class ClienteCreate(ClienteBase):

@@ -764,13 +764,28 @@ document.addEventListener('DOMContentLoaded', function(){
           </td>
 
           <td class="text-center">
-            <button type="button" class="btn btn-sm btn-outline-danger btn-quitar">Quitar</button>
+            <button type="button" class="btn btn-sm btn-outline-primary btn-maps-cliente">
+              Maps
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-danger btn-quitar">
+              Quitar
+            </button>
           </td>
         `;
         tr.querySelector('.btn-quitar').addEventListener('click', ()=>{
           const i = grupo.paradas.indexOf(p);
           if(i>=0){ grupo.paradas.splice(i,1); renderPlan(plan); }
         });
+        tr.querySelector('.btn-maps-cliente').addEventListener('click', () => {
+          if (p.linkmaps) {
+            window.open(p.linkmaps, '_blank');
+          } else if (p.lat && p.lng) {
+            window.open(`https://www.google.com/maps?q=${p.lat},${p.lng}`, '_blank');
+          } else {
+            alert('Este cliente no tiene ubicación registrada.');
+          }
+        });
+
         tr.querySelector('.inp-orden').addEventListener('change', (ev)=>{
           p.orden = parseInt(ev.target.value||'0',10) || (idx+1);
           grupo.paradas.sort((a,b)=>(a.orden||999)-(b.orden||999));
@@ -785,20 +800,32 @@ document.addEventListener('DOMContentLoaded', function(){
       $contenedor.appendChild(card);
 
       head.querySelector('.btn-ver-mapa').addEventListener('click', ()=>{
-        if(paradas.length===0) return;
-        const pts = paradas
-          .filter(p => p.lat && p.lng)
-          .map(p => `${p.lat},${p.lng}`);
-        if(pts.length === 0){
-          alert('No hay coordenadas geográficas para estas paradas.');
-          return;
-        }
-        const origin = encodeURIComponent(pts[0]);
-        const destination = encodeURIComponent(pts[pts.length-1]);
-        const waypoints = pts.slice(1, -1).map(encodeURIComponent).join('|');
-        const url = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}` + (waypoints ? `&waypoints=${waypoints}` : '');
-        window.open(url, '_blank');
-      });
+      const planta = "7.023179,-73.812788";
+
+      const ptsClientes = paradas
+        .filter(p => p.lat && p.lng)
+        .map(p => `${p.lat},${p.lng}`);
+
+      if (ptsClientes.length === 0) {
+        alert('No hay coordenadas geográficas para estas paradas.');
+        return;
+      }
+
+      const pts = [
+        planta,
+        ...ptsClientes,
+        planta
+      ];
+
+      const origin = encodeURIComponent(pts[0]);
+      const destination = encodeURIComponent(pts[pts.length - 1]);
+      const waypoints = pts.slice(1, -1).map(encodeURIComponent).join('|');
+
+      const url = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}` +
+                  (waypoints ? `&waypoints=${waypoints}` : '');
+
+      window.open(url, '_blank');
+    });
     });
   }
 

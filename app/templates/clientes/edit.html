@@ -245,11 +245,29 @@
     }
     // Usa la ciudad seleccionada si existe
     const selCiu = document.getElementById('ciudad');
-    const ciudadTxt = selCiu && selCiu.options[selCiu.selectedIndex]
-                      ? selCiu.options[selCiu.selectedIndex].text
-                      : 'Barrancabermeja';
+
+    //const ciudadTxt = selCiu && selCiu.options[selCiu.selectedIndex]
+    //                  ? selCiu.options[selCiu.selectedIndex].text
+    //                  : 'Barrancabermeja';
+
+    let ciudadTxt = 'Barrancabermeja';
+
+    if (selCiu && selCiu.selectedIndex >= 0) {
+        const opt = selCiu.options[selCiu.selectedIndex];
+        const txt = (opt?.text || '').trim();
+
+        if (
+            txt &&
+            !txt.toLowerCase().includes('ciudad del cliente') &&
+            !txt.toLowerCase().includes('seleccione')
+        ) {
+            ciudadTxt = txt;
+        }
+    }
 
     const fullDir = `${dir}, ${ciudadTxt}, Santander, Colombia`;
+    const mapsSearchUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(fullDir)}`;
+
     console.log('Geocodificando:', fullDir);
 
     geocoder.geocode({ address: fullDir }, (results, status) => {
@@ -266,9 +284,15 @@
         actualizarLinkMaps(lat, lng);
 
         alert("📍 Ubicación encontrada y actualizada.");
-      } else {
-        alert("No se puede encontrar la ubicación. Verifica la dirección.");
-      }
+        } else {
+            const abrir = confirm(
+                `No se pudo geocodificar automáticamente.\n\n¿Quieres abrir Google Maps para buscar:\n${fullDir}?`
+            );
+
+            if (abrir) {
+                window.open(mapsSearchUrl, '_blank');
+            }
+        }
     });
   }
 

@@ -15,6 +15,7 @@ class PlanParada(BaseModel):
     ventana_fin: Optional[time] = None
     capacidad_kg: Optional[int] = None
     orden: Optional[int] = None
+    linkmaps: str | None = None
 
 class PlanVehiculo(BaseModel):
     vehiculo: Optional[dict] = None  # {"id":int,"placa":str,"capacidad":int}

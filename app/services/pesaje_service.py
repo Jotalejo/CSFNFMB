@@ -43,9 +43,13 @@ class PesajeService:
     def get_manifiestos(self, fecha, vehiculo_id: int, cliente_id: int):
         return (
             self.db.query(Recoleccion)
+            .outerjoin(Pesaje, Pesaje.recoleccion_id == Recoleccion.id)
             .filter(Recoleccion.fecha == fecha)
             .filter(Recoleccion.vehiculo == vehiculo_id)
             .filter(Recoleccion.cliente == cliente_id)
+            .filter(
+                (Pesaje.id == None) | (Pesaje.estado != "CONFIRMADO")
+            )
             .order_by(Recoleccion.id.desc())
             .all()
         )

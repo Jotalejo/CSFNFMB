@@ -62,7 +62,17 @@ function send_json(event) {
         },
         body: jsonRequest
     })
-    .then(response => response.json())
+
+    .then(async response => {
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+        console.error('Error del servidor:', data);
+        alert('No se pudo guardar. Revisa la consola para ver el detalle.');
+        throw new Error('HTTP ' + response.status);
+    }
+        return data;
+    })
     .then(data => {
             let redirectPage = event.target.getAttribute('data-redirect');
             console.log('Success:', redirectPage)

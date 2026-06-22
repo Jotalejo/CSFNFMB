@@ -89,6 +89,7 @@ class PlanTransporteService:
                     "direccion": getattr(c, "direccion", None),
                     "lat": getattr(c, "latrecolec", None),
                     "lng": getattr(c, "lngrecolec", None),
+                    "linkmaps": getattr(c, "linkmaps", None),
                     "hora_pref": f.hora_desde,
                     "ventana_ini": f.hora_desde,
                     "ventana_fin": f.hora_hasta,

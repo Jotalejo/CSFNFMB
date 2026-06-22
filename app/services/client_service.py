@@ -81,15 +81,25 @@ class ClienteService:
         db_cliente.latrecolec = cliente.latrecolec
         db_cliente.lngrecolec = cliente.lngrecolec
 
-        if cliente.linkmaps:
-            db_cliente.linkmaps = cliente.linkmaps
+        nuevo_link = (cliente.linkmaps or "").strip()
+
+        if nuevo_link:
+            db_cliente.linkmaps = nuevo_link
         elif cliente.latrecolec is not None and cliente.lngrecolec is not None:
             db_cliente.linkmaps = self.generar_linkmaps(
                 cliente.latrecolec,
                 cliente.lngrecolec
             )
-        else:
-            db_cliente.linkmaps = None
+
+#        if cliente.linkmaps:
+#            db_cliente.linkmaps = cliente.linkmaps
+#        elif cliente.latrecolec is not None and cliente.lngrecolec is not None:
+#            db_cliente.linkmaps = self.generar_linkmaps(
+#                cliente.latrecolec,
+#                cliente.lngrecolec
+#            )
+#        else:
+#            db_cliente.linkmaps = None
 
         self.db.commit()
         self.db.refresh(db_cliente)

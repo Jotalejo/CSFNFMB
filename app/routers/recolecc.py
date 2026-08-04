@@ -162,14 +162,31 @@ def get_manifiesto(recoleccion_id: int, request: Request, db: Session = Depends(
     residuos = []
     cantidad_total = 0
     peso_total = 0.0
+
     for detalle in recoleccion.detalles:
+        cantidad = detalle.cantidad or 0
+        peso_unitario = detalle.peso or 0.0
+        kilos_linea = cantidad * peso_unitario
+
         residuos.append({
-            "tipo": detalle.tipo_residuo.nombre,
-            "cantidad": detalle.cantidad,
-            "kilos": detalle.peso
+            "tipo": (
+                detalle.tipo_residuo.nombre
+                if detalle.tipo_residuo
+                else "Sin identificar"
+            ),
+            "cantidad": cantidad,
+
+            # Esto es lo que se muestra en la fila
+            "kilos": peso_unitario
         })
-        cantidad_total += detalle.cantidad
-        peso_total += detalle.peso
+
+        cantidad_total += cantidad
+
+        # Esto solamente se utiliza para el total general
+        peso_total += kilos_linea
+
+    # Redondeo final para evitar decimales flotantes extraños
+    peso_total = round(peso_total, 2)
 
     placa = recoleccion.vehiculo_rel.placa if recoleccion.vehiculo_rel else ""
     

@@ -177,7 +177,8 @@ def get_manifiesto(recoleccion_id: int, request: Request, db: Session = Depends(
             "cantidad": cantidad,
 
             # Esto es lo que se muestra en la fila
-            "kilos": peso_unitario
+            "kilos": peso_unitario,
+            "observaciones": detalle.observaciones or ""
         })
 
         cantidad_total += cantidad

@@ -1,21 +1,31 @@
 <div class="container-fluid">
+
   <div class="row my-3">
     <div class="col-md-8">
       <p class="h5 mb-1">Recolección #{{ r.id }}</p>
+
       <div class="text-muted">
-        Fecha: {{ r.fecha }}{% if r.hora %} — Hora: {{ r.hora }}{% endif %}
+        Fecha: {{ r.fecha }}
+        {% if r.hora %}
+          — Hora: {{ r.hora }}
+        {% endif %}
       </div>
     </div>
+
     <div class="col-md-4 text-md-right">
-      <span class="badge badge-info">{{ r.estado.nombre }}</span>
+      {% if r.estado %}
+        <span class="badge badge-info">{{ r.estado.nombre }}</span>
+      {% endif %}
     </div>
   </div>
 
   <hr>
 
   <div class="row">
-    <div class="col-sm-6">
+
+    <div class="col-sm-5">
       <p class="h6">Cliente</p>
+
       <address class="mb-0">
         <strong>{{ r.cliente_rel.razonSocial }}</strong><br>
         {{ r.cliente_rel.direccion }}<br>
@@ -23,21 +33,101 @@
         {{ r.cliente_rel.email }}
       </address>
     </div>
-    <div class="col-sm-6 text-sm-right">
-      <p class="h6">Detalle</p>
-      {% for r in r.detalles %}
-      <div>Tipo residuo: <strong>{{ r.tipo_residuo.nombre }}</strong></div>
-      <div>Cant. bolsas: <strong>{{ r.cantidad }}</strong></div>
-      <div>Peso total: <strong>{{ r.peso_total }} kg</strong></div>
-      {% endfor %}
-      {% if r.codigobar %}<div>Código barras: {{ r.codigobar }}</div>{% endif %}
-      {% if r.firmarecolec %}<div>Firma entrega: {{ r.firmarecolec }}</div>{% endif %}
-      {% if r.lafirmaderecibo %}<div>Firma recibo: {{ r.lafirmaderecibo }}</div>{% endif %}
+
+    <div class="col-sm-7">
+      <p class="h6">Detalle de residuos</p>
+
+      <div class="table-responsive">
+        <table class="table table-sm table-bordered">
+          <thead>
+            <tr>
+              <th>Residuo</th>
+              <th>Cantidad</th>
+              <th>Peso unitario</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {% set ns = namespace(cantidad_total=0, peso_total=0.0) %}
+
+            {% for detalle in r.detalles %}
+
+              {% set cantidad = detalle.cantidad or 0 %}
+              {% set peso_unitario = detalle.peso or 0.0 %}
+              {% set total_linea = cantidad * peso_unitario %}
+
+              {% set ns.cantidad_total = ns.cantidad_total + cantidad %}
+              {% set ns.peso_total = ns.peso_total + total_linea %}
+
+              <tr>
+                <td>
+                  {% if detalle.tipo_residuo %}
+                    {{ detalle.tipo_residuo.nombre }}
+                  {% else %}
+                    Sin identificar
+                  {% endif %}
+                </td>
+
+                <td class="text-right">
+                  {{ cantidad }}
+                </td>
+
+                <td class="text-right">
+                  {{ "%.2f"|format(peso_unitario) }} kg
+                </td>
+
+                <td class="text-right">
+                  {{ "%.2f"|format(total_linea) }} kg
+                </td>
+              </tr>
+
+              {% if detalle.observaciones %}
+              <tr>
+                <td colspan="4">
+                  <strong>Observaciones:</strong><br>
+                  {{ detalle.observaciones }}
+                </td>
+              </tr>
+              {% endif %}
+
+            {% endfor %}
+          </tbody>
+
+          <tfoot>
+            <tr>
+              <th>Total</th>
+              <th class="text-right">
+                {{ ns.cantidad_total }}
+              </th>
+              <th></th>
+              <th class="text-right">
+                {{ "%.2f"|format(ns.peso_total) }} kg
+              </th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
     </div>
+
   </div>
 
-  {% if r.observaciones %}
-    <hr>
-    <p class="mb-0"><strong>Observaciones:</strong><br>{{ r.observaciones }}</p>
+  {% if r.codigobar or r.firmarecolec or r.lafirmaderecibo %}
+  <hr>
+
+  <div>
+    {% if r.codigobar %}
+      <div><strong>Código de barras:</strong> {{ r.codigobar }}</div>
+    {% endif %}
+
+    {% if r.firmarecolec %}
+      <div><strong>Firma entrega:</strong> {{ r.firmarecolec }}</div>
+    {% endif %}
+
+    {% if r.lafirmaderecibo %}
+      <div><strong>Firma recibo:</strong> {{ r.lafirmaderecibo }}</div>
+    {% endif %}
+  </div>
   {% endif %}
+
 </div>

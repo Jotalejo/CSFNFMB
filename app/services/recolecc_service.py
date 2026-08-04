@@ -26,6 +26,7 @@ class RecoleccService:
                 joinedload(Recoleccion.detalles),
                 # joinedload(Recoleccion.vehiculo_rel),  # si luego habilitas la relación
             )
+            .order_by(Recoleccion.fecha.desc(), Recoleccion.hora.desc())
             .all()
         )
 

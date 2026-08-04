@@ -116,8 +116,21 @@
         {% for residuo in residuos %}
         <tr>
           <td>{{ residuo.tipo }}</td>
-          <td>{{ residuo.cantidad }} / {{ residuo.kilos }}</td>
+          <td>
+            {{ residuo.cantidad }} /
+            {{ "%.2f"|format(residuo.kilos) }}
+          </td>
         </tr>
+
+        {% if residuo.observaciones %}
+        <tr>
+          <td colspan="2">
+            <span class="label">Observación:</span>
+            {{ residuo.observaciones }}
+          </td>
+        </tr>
+        {% endif %}
+
         {% endfor %}
       </tbody>
     </table>

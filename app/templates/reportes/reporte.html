@@ -1,0 +1,157 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">{{ titulo }}</h3>
+  </div>
+
+  <div class="card-body">
+    <form method="get" action="{{ request.url.path }}">
+      <input type="hidden" name="consultar" value="true">
+
+      <div class="row align-items-end">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="fecha_desde">Fecha desde</label>
+            <input
+              type="date"
+              id="fecha_desde"
+              name="fecha_desde"
+              class="form-control"
+              value="{{ fecha_desde }}"
+              required
+            >
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="fecha_hasta">Fecha hasta</label>
+            <input
+              type="date"
+              id="fecha_hasta"
+              name="fecha_hasta"
+              class="form-control"
+              value="{{ fecha_hasta }}"
+              required
+            >
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary">
+              <i class="fa fa-search"></i> Consultar
+            </button>
+            <button
+                type="submit"
+                name="exportar"
+                value="true"
+                class="btn btn-success"
+                >
+                <i class="fa fa-file-excel-o"></i> Exportar a Excel
+            </button>
+            <a href="{{ request.url.path }}"
+               class="btn btn-secondary">
+              Limpiar
+            </a>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    {% if error %}
+      <div class="alert alert-warning" role="alert">
+        {{ error }}
+      </div>
+
+    {% elif consultado %}
+      <p>
+        Período: <strong>{{ fecha_desde }}</strong>
+        al <strong>{{ fecha_hasta }}</strong>.
+        Clientes encontrados: <strong>{{ total_clientes }}</strong>.
+      </p>
+
+      {% if grupos %}
+        <div class="table-responsive">
+          <table class="table table-sm table-bordered">
+            <thead>
+              <tr>
+                <th>Cliente</th>
+                {% if es_residuos %}
+                  <th>Tipo de residuo</th>
+                  <th class="text-right">Total kg</th>
+                {% endif %}
+              </tr>
+            </thead>
+
+            <tbody>
+              {% for grupo in grupos %}
+                {% if es_residuos %}
+                  {% for residuo in grupo.residuos %}
+                    <tr>
+                      <td>
+                        {% if loop.first %}
+                          {{ grupo.cliente }}
+                        {% endif %}
+                      </td>
+                      <td>{{ residuo.tipo }}</td>
+                      <td class="text-right">
+                        {{ "%.2f"|format(residuo.total) }}
+                      </td>
+                    </tr>
+                  {% endfor %}
+
+                  <tr class="table-active">
+                    <td></td>
+                    <th>TOTAL CLIENTE</th>
+                    <th class="text-right">
+                      {{ "%.2f"|format(grupo.total) }}
+                    </th>
+                  </tr>
+                {% else %}
+                  <tr>
+                    <td>{{ grupo.cliente }}</td>
+                  </tr>
+                {% endif %}
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            {% if anterior_url %}
+              <a class="btn btn-outline-primary"
+                 href="{{ anterior_url }}">
+                Anterior
+              </a>
+            {% endif %}
+          </div>
+
+          <span>Página {{ pagina }} de {{ paginas }}</span>
+
+          <div>
+            {% if siguiente_url %}
+              <a class="btn btn-outline-primary"
+                 href="{{ siguiente_url }}">
+                Siguiente
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      {% else %}
+        <div class="alert alert-info">
+          No se encontraron resultados para este período.
+        </div>
+      {% endif %}
+
+    {% else %}
+      <p class="text-muted">
+        Selecciona el rango de fechas y pulsa Consultar.
+      </p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

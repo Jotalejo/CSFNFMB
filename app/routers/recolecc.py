@@ -222,7 +222,8 @@ def get_manifiesto(recoleccion_id: int, request: Request, db: Session = Depends(
         },
         "manifiesto": {
             "fecha": fecha_recoleccion,
-            "numero": recoleccion.id
+            "numero": recoleccion.id,
+            "observaciones": (recoleccion.observaciones or "").strip()
         },
         "cliente": cliente_data,
         "operario": {

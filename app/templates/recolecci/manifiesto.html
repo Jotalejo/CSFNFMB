@@ -139,6 +139,14 @@
     <span class="label">Total Kilos:</span> {{ totales.kilos }}
   </div>
 
+  {% set observaciones = (manifiesto.observaciones | default('', true)) | trim %}
+  {% if observaciones %}
+  <div class="section">
+    <span class="label">Observaciones de la recolección:</span>
+    <div style="white-space: pre-wrap; word-wrap: break-word;">{{ observaciones }}</div>
+  </div>
+  {% endif %}
+
   <div class="section">
     <span class="label">Cliente:</span> {{ cliente.firma_nombre }}<br>
     <span class="label">CC:</span> {{ cliente.firma_cc }}

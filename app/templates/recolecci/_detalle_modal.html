@@ -112,6 +112,17 @@
 
   </div>
 
+  {% set observaciones = (r.observaciones or '') | trim %}
+  {% if observaciones %}
+  <hr>
+  <div class="row">
+    <div class="col-12">
+      <p class="h6">Observaciones de la recolección</p>
+      <div style="white-space: pre-wrap; word-wrap: break-word;">{{ observaciones }}</div>
+    </div>
+  </div>
+  {% endif %}
+
   {% if r.codigobar or r.firmarecolec or r.lafirmaderecibo %}
   <hr>
 
